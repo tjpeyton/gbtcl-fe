@@ -1,0 +1,6 @@
+.container {
+    height: 75px;
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+}
