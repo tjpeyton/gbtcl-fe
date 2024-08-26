@@ -26,11 +26,6 @@ const TopNav = () => {
         href='/whitepaper'>
         Whitepaper
       </Link>
-      <Link 
-        className={`${pathname === '/' ? 'activeLink' : 'link'}`}
-        href='/'>
-        Dashboard
-      </Link>
       <div className={styles.connectWallet}>
         <Button
           type='primary'
