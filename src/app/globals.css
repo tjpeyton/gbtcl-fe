@@ -14,3 +14,20 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+button {
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+}
+
+button:hover {
+  cursor: pointer;
+  opacity: 75%;
+}
+
+main {
+  padding-left: 15%;
+  padding-right: 15%;
+}

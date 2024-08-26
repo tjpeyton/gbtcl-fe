@@ -1,6 +1,27 @@
 .container {
-    height: 75px;
-    background-color: white;
-    display: flex;
-    flex-direction: row;
+  height: 75px;
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  padding-right: 15%;
+  padding-left: 15%;
+  align-items: center;
+  gap: 5%;
+}
+
+.connectWallet {
+  height: 35px;
+  width: 125px;
+}
+
+.link {
+  color: black;
+}
+
+.link:hover {
+  cursor: pointer;
+}
+
+.activeLink {
+  color: orange;
 }
