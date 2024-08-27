@@ -26,13 +26,17 @@ const TopNav = () => {
         href='/whitepaper'>
         Whitepaper
       </Link>
-      <div className={styles.connectWallet}>
-        <Button
-          type='primary'
-          onClick={() => router.push('/connect')}>
-          Connect Wallet
-        </Button>
-      </div>
+      {
+        pathname !== '/connect'
+          ? <div className={styles.connectWallet}>
+            <Button
+              type='primary'
+              onClick={() => router.push('/connect')}>
+              Connect Wallet
+            </Button>
+          </div>
+          : <></>
+      }
     </nav>
   )
 }

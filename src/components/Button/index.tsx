@@ -5,7 +5,7 @@ import styles from './Button.module.css'
 type ButtonProps = {
     children: React.ReactNode,
     onClick: () => void,
-    type: string
+    type?: string
 }
 
 const Button = (props: ButtonProps) => {
@@ -13,7 +13,7 @@ const Button = (props: ButtonProps) => {
   return (
     <button
       onClick={props.onClick}
-      className={props.type === 'primary' ? styles.primary : styles.secondary}
+      className={props.type === 'primary' ? styles.primary : props.type === 'secondary' ? styles.secondary : ''}
     >
       {props.children}
     </button>

@@ -6,6 +6,7 @@ import { useSyncProviders } from '@/lib/hooks/useSyncProviders'
 import { EIP6963ProviderDetail } from '@/types'
 
 import styles from './connect.module.css'
+import Button from '@/components/Button'
 
 
 const ConnectPage = () => {
@@ -28,22 +29,22 @@ const ConnectPage = () => {
   }
 
   return (
-    <main>
-      <div className='discover-wallet-container'>      
-        <h2>Wallets Detected:</h2>    
+    <main className={styles.container}>      
+      <h2 className={styles.title}>Connect Wallet:</h2>   
+      <div className={styles.walletContainer}>
         {
           providers.length > 0 
             ? providers?.map((provider: EIP6963ProviderDetail) => (
-              <button key={provider.info.uuid} onClick={() => handleConnect(provider)}>
-                <img src={provider.info.icon} alt={provider.info.name}/>
-                <div>{provider.info.name}</div>
-              </button>
+              <div className={styles.item} key={provider.info.uuid}>
+                <Button onClick={() => handleConnect(provider)}>
+                  <img src={provider.info.icon} alt={provider.info.name}/>
+                  <div>{provider.info.name}</div>
+                </Button>
+              </div>
             )) 
             : <div>No Announced Wallet Providers</div>
-        }
-        <hr/>
-        <h2>{userAccount ? '' : 'No '}Wallet Selected</h2>      
-      </div>
+        } 
+      </div> 
     </main>
   )
 }
