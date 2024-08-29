@@ -2,14 +2,14 @@ import { useState } from 'react'
 
 import styles from './WalletInfo.module.css'
 import Button from '../Button'
+import { formatAddress } from '@/lib/utils'
 
-type WalletInfoProps = {
-    addressAbv: string,
-    addressLong: string,
-    name: string,
-    rdns: string,
-    uuid: string,
-    icon: string
+export type WalletInfoProps = {
+    address: string | null,
+    name: string | null,
+    rdns: string | null,
+    uuid: string | null,
+    icon: string | null
 }
 
 const WalletInfo = (props: WalletInfoProps) => {
@@ -18,8 +18,8 @@ const WalletInfo = (props: WalletInfoProps) => {
   return (
     <div className={styles.container}>
       <Button onClick={() => setOpen(!open)}>
-        <img src={props.icon} alt='walletAvatar'/>
-        <span className={styles.address}>{props.addressAbv}</span>
+        <img src={props.icon ?? ''} alt='walletAvatar'/>
+        <span className={styles.address}>{ formatAddress(props.address ?? '') }</span>
       </Button>
       {
         open
