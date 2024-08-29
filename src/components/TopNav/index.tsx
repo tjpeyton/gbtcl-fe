@@ -20,7 +20,7 @@ const TopNav = () => {
   }
 
   const getWalletInfoProps = (): WalletInfoProps => {
-    const address = localStorage.getItem('address')
+    const address = localStorage.getItem('token')
     const name = localStorage.getItem('name') 
     const rdns = localStorage.getItem('rdns')
     const uuid = localStorage.getItem('uuid')

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+'use client'
 
 import styles from './WalletInfo.module.css'
 import Button from '../Button'
@@ -13,23 +13,16 @@ export type WalletInfoProps = {
 }
 
 const WalletInfo = (props: WalletInfoProps) => {
-  const [open, setOpen] = useState(false)
+  const address = formatAddress(props.address ?? '')
 
   return (
     <div className={styles.container}>
-      <Button onClick={() => setOpen(!open)}>
-        <img src={props.icon ?? ''} alt='walletAvatar'/>
-        <span className={styles.address}>{ formatAddress(props.address ?? '') }</span>
+      <Button onClick={() => {}}>
+        <div className={styles.buttonItems}>
+          <img src={props.icon ?? ''} alt='walletAvatar'/>
+          <span className={styles.address}>{ address }</span>
+        </div>     
       </Button>
-      {
-        open
-          ? <>
-            <div>Name: {props.name}</div>
-            <div>RDNS: {props.rdns}</div>
-            <div>UUID: {props.uuid}</div>
-          </>
-          : <></>
-      }
     </div>
   )
 }

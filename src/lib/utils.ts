@@ -9,7 +9,8 @@ export const formatChainAsNum = (chainIdHex: string) => {
 }
     
 export const formatAddress = (addr: string) => {
-  const upperAfterLastTwo = addr.slice(0, 2) + addr.slice(2)
-  return `${upperAfterLastTwo.substring(0, 5)}...${upperAfterLastTwo.substring(39)}`
+//   const upperAfterLastTwo = addr.slice(0, 2) + addr.slice(2)
+//   return `${upperAfterLastTwo.substring(0, 5)}...${upperAfterLastTwo.substring(39)}`
+  return `${addr.slice(0, 6)}...${addr.slice(-6)}`;
 }
   
