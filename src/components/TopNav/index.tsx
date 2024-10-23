@@ -2,35 +2,38 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useRouter } from 'next/navigation'
 
 import Button from '../Button'
 import WalletInfo, { WalletInfoProps } from '../WalletInfo'
 
 import styles from './TopNav.module.css'
+import { useWalletContext, WalletContext } from '@/context/WalleContext'
 
 
 const TopNav = () => {
   const pathname = usePathname()
-  const router = useRouter()
+  const {
+    connectWallet,
+    disconnect,
+    state: { isAuthenticated, address, currentChain },
+  } = useWalletContext() as WalletContext;
 
   const isConnected = (): boolean => {
-    const token = localStorage.getItem('token')
-    return token ? true : false
+    return isAuthenticated ? true : false
   }
 
   const getWalletInfoProps = (): WalletInfoProps => {
-    const address = localStorage.getItem('token')
-    const name = localStorage.getItem('name') 
-    const rdns = localStorage.getItem('rdns')
-    const uuid = localStorage.getItem('uuid')
-    const icon = localStorage.getItem('icon')
+    console.log('address: ', address)
+    console.log('currentChain: ', currentChain)
+    // const address = localStorage.getItem('token')
+    // const name = localStorage.getItem('name') 
+    // const rdns = localStorage.getItem('rdns')
+    // const uuid = localStorage.getItem('uuid')
+    // const icon = localStorage.getItem('icon')
+
     return {
         address,
-        name,
-        rdns,
-        uuid,
-        icon
+        currentChain,
     }
   }
 
@@ -54,7 +57,7 @@ const TopNav = () => {
               ? <div className={styles.connectWallet}>
                   <Button
                     type='primary'
-                    onClick={() => router.push('/connect')}>
+                    onClick={connectWallet}>
                     Connect Wallet
                   </Button>
                </div>

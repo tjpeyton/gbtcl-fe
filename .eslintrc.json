@@ -8,6 +8,7 @@
     "no-useless-return": "error",
     "no-useless-catch": "error",
     "no-unneeded-ternary": "error",
-    "no-unsafe-finally": "error"
+    "no-unsafe-finally": "error",
+    "semi": ["error", "never"]
   }
 }

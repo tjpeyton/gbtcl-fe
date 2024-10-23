@@ -6,10 +6,7 @@ import { formatAddress } from '@/lib/utils'
 
 export type WalletInfoProps = {
     address: string | null,
-    name: string | null,
-    rdns: string | null,
-    uuid: string | null,
-    icon: string | null
+    currentChain: number | null
 }
 
 const WalletInfo = (props: WalletInfoProps) => {
@@ -19,7 +16,7 @@ const WalletInfo = (props: WalletInfoProps) => {
     <div className={styles.container}>
       <Button onClick={() => {}}>
         <div className={styles.buttonItems}>
-          <img src={props.icon ?? ''} alt='walletAvatar'/>
+          <img alt='walletAvatar'/>
           <span className={styles.address}>{ address }</span>
         </div>     
       </Button>
