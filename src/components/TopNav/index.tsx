@@ -3,28 +3,13 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-import Button from '../Button'
-import WalletInfo, { WalletInfoProps } from '../WalletInfo'
+import WalletInfo from '../WalletInfo'
 
 import styles from './TopNav.module.css'
-import { useWalletContext, WalletContext } from '@/context/WalleContext'
 
 
 const TopNav = () => {
   const pathname = usePathname()
-  const {
-    connectWallet,
-    disconnect,
-    state: { isAuthenticated, address, currentChain },
-  } = useWalletContext() as WalletContext;
-
-  const getWalletInfoProps = (): WalletInfoProps => {
-    return {
-        address,
-        currentChain,
-        disconnect,
-    }
-  }
 
   return (
     <nav className={styles.container}>
@@ -41,17 +26,7 @@ const TopNav = () => {
         href='/'>
         Whitepaper
       </Link>
-      {
-        isAuthenticated
-            ? <WalletInfo {...getWalletInfoProps()} ></WalletInfo>
-            : <div className={styles.connectWallet}>
-                <Button
-                  type='primary'
-                  onClick={connectWallet}>
-                  Connect Wallet
-                </Button>
-              </div>
-      }
+      <WalletInfo />
     </nav>
   )
 }

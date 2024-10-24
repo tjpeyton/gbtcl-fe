@@ -1,26 +1,4 @@
-.dropdownContainer {
-    position: absolute;
-}
-
-.dropdownMenu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-top: none;
-    z-index: 1000;
-}
-  
-.dropdownMenu li {
-    padding: 10px;
-    cursor: pointer;
-}
-  
-.dropdownMenu li:hover {
-    background-color: #f0f0f0;
+.connectWalletContainer {
+    height: 35px;
+    width: 125px;
 }

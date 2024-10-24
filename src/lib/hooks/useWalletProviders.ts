@@ -1,6 +1,6 @@
-import { BrowserProvider, ethers, JsonRpcSigner } from "ethers";
 import { useCallback, useEffect, useState } from "react";
-import { generateToken } from "../jwt";
+import { BrowserProvider, ethers, JsonRpcSigner } from "ethers";
+
 
 declare global {
     interface Window {
@@ -49,8 +49,7 @@ const useWalletProvider = () => {
             provider,
             isAuthenticated: true,
           });
-  
-          console.log('hello: ')
+
           localStorage.setItem("isConnected", "true")
 
           const request = await fetch('/api/auth', {
@@ -59,7 +58,6 @@ const useWalletProvider = () => {
           })
           const token = await request.json()
 
-          console.log('token', token)
           localStorage.setItem("token", token.token)
         }
       } catch (error) {

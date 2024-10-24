@@ -2,44 +2,68 @@
 
 import { useState } from 'react'
 
+import { CHAIN_ID_TO_NETWORK, formatAddress } from '@/lib/utils'
+import { useWalletContext, WalletContext } from '@/context/WalleContext'
+
+import Button, { ButtonType, ButtonVariant } from '../Button'
+import DropdownMenu from '../DropdownMenu'
+
 import styles from './WalletInfo.module.css'
 
-import Button from '../Button'
 
-import { CHAIN_ID_TO_NETWORK, formatAddress } from '@/lib/utils'
-
-
-export type WalletInfoProps = {
-    address: string | null,
-    currentChain: number | null,
-    disconnect: () => void
-}
-
-const WalletInfo = (props: WalletInfoProps) => {
+const WalletInfo = () => {
+  const {
+    connectWallet,
+    disconnect,
+    state: { isAuthenticated, address, currentChain },
+  } = useWalletContext() as WalletContext;
   const [isOpen, setIsOpen] = useState(false)
-  const address = formatAddress(props.address ?? '')
 
   return (
-    <div className={styles.container}>
-      <div className={styles.dropdownContainer}>
-      <Button onClick={() => setIsOpen(!isOpen)}>
-        <div className={styles.buttonItems}>
-          <span className={styles.address}>{ address }</span>
-        </div>     
-      </Button>
-      {
-        isOpen && (
-          <ul className={styles.dropdownMenu}>
-            <li className={styles.dropdownItem}>
-              <span>{CHAIN_ID_TO_NETWORK[props.currentChain ?? 0]}</span>
-            </li>
-            <li>
-              <Button onClick={props.disconnect}>Disconnect</Button>
-            </li>
-          </ul>
+    <div>
+      {isAuthenticated 
+        ? (
+          <>
+            <div className={styles.connectWalletContainer}>
+              <Button 
+                type={ButtonType.BUTTON}
+                variant={ButtonVariant.PRIMARY}
+                onClick={() => setIsOpen(!isOpen)}>
+                <div className={styles.buttonItems}>
+                  <span className={styles.address}>{ formatAddress(address ?? '') }</span>
+                </div>     
+              </Button>
+            </div>
+            {
+              isOpen && (
+                <DropdownMenu>
+                  <li>
+                    <span>{CHAIN_ID_TO_NETWORK[currentChain ?? 0]}</span>
+                  </li>
+                  <li>
+                    <Button 
+                      type={ButtonType.BUTTON}
+                      variant={ButtonVariant.TERTIARY}
+                      onClick={disconnect}>
+                      Disconnect
+                    </Button>
+                  </li>
+                </DropdownMenu>
+              )
+            }
+          </>
+        ) 
+        : (
+          <div className={styles.connectWalletContainer}>
+            <Button
+              type={ButtonType.BUTTON}
+              variant={ButtonVariant.SECONDARY}
+              onClick={connectWallet}>
+              Connect Wallet
+            </Button>
+          </div>
         )
       }
-      </div>
     </div>
   )
 }

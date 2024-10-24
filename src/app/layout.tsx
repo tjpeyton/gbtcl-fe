@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
-import TopNav from '@/components/TopNav';
 import WalletContextProvider from '@/context/WalleContext';
 
+import TopNav from '@/components/TopNav';
+
 import './globals.css';
+
 
 const inter = Inter({ subsets: ['latin'] });
 
