@@ -1,4 +1,4 @@
-import { generateToken } from '@/lib/jwt'
+import { generateToken } from "@/lib/jwt"
 
 // Generate a jwt 
 export async function POST(request: Request) {

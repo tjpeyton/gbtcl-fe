@@ -18,22 +18,11 @@ const TopNav = () => {
     state: { isAuthenticated, address, currentChain },
   } = useWalletContext() as WalletContext;
 
-  const isConnected = (): boolean => {
-    return isAuthenticated ? true : false
-  }
-
   const getWalletInfoProps = (): WalletInfoProps => {
-    console.log('address: ', address)
-    console.log('currentChain: ', currentChain)
-    // const address = localStorage.getItem('token')
-    // const name = localStorage.getItem('name') 
-    // const rdns = localStorage.getItem('rdns')
-    // const uuid = localStorage.getItem('uuid')
-    // const icon = localStorage.getItem('icon')
-
     return {
         address,
         currentChain,
+        disconnect,
     }
   }
 
@@ -42,26 +31,26 @@ const TopNav = () => {
       <h1>Global Bitcoin Lottery</h1>
       <Link 
         className={`${pathname === '/about' ? 'activeLink' : 'link'}`}
-        href='/about'>
+        // go nowhere for now
+        href='/'>
         About
       </Link>
       <Link 
         className={`${pathname === '/whitepaper' ? 'activeLink' : 'link'}`}
-        href='/whitepaper'>
+        // go nowhere for now
+        href='/'>
         Whitepaper
       </Link>
       {
-        isConnected()
+        isAuthenticated
             ? <WalletInfo {...getWalletInfoProps()} ></WalletInfo>
-            : pathname !== '/connect'
-              ? <div className={styles.connectWallet}>
-                  <Button
-                    type='primary'
-                    onClick={connectWallet}>
-                    Connect Wallet
-                  </Button>
-               </div>
-              : <></>
+            : <div className={styles.connectWallet}>
+                <Button
+                  type='primary'
+                  onClick={connectWallet}>
+                  Connect Wallet
+                </Button>
+              </div>
       }
     </nav>
   )
