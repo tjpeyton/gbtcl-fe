@@ -5,10 +5,10 @@ import { useState } from 'react'
 import { CHAIN_ID_TO_NETWORK, formatAddress } from '@/lib/utils'
 import { useWalletContext, WalletContext } from '@/context/WalleContext'
 
-import Button, { ButtonType, ButtonVariant } from '../Button'
 import DropdownMenu from '../DropdownMenu'
 
 import styles from './WalletInfo.module.css'
+import { Button } from '../ui/button'
 
 
 const WalletInfo = () => {
@@ -26,8 +26,7 @@ const WalletInfo = () => {
           <>
             <div className={styles.connectWalletContainer}>
               <Button 
-                type={ButtonType.BUTTON}
-                variant={ButtonVariant.PRIMARY}
+                type='button'
                 onClick={() => setIsOpen(!isOpen)}>
                 <div className={styles.buttonItems}>
                   <span className={styles.address}>{ formatAddress(address ?? '') }</span>
@@ -42,8 +41,8 @@ const WalletInfo = () => {
                   </li>
                   <li>
                     <Button 
-                      type={ButtonType.BUTTON}
-                      variant={ButtonVariant.TERTIARY}
+                      type='button'
+                      variant='ghost'
                       onClick={disconnect}>
                       Disconnect
                     </Button>
@@ -56,8 +55,8 @@ const WalletInfo = () => {
         : (
           <div className={styles.connectWalletContainer}>
             <Button
-              type={ButtonType.BUTTON}
-              variant={ButtonVariant.SECONDARY}
+              type='button'
+              variant='secondary'
               onClick={connectWallet}>
               Connect Wallet
             </Button>
