@@ -56,9 +56,9 @@ const useWalletProvider = () => {
             method: 'POST',
             body: JSON.stringify({ address: accounts[0], chain }),
           })
-          const token = await request.json()
+          const response = await request.json()
 
-          localStorage.setItem("token", token.token)
+          localStorage.setItem("token", response.token)
         }
       } catch (error) {
         console.error("Error connecting wallet", error)
