@@ -8,8 +8,6 @@ import { useWalletContext, WalletContext } from '@/context/WalleContext'
 import { Button } from '../ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu'
 
-import styles from './WalletInfo.module.css'
-
 
 const WalletInfo = () => {
   const {
@@ -26,9 +24,7 @@ const WalletInfo = () => {
               <DropdownMenuTrigger>
                 <Button 
                   type='button'>
-                  <div className={styles.buttonItems}>
-                    <span className={styles.address}>{ formatAddress(address ?? '') }</span>
-                  </div>     
+                  { formatAddress(address ?? '') }
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
