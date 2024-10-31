@@ -11,7 +11,6 @@ export function formatAddress(address: string) {
 
 export const CHAIN_ID_TO_NETWORK: Record<string, string> =  {
   "0": "Unknown",
-  "1": "Ethereum",
-  "11155111": "Sepolia"
+  "1": "Ethereum Mainnet",
+  "11155111": "Sepolia Testnet"
 }
-

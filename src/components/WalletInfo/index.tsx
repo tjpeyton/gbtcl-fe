@@ -1,14 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { LogOut } from 'lucide-react'
 
 import { CHAIN_ID_TO_NETWORK, formatAddress } from '@/lib/utils'
 import { useWalletContext, WalletContext } from '@/context/WalleContext'
 
-import DropdownMenu from '../DropdownMenu'
+import { Button } from '../ui/button'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu'
 
 import styles from './WalletInfo.module.css'
-import { Button } from '../ui/button'
 
 
 const WalletInfo = () => {
@@ -17,53 +17,47 @@ const WalletInfo = () => {
     disconnect,
     state: { isAuthenticated, address, currentChain },
   } = useWalletContext() as WalletContext;
-  const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div>
+    <>
       {isAuthenticated 
         ? (
-          <>
-            <div className={styles.connectWalletContainer}>
-              <Button 
-                type='button'
-                onClick={() => setIsOpen(!isOpen)}>
-                <div className={styles.buttonItems}>
-                  <span className={styles.address}>{ formatAddress(address ?? '') }</span>
-                </div>     
-              </Button>
-            </div>
-            {
-              isOpen && (
-                <DropdownMenu>
-                  <li>
-                    <span>{CHAIN_ID_TO_NETWORK[currentChain ?? 0]}</span>
-                  </li>
-                  <li>
-                    <Button 
-                      type='button'
-                      variant='ghost'
-                      onClick={disconnect}>
-                      Disconnect
-                    </Button>
-                  </li>
-                </DropdownMenu>
-              )
-            }
-          </>
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <Button 
+                  type='button'>
+                  <div className={styles.buttonItems}>
+                    <span className={styles.address}>{ formatAddress(address ?? '') }</span>
+                  </div>     
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>
+                  {CHAIN_ID_TO_NETWORK[currentChain ?? 0]}
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <LogOut/>
+                  <Button 
+                    type='button'
+                    variant='ghost'
+                    onClick={disconnect}>
+                    Disconnect
+                  </Button>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu> 
         ) 
         : (
-          <div className={styles.connectWalletContainer}>
             <Button
               type='button'
               variant='secondary'
               onClick={connectWallet}>
               Connect Wallet
             </Button>
-          </div>
         )
       }
-    </div>
+    </>
   )
 }
 
