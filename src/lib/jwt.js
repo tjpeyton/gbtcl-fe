@@ -6,10 +6,11 @@ export const generateToken = (payload) => {
   return jwt.sign(payload, secretKey, { expiresIn: '1h'})
 }
 
-export const verifyToken = (token) => {
+export const parseToken = (token) => {
   try {
     return jwt.verify(token, secretKey)
-  } catch (err) {
-    return null
+  } catch (error) {
+    console.error('Error parsing token:', error)
+    throw new Error('Invalid token')
   }
 }

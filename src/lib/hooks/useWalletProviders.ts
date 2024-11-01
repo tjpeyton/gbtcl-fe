@@ -54,11 +54,12 @@ const useWalletProvider = () => {
 
           const request = await fetch('/api/auth', {
             method: 'POST',
-            body: JSON.stringify({ address: accounts[0], chain }),
+            body: JSON.stringify({ address: accounts[0] })
           })
           const response = await request.json()
 
           localStorage.setItem("token", response.token)
+          localStorage.setItem("isAdmin", response.isAdmin)
         }
       } catch (error) {
         console.error("Error connecting wallet", error)
@@ -68,6 +69,8 @@ const useWalletProvider = () => {
     const disconnect = () => {
       setState(initialWalletState)
       localStorage.removeItem("isConnected")
+      localStorage.removeItem("token")
+      localStorage.removeItem("isAdmin")  
     };
   
     // Check if wallet is connected
