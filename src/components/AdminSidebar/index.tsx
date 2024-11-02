@@ -1,6 +1,6 @@
 'use client'
 
-import { ReceiptText, LayoutDashboard, Dices } from "lucide-react"
+import { ReceiptText, LayoutDashboard, Dices, House } from "lucide-react"
 
 import {
   Sidebar,
@@ -32,6 +32,11 @@ const items = [
     title: "Contracts",
     url: "/admin/contract",
     icon: ReceiptText,
+  }, 
+  {
+    title: "App",
+    url: "/",
+    icon: House,
   }
 ]
 
@@ -42,7 +47,7 @@ export function AdminSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Admin</SidebarGroupLabel>
+          <SidebarGroupLabel>GBTCL Admin</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => {
