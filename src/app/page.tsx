@@ -1,5 +1,3 @@
-
-
 import { columns } from '@/components/LotteryTable/columns';
 import { DataTable } from '@/components/ui/table';
 import { Card } from '@/components/ui/card';

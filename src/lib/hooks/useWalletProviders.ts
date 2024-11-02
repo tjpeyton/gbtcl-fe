@@ -60,6 +60,7 @@ const useWalletProvider = () => {
 
           localStorage.setItem("token", response.token)
           localStorage.setItem("isAdmin", response.isAdmin)
+          
         }
       } catch (error) {
         console.error("Error connecting wallet", error)

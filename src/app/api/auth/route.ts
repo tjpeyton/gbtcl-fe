@@ -1,19 +1,33 @@
 import { generateToken } from "@/lib/jwt"
 import { isAdmin } from "@/lib/mongodb/models/admin"
+import { cookies } from "next/headers"
 
 // Generate a jwt 
 export async function POST(request: Request) {
   try {
     const body = await request.json()
     const admin = await isAdmin(body.address)
-    const token = generateToken({ 
+    const token = await generateToken({ 
       address: body.address, 
       isAdmin: admin
     })
 
-    return new Response(JSON.stringify({ token, isAdmin: admin }), {
-        headers: { 'Content-Type': 'application/json' }
-    })
+    const response = new Response(
+      JSON.stringify({ isAdmin: admin, token }),
+      { headers: { 'Content-Type': 'application/json' } }
+    )
+
+    if (admin) {
+      cookies().set({
+        name: 'admin-token',
+        value: token,
+        path: '/',
+        maxAge: 86400,
+        httpOnly: true 
+      })
+    }
+
+    return response
 
   } catch (err) {
     return new Response(null, { status: 500, statusText: 'Server Error' })
