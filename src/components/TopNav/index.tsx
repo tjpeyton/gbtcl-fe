@@ -13,7 +13,10 @@ const TopNav = () => {
 
   return (
     <nav className={styles.container}>
-      <h1>Global Bitcoin Lottery</h1>
+      <Link
+        href='/'>
+        <h1>Global Bitcoin Lottery</h1>
+      </Link>
       <Link 
         className={`${pathname === '/about' ? 'activeLink' : 'link'}`}
         // go nowhere for now

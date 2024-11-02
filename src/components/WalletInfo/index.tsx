@@ -7,13 +7,14 @@ import { useWalletContext, WalletContext } from '@/context/WalleContext'
 
 import { Button } from '../ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu'
+import Link from 'next/link'
 
 
 const WalletInfo = () => {
   const {
     connectWallet,
     disconnect,
-    state: { isAuthenticated, address, currentChain },
+    state: { isAuthenticated, address, currentChain, isAdmin },
   } = useWalletContext() as WalletContext;
 
   return (
@@ -32,6 +33,13 @@ const WalletInfo = () => {
                   {CHAIN_ID_TO_NETWORK[currentChain ?? 0]}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                {isAdmin && (
+                  <DropdownMenuItem>
+                    <Link href='/admin'>
+                      Admin
+                    </Link>
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuItem>
                   <LogOut/>
                   <Button 

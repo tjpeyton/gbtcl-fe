@@ -14,6 +14,7 @@ export interface WalletState {
     signer: JsonRpcSigner | null;
     provider: BrowserProvider | null;
     isAuthenticated: boolean;
+    isAdmin: boolean;
 }
 
 const useWalletProvider = () => {
@@ -23,6 +24,7 @@ const useWalletProvider = () => {
         signer: null,
         provider: null,
         isAuthenticated: false,
+        isAdmin: false,
     };
   
     const [state, setState] = useState<WalletState>(initialWalletState);
@@ -41,15 +43,6 @@ const useWalletProvider = () => {
           const signer = await provider.getSigner()
           const chain = Number(await (await provider.getNetwork()).chainId)
   
-          setState({
-            ...state,
-            address: accounts[0],
-            signer,
-            currentChain: chain,
-            provider,
-            isAuthenticated: true,
-          });
-
           localStorage.setItem("isConnected", "true")
 
           const request = await fetch('/api/auth', {
@@ -60,7 +53,16 @@ const useWalletProvider = () => {
 
           localStorage.setItem("token", response.token)
           localStorage.setItem("isAdmin", response.isAdmin)
-          
+
+          setState({
+            ...state,
+            address: accounts[0],
+            signer,
+            currentChain: chain,
+            provider,
+            isAuthenticated: true,
+            isAdmin: response.isAdmin,
+          });
         }
       } catch (error) {
         console.error("Error connecting wallet", error)
