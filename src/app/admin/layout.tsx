@@ -17,7 +17,6 @@ export default function RootLayout({
     <SidebarProvider>
       <AdminSidebar />
       <main className={styles.main}>
-        <SidebarTrigger />
         {children}
       </main>
     </SidebarProvider>  
