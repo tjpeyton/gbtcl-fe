@@ -14,7 +14,7 @@ export function middleware(request: NextRequest) {
       return adminMiddleware(request)
     }
 
-    if (method === 'POST') {
+    if (method === 'POST' && !(path.startsWith('/api/auth'))) {
       return csrfMiddleware(request)
     }
 

@@ -11,8 +11,11 @@ import { ConnectContractForm } from '@/components/forms/ConnectContractForm'
 
 import { FormData } from '../forms/ConnectContractForm/types'
 
+export type ConnectContractDialogProps = {
+  onSuccess: () => void
+}
 
-export function ConnectContractDialog() {
+export function ConnectContractDialog({ onSuccess }: ConnectContractDialogProps) {
   const [open, setOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -40,6 +43,7 @@ export function ConnectContractDialog() {
           description: 'You can now interact with the contract',
           variant: 'default'
         })
+        onSuccess()
       } 
       // Handle submission
       setOpen(false)

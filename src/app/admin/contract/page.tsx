@@ -1,12 +1,7 @@
-import { ConnectContractDialog } from "@/components/ConnectContractDialog"
+import { ContractsPage } from "./ContractsPage"
 
-
-const AdminContractPage = () => {
-  return (
-    <>
-       <ConnectContractDialog />
-    </>
-  )
+const AdminContractPage = async () => {
+  return <ContractsPage />
 }
 
-export default AdminContractPage    
+export default AdminContractPage
