@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 
 import { getDb } from "@/lib/mongodb"
-import { verifyCsrfToken } from "@/lib/csrf"
+import { adminMiddleware } from "@/lib/middleware/admin"
 import { CHAIN_ID_TO_ETHERSCAN_API_URL } from "@/lib/utils"
 
 import { contractSchema } from "@/components/forms/ConnectContractForm/schema"
@@ -30,15 +30,8 @@ interface EtherscanResponse {
 
 export async function POST(request: NextRequest) {
     try {
-        // Validate CSRF token
-        const csrfToken = request.headers.get('X-CSRF-Token')
-        if (!csrfToken) {
-            return NextResponse.json(
-                { error: 'Missing CSRF token' },
-                { status: 403 }
-            )
-        }
-        await verifyCsrfToken(csrfToken)
+        // Only allow admins to add contracts
+        await adminMiddleware(request)
 
         // Validate form data
         const body = await request.json()
@@ -106,3 +99,19 @@ export async function POST(request: NextRequest) {
         )
     }
 }
+
+export async function GET(request: NextRequest) {
+    try { 
+        await adminMiddleware(request)  
+
+        const db = await getDb('gbtcl')
+        const collection = db.collection<Contract>('contract')
+
+        const contracts = await collection.find().toArray()
+
+        return NextResponse.json({ contracts }, { status: 200 })
+    } catch (error) {
+        console.error('Error fetching contracts:', error)
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    }
+}   

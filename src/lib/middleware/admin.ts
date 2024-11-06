@@ -11,18 +11,18 @@ export const adminMiddleware = async (request: NextRequest) => {
         const token = request.cookies.get('admin-token')?.value
 
         if (!token) {
-            return NextResponse.redirect(new URL('/', request.url))
+            return NextResponse.redirect(new URL('/', request.url), { status: 401 })
         }
 
         const payload = await verifyToken(token)  
 
         if (!payload.isAdmin) {
-            return NextResponse.redirect(new URL('/', request.url))
+            return NextResponse.redirect(new URL('/', request.url), { status: 403 })
         } else {
             return response
         }
         
     } catch (error) {
-        return NextResponse.redirect(new URL('/', request.url))
+        return NextResponse.redirect(new URL('/', request.url), { status: 401 })
     }
 }

@@ -1,3 +1,4 @@
+import { NextRequest, NextResponse } from 'next/server'
 import { generateToken } from './jwt'
 import { cookies } from 'next/headers'
 

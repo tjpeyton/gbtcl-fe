@@ -2,20 +2,28 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 import { adminMiddleware } from './lib/middleware/admin'
+import { csrfMiddleware } from './lib/middleware/csrf'
 
 
 export function middleware(request: NextRequest) {
-  const path = request.nextUrl.pathname
+  
+    const path = request.nextUrl.pathname
+    const method = request.method
 
-  if (path.startsWith('/admin')) {
-    return adminMiddleware(request)
-  }
+    if (path.startsWith('/admin')) {
+      return adminMiddleware(request)
+    }
 
-  return NextResponse.next()
+    if (method === 'POST') {
+      return csrfMiddleware(request)
+    }
+
+    return NextResponse.next()
 }
 
 export const config = {
   matcher: [
-    '/admin/:path*'
+    '/admin/:path*',
+    '/api/:path*'
   ]
 }
