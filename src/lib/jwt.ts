@@ -2,13 +2,13 @@ import { jwtVerify, SignJWT } from "jose"
 
 const secretKey = process.env.JWT_SECRET
 
-export async function generateToken(payload: any) {
+export async function generateToken(payload: any, expiresIn?: string) {
   const secret = new TextEncoder().encode(secretKey)
   
   return new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
-    .setExpirationTime('24h')
+    .setExpirationTime(expiresIn ?? '24h')
     .sign(secret)
 }
 
