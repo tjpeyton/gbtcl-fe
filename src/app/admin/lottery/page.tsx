@@ -1,6 +1,7 @@
+import { LotteryPage } from "./LotteryPage"
 
 const AdminLotteryPage = () => {
-  return <div>AdminLotteryPage</div>
+  return <LotteryPage />
 }
 
 export default AdminLotteryPage 

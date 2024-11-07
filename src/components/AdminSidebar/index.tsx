@@ -8,6 +8,7 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -15,7 +16,10 @@ import {
 
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { cn } from "@/lib/utils"
+import { CHAIN_ID_TO_NETWORK, cn, formatAddress } from "@/lib/utils"
+import { useWalletContext } from "@/context/WalleContext"
+import { WalletContext } from "@/context/WalleContext"
+import { Button } from "../ui/button"
 
 const items = [
   {
@@ -42,9 +46,23 @@ const items = [
 
 export function AdminSidebar() {
   const pathname = usePathname()
+  const {
+    state: { address, currentChain },
+  } = useWalletContext() as WalletContext;
 
   return (
     <Sidebar>
+      <SidebarHeader>
+        {currentChain && (
+          <span className="text-center block">
+            {CHAIN_ID_TO_NETWORK[currentChain]}
+          </span>
+        )}
+        <Button 
+          type="button">
+          {formatAddress(address ?? '')}
+        </Button>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>GBTCL Admin</SidebarGroupLabel>
