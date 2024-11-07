@@ -4,13 +4,13 @@ import { useEffect, useState } from 'react'
 
 import { toast } from '@/lib/hooks/use-toast'
 
-import { ConnectContractDialog } from "@/components/ConnectContractDialog"
+import { ConnectContractDialog } from "@/components/dialog/ConnectContractDialog"
 import { DataTable } from "@/components/ui/table"
 
 import { Contract, columns } from "./columns"
 
 
-export function ContractsPage() {
+export const ContractsPage = () => {
   const [contracts, setContracts] = useState<Contract[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -23,7 +23,7 @@ export function ContractsPage() {
       setContracts(data.contracts || [])
     } catch (error) {
       toast({
-        title: 'Failed to connect contract',
+        title: 'Failed to retrieve contracts',
         variant: 'destructive' 
       })
     } finally {
@@ -32,7 +32,7 @@ export function ContractsPage() {
   }
 
   useEffect(() => {
-        fetchContracts()
+    fetchContracts()
   }, [])
 
   if (isLoading) {

@@ -9,13 +9,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from "@/components/ui/button"
 import { ConnectContractForm } from '@/components/forms/ConnectContractForm'
 
-import { FormData } from '../forms/ConnectContractForm/types'
+import { FormData } from '../../forms/ConnectContractForm/types'
 
 export type ConnectContractDialogProps = {
   onSuccess: () => void
 }
 
-export function ConnectContractDialog({ onSuccess }: ConnectContractDialogProps) {
+export const ConnectContractDialog = ({ onSuccess }: ConnectContractDialogProps) => {
   const [open, setOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -45,11 +45,14 @@ export function ConnectContractDialog({ onSuccess }: ConnectContractDialogProps)
         })
         onSuccess()
       } 
-      // Handle submission
+
       setOpen(false)
     } catch (error) {
-        // handle error better
-      console.error(error)
+      toast({
+        title: 'Failed to connect contract',
+        description: 'Please try again',
+        variant: 'destructive' 
+      })
     } finally {
       setIsLoading(false)
     }
