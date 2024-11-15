@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { LogOut } from 'lucide-react'
 
 import { CHAIN_ID_TO_NETWORK, formatAddress } from '@/lib/utils'
@@ -7,7 +8,6 @@ import { useWalletContext, WalletContext } from '@/context/WalleContext'
 
 import { Button } from '../ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu'
-import Link from 'next/link'
 
 
 const WalletInfo = () => {

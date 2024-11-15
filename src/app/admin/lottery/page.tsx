@@ -1,7 +1,8 @@
-import { LotteryPage } from "./LotteryPage"
+import { LotteryPageClient } from "./LotteryPageClient"
+
 
 const AdminLotteryPage = () => {
-  return <LotteryPage />
+  return <LotteryPageClient />
 }
 
 export default AdminLotteryPage 

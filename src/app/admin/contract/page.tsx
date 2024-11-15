@@ -1,7 +1,8 @@
-import { ContractsPage } from "./ContractsPage"
+import { ContractsPageClient } from "./ContractsPageClient"
+
 
 const AdminContractPage = async () => {
-  return <ContractsPage />
+  return <ContractsPageClient />  
 }
 
 export default AdminContractPage

@@ -4,13 +4,13 @@ import { useEffect, useState } from 'react'
 
 import { toast } from '@/lib/hooks/use-toast'
 
-import { ConnectContractDialog } from "@/components/dialog/ConnectContractDialog"
 import { DataTable } from "@/components/ui/table"
+import { ConnectContractDialog } from '@/components/dialog/ConnectContractDialog'
 
 import { Contract, columns } from "./columns"
 
 
-export const ContractsPage = () => {
+export const ContractsPageClient = () => {
   const [contracts, setContracts] = useState<Contract[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -29,7 +29,7 @@ export const ContractsPage = () => {
     } finally {
       setIsLoading(false)
     }
-  }
+  } 
 
   useEffect(() => {
     fetchContracts()
@@ -40,14 +40,13 @@ export const ContractsPage = () => {
   }
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto py-2">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold">Contracts</h1>
         <ConnectContractDialog onSuccess={() => {
           fetchContracts()
         }} />
       </div>
-
       <DataTable 
         data={contracts} 
         columns={columns} 

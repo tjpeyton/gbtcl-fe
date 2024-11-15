@@ -1,7 +1,9 @@
 'use client'
 
-import useWalletProvider, { WalletState } from "@/lib/hooks/useWalletProviders";
 import { createContext, ReactNode, useContext } from "react";
+
+import useWalletProvider, { WalletState } from "@/lib/hooks/useWalletProviders";
+
 
 export interface WalletContext {
     connectWallet: () => Promise<any>;

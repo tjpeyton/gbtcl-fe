@@ -10,7 +10,7 @@ import { CreateLotteryDialog } from '@/components/dialog/CreateLotteryDialog'
 import { Lottery, columns } from "./columns"
 
 
-export const LotteryPage = () =>  {
+export const LotteryPageClient = () =>  {
   const [lotteries, setLotteries] = useState<Lottery[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -40,7 +40,7 @@ export const LotteryPage = () =>  {
   }
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto py-2">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold">Lotteries</h1>
         <CreateLotteryDialog onSuccess={fetchLotteries} />
