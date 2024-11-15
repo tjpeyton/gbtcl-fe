@@ -4,7 +4,6 @@ import { verifyCsrfToken } from "../csrf"
 
 
 export const csrfMiddleware = async (request: NextRequest) => {
-    console.log('csrfMiddleware')
     try {
         const csrfToken = request.headers.get('X-CSRF-Token')
         if (!csrfToken) {
