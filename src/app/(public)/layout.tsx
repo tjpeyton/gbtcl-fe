@@ -11,7 +11,9 @@ export default function PublicLayout({
   return (
     <>
       <TopNav/>
-      {children}  
+      <main>  
+        {children}  
+      </main>
     </>
   );
 }

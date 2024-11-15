@@ -18,6 +18,12 @@ a {
   text-decoration: none;
 }
 
+main {
+  padding-left: 15%;
+  padding-right: 15%;
+  padding-top: 3%;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

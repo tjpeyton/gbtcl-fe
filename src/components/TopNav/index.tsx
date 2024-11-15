@@ -20,13 +20,13 @@ const TopNav = () => {
       <Link 
         className={`${pathname === '/about' ? 'activeLink' : 'link'}`}
         // go nowhere for now
-        href='/'>
+        href='/about'>
         About
       </Link>
       <Link 
         className={`${pathname === '/whitepaper' ? 'activeLink' : 'link'}`}
         // go nowhere for now
-        href='/'>
+        href='/whitepaper'>
         Whitepaper
       </Link>
       <WalletInfo />

@@ -1,5 +1,5 @@
 import { AdminSidebar } from "@/components/AdminSidebar"
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { SidebarProvider } from "@/components/ui/sidebar"
 
 import styles from './page.module.css'
 
