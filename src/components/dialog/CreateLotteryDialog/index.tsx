@@ -6,18 +6,22 @@ import { Plus } from 'lucide-react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 
-import { FormData } from '../../forms/ConnectContractForm/types'
 import { CreateLotteryForm } from '@/components/forms/CreateLotteryForm'
+import { CreateLotteryFormData } from '@/components/forms/CreateLotteryForm/types'
+
 import { Contract } from '@/app/admin/contract/columns'
-import { toast } from '@/lib/hooks/use-toast'
+
+import { toast } from '@/app/hooks/use-toast'
+
 
 export type CreateLotteryDialogProps = {
-  onSuccess: () => void
+  onSuccess: () => void,
+  onSubmit: (data: CreateLotteryFormData, csrfToken: string) => Promise<void>,
+  isLoading: boolean
 }
 
-export const CreateLotteryDialog = ({ onSuccess }: CreateLotteryDialogProps) => {
+export const CreateLotteryDialog = (props: CreateLotteryDialogProps) => {
   const [open, setOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const [contracts, setContracts] = useState<Contract[]>([])
 
   const fetchContracts = async () => {
@@ -32,20 +36,6 @@ export const CreateLotteryDialog = ({ onSuccess }: CreateLotteryDialogProps) => 
         title: 'Failed to retrieve contracts',
         variant: 'destructive' 
       })
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleSubmit = async (data: FormData, csrfToken: string) => {
-    try {
-      setIsLoading(true)
-
-      setOpen(false)
-    } catch (error) {
-
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -62,13 +52,13 @@ export const CreateLotteryDialog = ({ onSuccess }: CreateLotteryDialogProps) => 
             Create Lottery
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-4xl">
         <DialogHeader>
           <DialogTitle>Create Lottery</DialogTitle>
         </DialogHeader>
         <CreateLotteryForm 
-          onSubmit={handleSubmit}
-          isLoading={isLoading}
+          onSubmit={props.onSubmit}
+          isLoading={props.isLoading}
           contracts={contracts} 
         />
       </DialogContent>

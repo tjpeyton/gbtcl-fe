@@ -70,6 +70,30 @@ const useWalletProvider = () => {
         console.error("Error connecting wallet", error)
       }
     }, [state]);
+
+    const switchNetwork = useCallback(async (chainId: number) => {
+      try {
+        console.log('switchNetwork', chainId) 
+          await window.ethereum.request({
+              method: 'wallet_switchEthereumChain',
+              params: [{ chainId: `0x${chainId.toString(16)}` }],
+          });
+      } catch (error: any) {
+          // Error code 4902 means the chain hasn't been added to MetaMask
+          if (error.code === 4902) {
+              console.error('This network needs to be added to your wallet first')
+          }
+          throw error;
+      }
+    }, []);
+
+    const getBlockTimestamp = useCallback(async () => {
+      if (!state.provider) throw new Error('Provider not initialized');
+
+      const block = await state.provider.getBlock('latest');
+
+      return block?.timestamp;
+    }, [state.provider]);
   
     const disconnect = () => {
       setState(initialWalletState)
@@ -106,6 +130,8 @@ const useWalletProvider = () => {
     return {
       connectWallet,
       disconnect,
+      switchNetwork, 
+      getBlockTimestamp,
       state,
     }
 }

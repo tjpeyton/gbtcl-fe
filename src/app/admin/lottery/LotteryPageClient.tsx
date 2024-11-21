@@ -1,18 +1,30 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { ethers } from 'ethers'
 
-import { toast } from '@/lib/hooks/use-toast'
+import { toast } from '@/app/hooks/use-toast'
+
+import { Lottery } from '@/app/api/lottery/route'
 
 import { DataTable } from "@/components/ui/table"
 import { CreateLotteryDialog } from '@/components/dialog/CreateLotteryDialog'
+import { CreateLotteryFormData } from '@/components/forms/CreateLotteryForm/types'
 
-import { Lottery, columns } from "./columns"
+import { WalletContext, useWalletContext } from '@/context/WalleContext'
+
+import { columns, LotteryColumn } from "./columns"
 
 
 export const LotteryPageClient = () =>  {
   const [lotteries, setLotteries] = useState<Lottery[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isCreating, setIsCreating] = useState(false)
+  const {
+    state: { isAuthenticated, provider },
+    switchNetwork,
+    getBlockTimestamp,
+  } = useWalletContext() as WalletContext;
 
   const fetchLotteries = async () => {
     try {
@@ -31,6 +43,101 @@ export const LotteryPageClient = () =>  {
     }
   }
 
+  const createLottery = async (
+    lottery: Lottery,
+    csrfToken: string
+  ) => {
+    try { 
+      const response = await fetch('/api/lottery', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify(lottery)
+      }) 
+      if (!response.ok) throw new Error('Failed to create lottery')
+
+      const data = await response.json()
+      console.log('data', data) 
+      fetchLotteries() 
+
+    } catch (error) {
+
+    }
+  } 
+
+  const fetchContract = async (contractAddress: string) => {
+    const response = await fetch(`/api/contract?address=${contractAddress}`)
+    if (!response.ok) throw new Error('Failed to fetch contract')
+
+    const data = await response.json()
+    return data  
+  }
+
+  const handleCreateLottery = async (data: CreateLotteryFormData, csrfToken: string) => {
+    try {
+      setIsCreating(true)
+      if (!isAuthenticated) throw new Error('User is not authenticated')
+
+      const chain = await provider?.getNetwork()
+      const currentChainId = Number(chain?.chainId)  
+      if (currentChainId !== data.contract.chainId) {
+        await switchNetwork(data.contract.chainId)
+      }
+
+      const signer = await provider?.getSigner()
+      if (!signer) throw new Error('Signer not found')  
+
+      const res = await fetchContract(data.contract.address)
+      const contract = res.contract
+      if (!contract) throw new Error('Contract not found')
+
+      const contractInstance = new ethers.Contract(data.contract.address, contract.abi, signer)
+
+      const blockTimestamp = await getBlockTimestamp()
+      if (!blockTimestamp) throw new Error('Block timestamp not found')
+
+      contractInstance.on("LotteryCreated", (
+        ticketPrice: number,
+        maxTickets: number,
+        operatorCommissionPercentage: number,
+        expiration: number,
+        lotteryId: number, 
+      ) => {
+        const lottery: Lottery = {
+          contract: {
+            address: data.contract.address,
+            chainId: data.contract.chainId
+          },
+          lotteryId: Number(lotteryId),
+          ticketPrice: Number(ticketPrice),
+          maxTickets: Number(maxTickets),
+          operatorCommissionPercentage: Number(operatorCommissionPercentage),
+          expiration: Number(expiration),
+          createdAt: new Date(blockTimestamp).toISOString(),
+        }
+
+        createLottery(lottery, csrfToken)
+      })
+
+      const tx = await contractInstance.createLottery(
+        data.ticketPrice, 
+        data.maxTickets, 
+        data.commissionPercentage, 
+        blockTimestamp + data.expiration
+      )
+      console.log('tx', tx) 
+      const receipt = await tx.wait()
+      console.log('receipt', receipt)
+
+    } catch (error) {
+
+    } finally {
+      setIsCreating(false)
+    }
+  }
+
   useEffect(() => {
     fetchLotteries()
   }, [])
@@ -43,10 +150,14 @@ export const LotteryPageClient = () =>  {
     <div className="container mx-auto py-2">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold">Lotteries</h1>
-        <CreateLotteryDialog onSuccess={fetchLotteries} />
+        <CreateLotteryDialog 
+          onSuccess={fetchLotteries}
+          onSubmit={handleCreateLottery}
+          isLoading={isCreating}
+        />
       </div>
       <DataTable 
-        data={lotteries} 
+        data={lotteries as LotteryColumn[]} 
         columns={columns} 
       />
     </div>

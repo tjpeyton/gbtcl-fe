@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-import { toast } from '@/lib/hooks/use-toast'
+import { toast } from '@/app/hooks/use-toast'
 
 import { DataTable } from "@/components/ui/table"
 import { ConnectContractDialog } from '@/components/dialog/ConnectContractDialog'

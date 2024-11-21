@@ -2,13 +2,13 @@ import { z } from 'zod'
 
 import { Contract } from '@/app/admin/contract/columns'
 
-import { lotterySchema } from './schema'
+import { lotteryFormSchema } from './schema'
 
 
-export type FormData = z.infer<typeof lotterySchema>
+export type CreateLotteryFormData = z.infer<typeof lotteryFormSchema>
 
 export interface CreateLotteryFormProps {
-  onSubmit: (data: FormData, csrfToken: string) => Promise<void>
+  onSubmit: (data: CreateLotteryFormData, csrfToken: string) => Promise<void>
   isLoading?: boolean
   contracts: Contract[] 
 }

@@ -2,31 +2,29 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 
-export type Lottery = {
-  id: string,
-  contractAddress: string,
-  status: 'created' | 'started' | 'ended' | 'winner_selected',
-  maxTickets: string,
-  ticketPrice: string,
-  createdAt: string,
-  startedAt: string,
-  endedAt: string, 
-  winnerSelectedAt: string,
-  winnerAddress: string,
+export type LotteryColumn = {
+  lotteryId: number,
+  contract: {
+    address: string,  
+    chainId: number
+  },
+  maxTickets: number,
+  ticketPrice: number,
+  createdAt: string
 }
 
-export const columns: ColumnDef<Lottery>[] = [
+export const columns: ColumnDef<LotteryColumn>[] = [
   {
-    accessorKey: "id",
+    accessorKey: "lotteryId",
     header: "ID",
   },
   {
-    accessorKey: "contractAddress",
+    accessorKey: "contract.address",
     header: "Address",
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "contract.chainId",
+    header: "Chain ID",
   },
   {
     accessorKey: "maxTickets",

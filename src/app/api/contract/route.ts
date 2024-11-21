@@ -1,19 +1,13 @@
 import { NextRequest, NextResponse } from "next/server"
 
+import { contractSchema } from "@/components/forms/ConnectContractForm/schema"
+
 import { getDb } from "@/lib/mongodb"
 import { adminMiddleware } from "@/lib/middleware/admin"
 import { CHAIN_ID_TO_ETHERSCAN_API_URL } from "@/lib/utils"
 
-import { contractSchema } from "@/components/forms/ConnectContractForm/schema"
+import { Lottery } from "@/app/api/lottery/route"   
 
-
-interface Lottery {
-    id: number,
-    ticketPrice: number,
-    maxTickets: number,
-    expiration: number,
-    operatorTicketPercentage: number
-}
 
 interface Contract {
     address: string,
@@ -27,6 +21,30 @@ interface EtherscanResponse {
     message: string
     result: string
 }
+
+
+export async function GET(request: NextRequest) {
+    try { 
+        await adminMiddleware(request)  
+
+        const db = await getDb('gbtcl')
+        const collection = db.collection<Contract>('contract')
+
+        const query = request.nextUrl.searchParams  
+        const address = query.get('address')
+
+        if(address) {
+            const contract = await collection.findOne({ address })
+            return NextResponse.json({ contract }, { status: 200 })
+        } else {
+            const contracts = await collection.find().toArray()
+            return NextResponse.json({ contracts }, { status: 200 })
+        }
+    } catch (error) {
+        console.error('Error fetching contracts:', error)
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    }
+} 
 
 export async function POST(request: NextRequest) {
     try {
@@ -99,19 +117,3 @@ export async function POST(request: NextRequest) {
         )
     }
 }
-
-export async function GET(request: NextRequest) {
-    try { 
-        await adminMiddleware(request)  
-
-        const db = await getDb('gbtcl')
-        const collection = db.collection<Contract>('contract')
-
-        const contracts = await collection.find().toArray()
-
-        return NextResponse.json({ contracts }, { status: 200 })
-    } catch (error) {
-        console.error('Error fetching contracts:', error)
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
-    }
-}   

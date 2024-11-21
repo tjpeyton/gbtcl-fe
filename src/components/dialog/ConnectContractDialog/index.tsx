@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Plug } from 'lucide-react'
 
-import { toast } from '@/lib/hooks/use-toast'
+import { toast } from '@/app/hooks/use-toast'
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
