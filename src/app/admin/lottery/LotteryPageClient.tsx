@@ -88,6 +88,7 @@ export const LotteryPageClient = () =>  {
       setIsCreating(true)
       if (!isAuthenticated) throw new Error('User is not authenticated')
 
+      // Switch network if necessary
       const chain = await provider?.getNetwork()
       const currentChainId = Number(chain?.chainId)  
       if (currentChainId !== data.contract.chainId) {
@@ -121,12 +122,13 @@ export const LotteryPageClient = () =>  {
             address: data.contract.address,
             chainId: data.contract.chainId
           },
+          // Convert to number to handle BigInt
           lotteryId: Number(lotteryId),
           ticketPrice: Number(ticketPrice),
           maxTickets: Number(maxTickets),
           operatorCommissionPercentage: Number(operatorCommissionPercentage),
-          expiration: Number(expiration),
-          createdAt: new Date(blockTimestamp).toISOString(),
+          expiration: blockTimestamp + Number(expiration),
+          createdAt: blockTimestamp,
         }
         toast({ 
           title: 'Lottery created successfully',

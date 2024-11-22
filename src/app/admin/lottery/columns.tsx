@@ -1,5 +1,6 @@
 "use client"
 
+import { CHAIN_ID_TO_NETWORK, formatUnixTimestamp } from "@/lib/utils"
 import { ColumnDef } from "@tanstack/react-table"
 
 export type LotteryColumn = {
@@ -10,32 +11,40 @@ export type LotteryColumn = {
   },
   maxTickets: number,
   ticketPrice: number,
-  createdAt: string
+  createdAt: number
 }
 
 export const columns: ColumnDef<LotteryColumn>[] = [
   {
-    accessorKey: "lotteryId",
     header: "ID",
+    accessorKey: "lotteryId",
   },
   {
-    accessorKey: "contract.address",
-    header: "Address",
+    header: "Contract Address",
+    accessorKey: "contract.address"
   },
   {
+    header: "Chain",
     accessorKey: "contract.chainId",
-    header: "Chain ID",
+    cell: ({ row }) => {
+      const chainId = row.original.contract.chainId
+      return CHAIN_ID_TO_NETWORK[chainId]
+    }
   },
   {
-    accessorKey: "maxTickets",
     header: "Max Tickets",
+    accessorKey: "maxTickets"
   },
   {
-    accessorKey: "ticketPrice",
     header: "Ticket Price",
+    accessorKey: "ticketPrice"
   },
   {
-    accessorKey: "createdAt",
     header: "Created At",
+    accessorKey: "createdAt",
+    cell: ({ row }) => {
+      const createdAt = row.original.createdAt
+      return formatUnixTimestamp(createdAt)
+    }
   },
 ]

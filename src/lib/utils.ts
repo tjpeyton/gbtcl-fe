@@ -24,3 +24,7 @@ export const NETWORK_TO_CHAIN_ID: Record<string, string> = {
   "Ethereum Mainnet": "1",
   "Sepolia Testnet": "11155111"
 }
+
+export const formatUnixTimestamp = (timestamp: number) => {
+  return new Date(timestamp * 1000).toLocaleString()
+}

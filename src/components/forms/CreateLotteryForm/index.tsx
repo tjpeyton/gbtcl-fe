@@ -209,6 +209,6 @@ export const CreateLotteryForm = (props: CreateLotteryFormProps) => {
                     </div>
                 </form>     
             </Form>
-        ) : <div>Loading...</div>   
+        ) : <div>Creating Lottery...</div>   
     )
 }   

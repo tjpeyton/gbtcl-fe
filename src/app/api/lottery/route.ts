@@ -5,6 +5,7 @@ import { adminMiddleware } from '@/lib/middleware/admin'
 import { getDb } from '@/lib/mongodb'
 
 import { z } from 'zod'
+import { Contract } from '@/app/admin/contract/columns'
 
 
 export interface Lottery {
@@ -17,7 +18,7 @@ export interface Lottery {
     maxTickets: number,
     expiration: number,
     operatorCommissionPercentage: number,
-    createdAt: string
+    createdAt: number,
     winnerSelectedAt?: string,
     winnerAddress?: string,
 }
@@ -32,7 +33,7 @@ const createLotterySchema = z.object({
     maxTickets: z.number().min(1),
     expiration: z.number().min(1000),
     operatorCommissionPercentage: z.number().min(1).max(50),
-    createdAt: z.string().datetime(),
+    createdAt: z.number().min(1),
 })
 
 
@@ -43,7 +44,9 @@ export async function GET(request: NextRequest) {
         const db = await getDb('gbtcl')
         const collection = db.collection<Lottery>('lottery')
 
-        const lotteries = await collection.find().toArray()
+        const lotteries = await collection.find()
+            .sort({ createdAt: -1 })
+            .toArray()
 
         return NextResponse.json({ lotteries }, { status: 200 })
     } catch (error) {
@@ -69,9 +72,15 @@ export async function POST(request: NextRequest) {
         }   
 
         const db = await getDb('gbtcl')
-        const collection = db.collection<Lottery>('lottery')
+        const lotteryCollection = db.collection<Lottery>('lottery')
 
-        await collection.insertOne(lotteryDocument)
+        const { insertedId } = await lotteryCollection.insertOne(lotteryDocument)
+
+        const contractCollection = db.collection<Contract>('contract')
+        await contractCollection.updateOne(
+            { address: lotteryDocument.contract.address },
+            { $push: { lottery: insertedId.toString() } }
+        )
 
         return NextResponse.json({ message: 'Lottery created successfully' }, { status: 201 })
     } catch (error) {
