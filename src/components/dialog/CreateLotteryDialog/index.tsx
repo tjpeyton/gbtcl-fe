@@ -57,7 +57,11 @@ export const CreateLotteryDialog = (props: CreateLotteryDialogProps) => {
           <DialogTitle>Create Lottery</DialogTitle>
         </DialogHeader>
         <CreateLotteryForm 
-          onSubmit={props.onSubmit}
+          onSubmit={async (...args) => {
+            await props.onSubmit(...args)
+            setOpen(false)
+            props.onSuccess()
+          }}
           isLoading={props.isLoading}
           contracts={contracts} 
         />

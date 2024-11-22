@@ -33,9 +33,10 @@ export const LotteryPageClient = () =>  {
       
       const data = await response.json()
       setLotteries(data.lotteries || [])
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: 'Failed to fetch lotteries',
+        description: error.message,
         variant: 'destructive' 
       })
     } finally {
@@ -58,12 +59,19 @@ export const LotteryPageClient = () =>  {
       }) 
       if (!response.ok) throw new Error('Failed to create lottery')
 
-      const data = await response.json()
-      console.log('data', data) 
+      toast({ 
+        title: 'Lottery saved to database successfully',
+        description: 'Lottery ID: ' + lottery.lotteryId + ' created at ' + lottery.createdAt,
+        variant: 'default' 
+      })
       fetchLotteries() 
 
-    } catch (error) {
-
+    } catch (error: any) {
+      toast({ 
+        title: 'Failed to save lottery to database',
+        description: error.message,
+        variant: 'destructive' 
+      })
     }
   } 
 
@@ -89,16 +97,19 @@ export const LotteryPageClient = () =>  {
       const signer = await provider?.getSigner()
       if (!signer) throw new Error('Signer not found')  
 
+      // Fetch contract and retrieve ABI
       const res = await fetchContract(data.contract.address)
       const contract = res.contract
       if (!contract) throw new Error('Contract not found')
 
       const contractInstance = new ethers.Contract(data.contract.address, contract.abi, signer)
 
+      // Get current block timestamp
       const blockTimestamp = await getBlockTimestamp()
       if (!blockTimestamp) throw new Error('Block timestamp not found')
 
-      contractInstance.on("LotteryCreated", (
+      // Listen for LotteryCreated event
+      contractInstance.once("LotteryCreated", (
         ticketPrice: number,
         maxTickets: number,
         operatorCommissionPercentage: number,
@@ -117,7 +128,11 @@ export const LotteryPageClient = () =>  {
           expiration: Number(expiration),
           createdAt: new Date(blockTimestamp).toISOString(),
         }
-
+        toast({ 
+          title: 'Lottery created successfully',
+          description: 'Lottery ID: ' + lottery.lotteryId + ' created at ' + lottery.createdAt,
+          variant: 'default' 
+        }) 
         createLottery(lottery, csrfToken)
       })
 
@@ -127,12 +142,14 @@ export const LotteryPageClient = () =>  {
         data.commissionPercentage, 
         blockTimestamp + data.expiration
       )
-      console.log('tx', tx) 
-      const receipt = await tx.wait()
-      console.log('receipt', receipt)
 
-    } catch (error) {
-
+      await tx.wait()
+    } catch (error: any) {
+      toast({ 
+        title: 'Failed to create lottery',
+        description: error.message,
+        variant: 'destructive' 
+      })
     } finally {
       setIsCreating(false)
     }
