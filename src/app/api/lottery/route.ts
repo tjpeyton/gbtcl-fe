@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
 
 import { adminMiddleware } from '@/lib/middleware/admin'
 
 import { getDb } from '@/lib/mongodb'
 
-import { z } from 'zod'
 import { Contract } from '@/app/admin/contract/columns'
 
 
@@ -62,8 +62,7 @@ export async function POST(request: NextRequest) {
         const body = await request.json()
         const result = createLotterySchema.safeParse(body)
 
-        if (!result.success) {
-            console.log('result', result.error.issues)  
+        if (!result.success) { 
             return NextResponse.json({ error: result.error.issues }, { status: 400 })
         }
 
