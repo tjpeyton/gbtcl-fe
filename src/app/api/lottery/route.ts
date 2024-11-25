@@ -6,6 +6,7 @@ import { adminMiddleware } from '@/lib/middleware/admin'
 import { getDb } from '@/lib/mongodb'
 
 import { Contract } from '@/app/admin/contract/columns'
+import { Filter } from 'mongodb'
 
 
 export interface Lottery {
