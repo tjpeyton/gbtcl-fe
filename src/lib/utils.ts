@@ -25,6 +25,33 @@ export const NETWORK_TO_CHAIN_ID: Record<string, string> = {
   "Sepolia Testnet": "11155111"
 }
 
-export const formatUnixTimestamp = (timestamp: number) => {
+export const formatUnixTimestampFromSeconds = (timestamp: number) => {
   return new Date(timestamp * 1000).toLocaleString()
+}
+
+export const formatUnixTimestampFromMilliseconds = (timestamp: number) => {
+  return new Date(timestamp).toLocaleString()
+}
+
+export const secondsToMilliseconds = (seconds: number) => {
+  return seconds * 1000
+}
+
+export const minutesToSeconds = (minutes: number) => {
+  return minutes * 60
+}
+
+export const minutesToMilliseconds = (minutes: number) => {
+  return minutes * 60 * 1000
+}
+
+export const addMinutesToUnixTimestamp = (timestamp: number, minutes: number) => {
+  const milliseconds = minutesToMilliseconds(minutes)
+  const baseTimestamp = new Date(minutesToMilliseconds(timestamp))
+  console.log('baseTimestamp', baseTimestamp)   
+
+  const newTimestamp = new Date(baseTimestamp.getTime() + milliseconds)
+  console.log('newTimestamp', newTimestamp)
+  
+  return newTimestamp.getTime()
 }

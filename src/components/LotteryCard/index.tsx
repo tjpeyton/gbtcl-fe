@@ -1,4 +1,4 @@
-import { CHAIN_ID_TO_NETWORK, formatUnixTimestamp } from "@/lib/utils"
+import { CHAIN_ID_TO_NETWORK, formatUnixTimestampFromSeconds } from "@/lib/utils"
 
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 
@@ -23,8 +23,8 @@ export const LotteryCard = ({ lottery, isActive }: LotteryCardProps) => {
       </CardHeader>
       <CardContent>
         <div className="flex items-center gap-2">
-          <span>Created At: {formatUnixTimestamp(lottery.createdAt)}</span>
-          <span>Expiry: {formatUnixTimestamp(lottery.createdAt + lottery.expiration)}</span>
+          <span>Created At: {formatUnixTimestampFromSeconds(lottery.createdAt)}</span>
+          <span>Expiry: {formatUnixTimestampFromSeconds(lottery.expiration)}</span>
           <span>Max Tickets: {lottery.maxTickets}</span>
           <span>Ticket Price: {lottery.ticketPrice}</span>
         </div>

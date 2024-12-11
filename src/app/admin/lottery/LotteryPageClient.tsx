@@ -13,6 +13,8 @@ import { CreateLotteryFormData } from '@/components/forms/CreateLotteryForm/type
 
 import { WalletContext, useWalletContext } from '@/context/WalleContext'
 
+import { minutesToSeconds } from '@/lib/utils'
+
 import { columns, LotteryColumn } from "./columns"
 
 
@@ -105,18 +107,15 @@ export const LotteryPageClient = () =>  {
 
       const contractInstance = new ethers.Contract(data.contract.address, contract.abi, signer)
 
-      // Get current block timestamp
-      const blockTimestamp = await getBlockTimestamp()
-      if (!blockTimestamp) throw new Error('Block timestamp not found')
-
       // Listen for LotteryCreated event
       contractInstance.once("LotteryCreated", (
         ticketPrice: number,
         maxTickets: number,
         operatorCommissionPercentage: number,
         expiration: number,
-        lotteryId: number, 
+        lotteryId: number
       ) => {
+
         const lottery: Lottery = {
           contract: {
             address: data.contract.address,
@@ -127,8 +126,8 @@ export const LotteryPageClient = () =>  {
           ticketPrice: Number(ticketPrice),
           maxTickets: Number(maxTickets),
           operatorCommissionPercentage: Number(operatorCommissionPercentage),
-          expiration: blockTimestamp + Number(expiration),
-          createdAt: blockTimestamp,
+          expiration: Number(expiration),
+          createdAt: Number(blockTimestamp)
         }
         toast({ 
           title: 'Lottery created successfully',
@@ -138,11 +137,17 @@ export const LotteryPageClient = () =>  {
         createLottery(lottery, csrfToken)
       })
 
+      // Get current block timestamp
+      const blockTimestamp = await getBlockTimestamp()
+      if (!blockTimestamp) throw new Error('Block timestamp not found')
+
+      const expiration = blockTimestamp + minutesToSeconds(data.expiration)
+
       const tx = await contractInstance.createLottery(
         data.ticketPrice, 
         data.maxTickets, 
-        data.commissionPercentage, 
-        blockTimestamp + data.expiration
+        data.commissionPercentage,
+        expiration,
       )
 
       await tx.wait()

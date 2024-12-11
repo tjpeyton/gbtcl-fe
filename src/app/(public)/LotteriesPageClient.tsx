@@ -3,11 +3,12 @@
 import { useState, useEffect } from "react"
 
 import { LotteryCard } from "@/components/LotteryCard"
+import { Skeleton } from "@/components/ui/skeleton"
 
 import { Lottery } from "@/app/api/lottery/route"
 
 import { toast } from "../hooks/use-toast"
-import { Skeleton } from "@/components/ui/skeleton"
+import { secondsToMilliseconds } from "@/lib/utils"
 
 
 export const LotteriesPageClient = () => {
@@ -21,19 +22,12 @@ export const LotteriesPageClient = () => {
             if (!response.ok) throw new Error('Failed to fetch lotteries')
 
             const data = await response.json()
+            const currentDate = new Date()
             const activeLotteries = data.lotteries.filter(
-                (lottery: Lottery) => {
-                    const expirationTimestamp = lottery.expiration + lottery.createdAt
-                    const currentTimestamp = Date.now()
-                    return expirationTimestamp > currentTimestamp
-                }
+                (lottery: Lottery) => new Date(secondsToMilliseconds(lottery.expiration)) > currentDate
             )
             const expiredLotteries = data.lotteries.filter(
-                (lottery: Lottery) => {
-                    const expirationTimestamp = lottery.expiration + lottery.createdAt
-                    const currentTimestamp = Date.now()
-                    return expirationTimestamp < currentTimestamp
-                }
+                (lottery: Lottery) => new Date(secondsToMilliseconds(lottery.expiration)) < currentDate
             )
             setActiveLotteries(activeLotteries || [])
             setExpiredLotteries(expiredLotteries || [])

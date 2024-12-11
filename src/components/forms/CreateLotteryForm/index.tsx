@@ -45,8 +45,8 @@ export const CreateLotteryForm = (props: CreateLotteryFormProps) => {
             },        
             ticketPrice: 0,
             maxTickets: 0,
-            expiration: 0,
-            commissionPercentage: 0,
+            expiration: 5,
+            commissionPercentage: 5,
         },
     })
 
@@ -157,9 +157,9 @@ export const CreateLotteryForm = (props: CreateLotteryFormProps) => {
                                     <FormControl>   
                                         <Input 
                                             type="number"
-                                            min={1000}
-                                            max={100000}
-                                            step={1000}
+                                            min={5}
+                                            max={120}
+                                            step={5}
                                             {...field}
                                             onChange={(e) => {
                                                 field.onChange(Number(e.target.value))
@@ -167,7 +167,7 @@ export const CreateLotteryForm = (props: CreateLotteryFormProps) => {
                                         />
                                     </FormControl>
                                     <FormDescription>
-                                        Number of seconds before the lottery expires
+                                        Number of minutes before the lottery expires
                                     </FormDescription> 
                                     <FormMessage /> 
                                 </FormItem>
@@ -182,9 +182,9 @@ export const CreateLotteryForm = (props: CreateLotteryFormProps) => {
                                     <FormControl>   
                                         <Input 
                                             type="number"
-                                            min={1}
+                                            min={5}
                                             max={50}
-                                            step={1}
+                                            step={5}
                                             {...field}
                                             onChange={(e) => {
                                                 field.onChange(Number(e.target.value))
