@@ -1,5 +1,6 @@
 import { MongoClient } from 'mongodb'
 
+
 if (!process.env.MONGODB_URI) {
     throw new Error('MONGODB_URI is not defined')
 }
@@ -47,7 +48,7 @@ if (process.env.NODE_ENV === 'development') {
         })
 }
 
-export async function getDb(dbName: string) {
+export const getDb = async (dbName: string) => {
     const client = await clientPromise
     return client.db(dbName)
 }

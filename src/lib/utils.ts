@@ -48,10 +48,8 @@ export const minutesToMilliseconds = (minutes: number) => {
 export const addMinutesToUnixTimestamp = (timestamp: number, minutes: number) => {
   const milliseconds = minutesToMilliseconds(minutes)
   const baseTimestamp = new Date(minutesToMilliseconds(timestamp))
-  console.log('baseTimestamp', baseTimestamp)   
 
   const newTimestamp = new Date(baseTimestamp.getTime() + milliseconds)
-  console.log('newTimestamp', newTimestamp)
   
   return newTimestamp.getTime()
 }

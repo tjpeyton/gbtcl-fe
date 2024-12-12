@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { generateToken } from './jwt'
 import { cookies } from 'next/headers'
+
+import { generateToken } from './jwt'
+
 
 export const getCsrfToken = async () => {
   const token = await generateToken({}, '5m')
