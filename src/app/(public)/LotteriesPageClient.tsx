@@ -41,6 +41,10 @@ export const LotteriesPageClient = () => {
         }
     }
 
+    const handleBuyTickets = (lotteryId: number) => {
+        console.log('Buy Tickets', lotteryId)
+    }
+
     useEffect(() => {
         fetchLotteries()
     }, [])
@@ -69,6 +73,7 @@ export const LotteriesPageClient = () => {
                             key={lottery.lotteryId}
                             lottery={lottery}
                             isActive={true}
+                            onBuyTickets={() => handleBuyTickets(lottery.lotteryId)}
                         />
                     ))}
                     <div className="flex flex-row items-center">
