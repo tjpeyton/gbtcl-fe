@@ -1,6 +1,6 @@
-import { getDb } from "../client"
-import { AdminDocument } from "./types"
+import { AdminDocument } from "@/lib/types/admin"
 
+import { getDb } from "../client"
 
 export const isAdmin = async (address: string) : Promise<boolean> => {
     const db = await getDb('gbtcl')

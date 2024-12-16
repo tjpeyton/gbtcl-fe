@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { Contract } from '@/app/admin/contract/columns'
+import { Contract } from '@/lib/types/contract'
 
 import { lotteryFormSchema } from './schema'
 

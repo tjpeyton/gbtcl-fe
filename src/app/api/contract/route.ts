@@ -1,43 +1,24 @@
 import { NextRequest, NextResponse } from "next/server"
 
-import { contractSchema } from "@/components/forms/ConnectContractForm/schema"
-
-import { getDb } from "@/lib/mongodb"
 import { adminMiddleware } from "@/lib/middleware/admin"
-import { CHAIN_ID_TO_ETHERSCAN_API_URL } from "@/lib/utils"
 
-import { Lottery } from "@/app/api/lottery/route"   
+import { getAllContracts, getContract, insertContract } from "@/lib/mongodb"
+import { connectContractSchema, Contract } from "@/lib/types/contract"
 
-
-interface Contract {
-    address: string,
-    abi: string,
-    chainId: string,
-    lottery?: Lottery[]
-}
-
-interface EtherscanResponse {
-    status: string
-    message: string
-    result: string
-}
+import { EtherscanResponse, validateContract } from "@/lib/etherscan"
 
 
 export async function GET(request: NextRequest) {
     try { 
         await adminMiddleware(request)  
 
-        const db = await getDb('gbtcl')
-        const collection = db.collection<Contract>('contract')
-
         const query = request.nextUrl.searchParams  
         const address = query.get('address')
-
         if(address) {
-            const contract = await collection.findOne({ address })
+            const contract = await getContract(address)
             return NextResponse.json({ contract }, { status: 200 })
         } else {
-            const contracts = await collection.find().toArray()
+            const contracts = await getAllContracts()
             return NextResponse.json({ contracts }, { status: 200 })
         }
     } catch (error) {
@@ -53,7 +34,7 @@ export async function POST(request: NextRequest) {
 
         // Validate form data
         const body = await request.json()
-        const result = contractSchema.safeParse(body)
+        const result = connectContractSchema.safeParse(body)
         
         if (!result.success) {
             return NextResponse.json({ error: result.error.issues }, { status: 400 })
@@ -62,48 +43,24 @@ export async function POST(request: NextRequest) {
         const chainId = result.data.chain
         const address = result.data.contractAddress.toLowerCase()
 
-        const ETHERSCAN_API_URL = CHAIN_ID_TO_ETHERSCAN_API_URL[chainId]
-
-        // Validate contract and retrieve abi
-        const response = await fetch(
-            ETHERSCAN_API_URL + 
-            `?module=contract&action=getabi&` +         
-            `address=${address}&` +
-            `apikey=${process.env.ETHERSCAN_API_KEY}`
-        )
-
-        const data: EtherscanResponse = await response.json()
+        // Validate contract and retrieve abi   
+        const data: EtherscanResponse = await validateContract(chainId, address)
         if (data.status === '0') {
             return NextResponse.json(
                 { error: data.result },
                 { status: 400 }
             )
         }
-
         const abi = JSON.parse(data.result)
-
         const contract: Contract = {
             address,
             chainId,
             abi,
-            lottery: []
+            lottery: [],
+            createdAt: new Date()
         }
 
-        const db = await getDb('gbtcl')
-        const collection = db.collection<Contract>('contract')
-
-        // Check if contract exists first
-        const existingContract = await collection.findOne({
-            address: result.data.contractAddress.toLowerCase()
-        })
-
-        if (existingContract) {
-            return NextResponse.json({ 
-                message: 'Contract already exists for this network' 
-            }, { status: 409 })
-        }
-
-        await collection.insertOne((contract))
+        await insertContract(contract)
 
         return NextResponse.json(
             { message: 'ok' },

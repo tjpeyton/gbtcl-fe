@@ -1,6 +1,10 @@
 'use client'
 
+import { usePathname } from "next/navigation"
+import Link from "next/link"
 import { ReceiptText, LayoutDashboard, Dices, House } from "lucide-react"
+
+import { CHAIN_ID_TO_NETWORK, cn, formatAddress } from "@/lib/utils"
 
 import {
   Sidebar,
@@ -13,13 +17,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-
-import { usePathname } from "next/navigation"
-import Link from "next/link"
-import { CHAIN_ID_TO_NETWORK, cn, formatAddress } from "@/lib/utils"
-import { useWalletContext } from "@/context/WalleContext"
-import { WalletContext } from "@/context/WalleContext"
 import { Button } from "../ui/button"
+
+import { useWalletContext, WalletContext } from "@/context/WalleContext"
+
 
 const items = [
   {
@@ -29,12 +30,12 @@ const items = [
   },
   {
     title: "Lotteries",
-    url: "/admin/lottery",
+    url: "/admin/lotteries",
     icon: Dices,
   },
   {
     title: "Contracts",
-    url: "/admin/contract",
+    url: "/admin/contracts",
     icon: ReceiptText,
   }, 
   {

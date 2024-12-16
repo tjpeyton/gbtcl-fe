@@ -3,9 +3,8 @@
 import { useEffect, useState } from "react"
 import { Plug } from "lucide-react"
 import { useForm } from "react-hook-form"
-
-import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { z } from "zod"
 
 import { FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage, Form } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -13,8 +12,8 @@ import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 import { NETWORK_TO_CHAIN_ID } from "@/lib/utils"
+import { connectContractSchema } from "@/lib/types/contract"
 
-import { contractSchema } from "./schema"
 import { ConnectContractFormProps} from "./types"
 
 
@@ -36,8 +35,8 @@ export const ConnectContractForm = (props: ConnectContractFormProps) => {
         return () => clearInterval(interval)
     }, [])
 
-    const form = useForm<z.infer<typeof contractSchema>>({
-        resolver: zodResolver(contractSchema),
+    const form = useForm<z.infer<typeof connectContractSchema>>({
+        resolver: zodResolver(connectContractSchema),
         defaultValues: {
             contractAddress: "",
             chain: "",

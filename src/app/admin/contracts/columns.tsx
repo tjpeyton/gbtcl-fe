@@ -1,16 +1,12 @@
 "use client"
 
-import { CHAIN_ID_TO_NETWORK } from "@/lib/utils"
 import { ColumnDef } from "@tanstack/react-table"
 
-export type Contract = {
-  chainId: string,
-  address: string,
-  lottery: string[],
-  abi: any[]
-}
+import { ContractDocument } from "@/lib/types/contract"
+import { CHAIN_ID_TO_NETWORK } from "@/lib/utils"
 
-export const columns: ColumnDef<Contract>[] = [
+
+export const columns: ColumnDef<ContractDocument>[] = [
   {
     header: "Chain",
     accessorKey: "chainId",

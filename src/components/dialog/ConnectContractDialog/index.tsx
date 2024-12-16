@@ -3,13 +3,14 @@
 import { useState } from 'react'
 import { Plug } from 'lucide-react'
 
-import { toast } from '@/app/hooks/use-toast'
-
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { ConnectContractForm } from '@/components/forms/ConnectContractForm'
+import { toast } from '@/components/ui/hooks/use-toast'
 
-import { FormData } from '../../forms/ConnectContractForm/types'
+import { ConnectContractForm } from '@/components/forms/ConnectContractForm'
+import { ConnectContractFormData } from '@/components/forms/ConnectContractForm/types'
+
+import { saveContract } from '@/app/services/contractService'
 
 export type ConnectContractDialogProps = {
   onSuccess: () => void
@@ -19,21 +20,15 @@ export const ConnectContractDialog = ({ onSuccess }: ConnectContractDialogProps)
   const [open, setOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = async (data: FormData, csrfToken: string) => {
+  const handleSubmit = async (data: ConnectContractFormData, csrfToken: string) => {
     try {
       setIsLoading(true)
-      const response = await fetch('/api/contract', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-          'X-CSRF-Token': csrfToken
-        }
-      })
-      const json: any = await response.json()
+      const response = await saveContract(data, csrfToken)
       if (!response.ok) {
+        const data = await response.json()
         toast({
           title: 'Failed to connect contract',
-          description: json.error || json.message,
+          description: data.error || data.message,
           variant: 'destructive' 
         })
         return

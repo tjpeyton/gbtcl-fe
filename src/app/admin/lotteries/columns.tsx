@@ -4,18 +4,9 @@ import { ColumnDef } from "@tanstack/react-table"
 
 import { CHAIN_ID_TO_NETWORK, formatUnixTimestampFromSeconds } from "@/lib/utils"
 
-export type LotteryColumn = {
-  lotteryId: number,
-  contract: {
-    address: string,  
-    chainId: number
-  },
-  maxTickets: number,
-  ticketPrice: number,
-  createdAt: number
-}
+import { LotteryDocument } from "@/lib/types/lottery" 
 
-export const columns: ColumnDef<LotteryColumn>[] = [
+export const columns: ColumnDef<LotteryDocument>[] = [
   {
     header: "ID",
     accessorKey: "lotteryId",

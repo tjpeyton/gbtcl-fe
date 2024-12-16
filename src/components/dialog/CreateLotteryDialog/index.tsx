@@ -3,15 +3,16 @@
 import { useEffect, useState } from 'react'
 import { Plus } from 'lucide-react'
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import { toast } from '@/components/ui/hooks/use-toast'
 
 import { CreateLotteryForm } from '@/components/forms/CreateLotteryForm'
 import { CreateLotteryFormData } from '@/components/forms/CreateLotteryForm/types'
 
-import { Contract } from '@/app/admin/contract/columns'
+import { fetchAllContracts } from '@/app/services/contractService'
 
-import { toast } from '@/app/hooks/use-toast'
+import { Contract } from '@/lib/types/contract'
 
 
 export type CreateLotteryDialogProps = {
@@ -26,11 +27,8 @@ export const CreateLotteryDialog = (props: CreateLotteryDialogProps) => {
 
   const fetchContracts = async () => {
     try {
-      const response = await fetch('/api/contract')
-      if (!response.ok) throw new Error('Failed to fetch')
-      
-      const data = await response.json()
-      setContracts(data.contracts || [])    
+      const contracts: Contract[] = await fetchAllContracts()
+      setContracts(contracts)
     } catch (error) {
       toast({
         title: 'Failed to retrieve contracts',

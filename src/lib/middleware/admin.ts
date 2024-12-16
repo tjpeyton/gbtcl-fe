@@ -24,6 +24,7 @@ export const adminMiddleware = async (request: NextRequest) => {
         }
         
     } catch (error) {
+        console.error(error)    
         return NextResponse.redirect(new URL('/', request.url), { status: 401 })
     }
 }

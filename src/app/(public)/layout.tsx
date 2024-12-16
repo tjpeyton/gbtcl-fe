@@ -11,7 +11,7 @@ export default function PublicLayout({
   return (
     <>
       <TopNav/>
-      <main>  
+      <main className="container mx-auto">  
         {children}  
       </main>
     </>
