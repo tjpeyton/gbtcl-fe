@@ -15,17 +15,17 @@ export const useContract = () => {
 
     const getContract = async (address: string) => {
         try {
-            const contractData = await fetchContract(address)
-            console.log(contractData)   
+            const contractData = await fetchContract(address)   
 
-        // Check if the current network is the same as the contract's network   
-        const chain = await provider?.getNetwork()
-        const currentChainId = Number(chain?.chainId)  
-        if (currentChainId !== Number(contractData.chainId)) {
+            // Check if the current network is the same as the contract's network   
+            const chain = await provider?.getNetwork()
+            const currentChainId = Number(chain?.chainId)  
+            if (currentChainId !== Number(contractData.chainId)) {
                 await switchNetwork(Number(contractData.chainId))
             }
 
             if (!signer) throw new Error('Signer not found')
+                
             const contract = new ethers.Contract(address, contractData.abi, signer)
 
             return contract
