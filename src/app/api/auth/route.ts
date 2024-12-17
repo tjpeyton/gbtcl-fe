@@ -1,6 +1,8 @@
-import { generateToken } from "@/lib/jwt"
-import { isAdmin } from "@/lib/mongodb/models/admin"
 import { cookies } from "next/headers"
+
+import { generateToken } from "@/lib/jwt"
+import { isAdmin } from "@/lib/mongodb"
+
 
 // Generate a jwt 
 export async function POST(request: Request) {
@@ -28,7 +30,6 @@ export async function POST(request: Request) {
     }
 
     return response
-
   } catch (err) {
     return new Response(null, { status: 500, statusText: 'Server Error' })
   }

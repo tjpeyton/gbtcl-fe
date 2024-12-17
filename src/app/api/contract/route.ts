@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 
 import { adminMiddleware } from "@/lib/middleware/admin"
-
-import { getAllContracts, getContract, insertContract } from "@/lib/mongodb"
+import { getAllContracts, insertContract } from "@/lib/mongodb"
 import { connectContractSchema, Contract } from "@/lib/types/contract"
-
 import { EtherscanResponse, validateContract } from "@/lib/etherscan"
 
 
@@ -12,15 +10,9 @@ export async function GET(request: NextRequest) {
     try { 
         await adminMiddleware(request)  
 
-        const query = request.nextUrl.searchParams  
-        const address = query.get('address')
-        if(address) {
-            const contract = await getContract(address)
-            return NextResponse.json({ contract }, { status: 200 })
-        } else {
-            const contracts = await getAllContracts()
-            return NextResponse.json({ contracts }, { status: 200 })
-        }
+        const contracts = await getAllContracts()
+
+        return NextResponse.json({ contracts }, { status: 200 })
     } catch (error) {
         console.error('Error fetching contracts:', error)
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
@@ -29,7 +21,6 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
     try {
-        // Only allow admins to add contracts
         await adminMiddleware(request)
 
         // Validate form data

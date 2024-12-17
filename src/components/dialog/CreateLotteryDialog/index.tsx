@@ -12,35 +12,18 @@ import { CreateLotteryFormData } from '@/components/forms/CreateLotteryForm/type
 
 import { fetchAllContracts } from '@/app/services/contractService'
 
-import { Contract } from '@/lib/types/contract'
+import { Contract, ContractDocument, GetAllContractsResponse } from '@/lib/types/contract'
 
 
 export type CreateLotteryDialogProps = {
   onSuccess: () => void,
   onSubmit: (data: CreateLotteryFormData, csrfToken: string) => Promise<void>,
-  isLoading: boolean
+  isLoading: boolean,
+  contracts: ContractDocument[]
 }
 
 export const CreateLotteryDialog = (props: CreateLotteryDialogProps) => {
   const [open, setOpen] = useState(false)
-  const [contracts, setContracts] = useState<Contract[]>([])
-
-  const fetchContracts = async () => {
-    try {
-      const contracts: Contract[] = await fetchAllContracts()
-      setContracts(contracts)
-    } catch (error) {
-      toast({
-        title: 'Failed to retrieve contracts',
-        variant: 'destructive' 
-      })
-    }
-  }
-
-  useEffect(() => {
-    fetchContracts()
-  }, [])    
-
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -61,7 +44,7 @@ export const CreateLotteryDialog = (props: CreateLotteryDialogProps) => {
             props.onSuccess()
           }}
           isLoading={props.isLoading}
-          contracts={contracts} 
+          contracts={props.contracts} 
         />
       </DialogContent>
     </Dialog>

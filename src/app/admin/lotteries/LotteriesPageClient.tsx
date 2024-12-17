@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react'
 
 import { LotteryDocument, GetAllLotteriesResponse, Lottery } from '@/lib/types/lottery'
-
-import { minutesToSeconds } from '@/lib/utils'
+import { ContractDocument, GetAllContractsResponse } from '@/lib/types/contract'
+import { fetchAllContracts } from '@/app/services/contractService'
+import { fetchAllLotteries, saveLottery } from '@/app/services/lotteryService'
 
 import { DataTable } from "@/components/ui/table"
 import { CreateLotteryDialog } from '@/components/dialog/CreateLotteryDialog'
@@ -12,11 +13,11 @@ import { CreateLotteryFormData } from '@/components/forms/CreateLotteryForm/type
 import { toast } from '@/components/ui/hooks/use-toast'
 import TableSkeleton from '@/components/TableSkeleton'
 
-import { fetchAllLotteries, saveLottery } from '@/app/services/lotteryService'
-
 import { WalletContext, useWalletContext } from '@/context/WalleContext'
 
 import { useContract } from '@/app/hooks/useContract'
+
+import { minutesToSeconds } from '@/lib/utils'
 
 import { columns } from "./columns"
 
@@ -25,10 +26,14 @@ export const LotteryPageClient = () =>  {
   const [lotteries, setLotteries] = useState<LotteryDocument[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isCreating, setIsCreating] = useState(false)
+  const [contracts, setContracts] = useState<ContractDocument[]>([])
+
   const {
     state: { isAuthenticated },
     getBlockTimestamp,
-  } = useWalletContext() as WalletContext;
+  } = useWalletContext() as WalletContext
+
+  const { getContract } = useContract() 
 
   const fetchLotteries = async () => {
     try {
@@ -44,6 +49,21 @@ export const LotteryPageClient = () =>  {
       })
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const fetchContracts = async () => {
+    try {
+      const data: GetAllContractsResponse = await fetchAllContracts()
+      const contracts: ContractDocument[] = data.contracts
+
+      setContracts(contracts || [])
+    } catch (error: any) {
+      toast({
+        title: 'Failed to retrieve contracts',
+        description: error.message,
+        variant: 'destructive' 
+      })
     }
   }
 
@@ -74,7 +94,7 @@ export const LotteryPageClient = () =>  {
       setIsCreating(true)
       if (!isAuthenticated) throw new Error('User is not authenticated')
 
-      const contractInstance = await useContract(data.contract.address)
+      const contractInstance = await getContract(data.contract.address) 
 
       // Listen for LotteryCreated event
       contractInstance.once("LotteryCreated", (
@@ -133,6 +153,7 @@ export const LotteryPageClient = () =>  {
 
   useEffect(() => {
     fetchLotteries()
+    fetchContracts()  
   }, [])
 
 
@@ -143,8 +164,9 @@ export const LotteryPageClient = () =>  {
         {!isLoading && 
           <CreateLotteryDialog 
             onSuccess={fetchLotteries}
-            onSubmit={handleCreateLottery}
+            onSubmit={handleCreateLottery}  
             isLoading={isCreating}
+            contracts={contracts}
           />
         }
       </div>
