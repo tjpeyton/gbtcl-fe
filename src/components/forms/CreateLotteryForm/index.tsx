@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Plus } from "lucide-react"
+import { Loader2, Plus } from "lucide-react"
 import { useForm } from "react-hook-form"
 
 import { z } from "zod"
@@ -51,7 +51,7 @@ export const CreateLotteryForm = (props: CreateLotteryFormProps) => {
     })
 
     return (
-        !props.isLoading ? (    
+        <div className="relative">        
             <Form {...form}>
                 <form 
                     className="space-y-6" 
@@ -209,6 +209,11 @@ export const CreateLotteryForm = (props: CreateLotteryFormProps) => {
                     </div>
                 </form>     
             </Form>
-        ) : <div>Creating Lottery...</div>   
-    )
+            {props.isLoading && (
+                <div className="absolute inset-0 flex items-center justify-center bg-background/50">
+                    <Loader2 className="h-6 w-6 animate-spin" />
+                </div>
+            )}  
+        </div>
+    )       
 }   

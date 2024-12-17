@@ -36,7 +36,7 @@ export const ConnectContractDialog = ({ onSuccess }: ConnectContractDialogProps)
         toast({
           title: 'Contract connected',
           description: 'You can now interact with the contract',
-          variant: 'default'
+          variant: 'success'
         })
         onSuccess()
       } 

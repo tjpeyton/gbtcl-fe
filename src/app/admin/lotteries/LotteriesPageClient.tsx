@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { Plus } from 'lucide-react'
 
 import { LotteryDocument, GetAllLotteriesResponse, Lottery } from '@/lib/types/lottery'
 import { ContractDocument, GetAllContractsResponse } from '@/lib/types/contract'
@@ -8,13 +9,14 @@ import { fetchAllContracts } from '@/app/services/contractService'
 import { fetchAllLotteries, saveLottery } from '@/app/services/lotteryService'
 
 import { DataTable } from "@/components/ui/table"
-import { CreateLotteryDialog } from '@/components/dialog/CreateLotteryDialog'
+import { Button } from '@/components/ui/button'
+import { CreateLotteryForm } from '@/components/forms/CreateLotteryForm'
 import { CreateLotteryFormData } from '@/components/forms/CreateLotteryForm/types'
 import { toast } from '@/components/ui/hooks/use-toast'
+import { FormDialog } from '@/components/dialog/FormDialog'
 import TableSkeleton from '@/components/TableSkeleton'
 
 import { WalletContext, useWalletContext } from '@/context/WalleContext'
-
 import { useContract } from '@/app/hooks/useContract'
 
 import { minutesToSeconds } from '@/lib/utils'
@@ -27,6 +29,7 @@ export const LotteryPageClient = () =>  {
   const [isLoading, setIsLoading] = useState(true)
   const [isCreating, setIsCreating] = useState(false)
   const [contracts, setContracts] = useState<ContractDocument[]>([])
+  const [lotteryDialogOpen, setLotteryDialogOpen] = useState(false) 
 
   const {
     state: { isAuthenticated },
@@ -35,6 +38,7 @@ export const LotteryPageClient = () =>  {
 
   const { getContract } = useContract() 
 
+  
   const fetchLotteries = async () => {
     try {
       const data: GetAllLotteriesResponse = await fetchAllLotteries()
@@ -77,7 +81,7 @@ export const LotteryPageClient = () =>  {
       toast({ 
         title: 'Lottery saved to database successfully',
         description: 'Lottery ID: ' + lottery.lotteryId + ' created at ' + lottery.createdAt,
-        variant: 'default' 
+        variant: 'success' 
       })
       fetchLotteries() 
     } catch (error: any) {
@@ -121,8 +125,9 @@ export const LotteryPageClient = () =>  {
         toast({ 
           title: 'Lottery created successfully',
           description: 'Lottery ID: ' + lottery.lotteryId + ' created at ' + lottery.createdAt,
-          variant: 'default' 
+          variant: 'success' 
         }) 
+        setLotteryDialogOpen(false)
         createLottery(lottery, csrfToken)
       })
 
@@ -162,12 +167,20 @@ export const LotteryPageClient = () =>  {
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold">Lotteries</h1>
         {!isLoading && 
-          <CreateLotteryDialog 
-            onSuccess={fetchLotteries}
-            onSubmit={handleCreateLottery}  
-            isLoading={isCreating}
-            contracts={contracts}
-          />
+          <FormDialog
+            title="Create Lottery"
+            description="Create a new lottery"
+            isOpen={lotteryDialogOpen}
+            setIsOpen={setLotteryDialogOpen}
+            trigger={<Trigger/>}  
+            form={
+              <CreateLotteryForm 
+                onSubmit={handleCreateLottery}
+                isLoading={isCreating}
+                contracts={contracts} 
+              />
+            }
+          />  
         }
       </div>
       {isLoading && <TableSkeleton rows={5} columns={3} />}
@@ -178,5 +191,14 @@ export const LotteryPageClient = () =>  {
         />
       )}
     </div>
+  )
+}
+
+const Trigger = () => {
+  return (  
+    <Button>
+      <Plus/>
+      Create Lottery
+    </Button>
   )
 }
