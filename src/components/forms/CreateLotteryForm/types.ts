@@ -9,6 +9,6 @@ export type CreateLotteryFormData = z.infer<typeof lotteryFormSchema>
 
 export interface CreateLotteryFormProps {
   onSubmit: (data: CreateLotteryFormData, csrfToken: string) => Promise<void>
-  isLoading?: boolean
+  isLoading: boolean
   contracts: Contract[] 
 }

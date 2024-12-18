@@ -6,8 +6,7 @@ import { LotteryCard } from "@/components/LotteryCard"
 import TableSkeleton from "@/components/TableSkeleton"
 import { toast } from "@/components/ui/hooks/use-toast"
 
-import { LotteryDocument } from "@/lib/types/lottery"
-import { GetAllLotteriesResponse } from "@/lib/types/lottery"
+import { LotteryDocument, GetAllLotteriesResponse } from "@/lib/types/lottery"
 
 import { fetchAllLotteries, filterActiveLotteries, filterExpiredLotteries } from "../services/lotteryService"
 

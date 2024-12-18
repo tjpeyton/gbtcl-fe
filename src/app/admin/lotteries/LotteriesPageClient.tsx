@@ -5,14 +5,15 @@ import { Plus } from 'lucide-react'
 
 import { LotteryDocument, GetAllLotteriesResponse, Lottery } from '@/lib/types/lottery'
 import { ContractDocument, GetAllContractsResponse } from '@/lib/types/contract'
+
 import { fetchAllContracts } from '@/app/services/contractService'
 import { fetchAllLotteries, saveLottery } from '@/app/services/lotteryService'
 
 import { DataTable } from "@/components/ui/table"
 import { Button } from '@/components/ui/button'
+import { toast } from '@/components/ui/hooks/use-toast'
 import { CreateLotteryForm } from '@/components/forms/CreateLotteryForm'
 import { CreateLotteryFormData } from '@/components/forms/CreateLotteryForm/types'
-import { toast } from '@/components/ui/hooks/use-toast'
 import { FormDialog } from '@/components/dialog/FormDialog'
 import TableSkeleton from '@/components/TableSkeleton'
 
@@ -169,10 +170,14 @@ export const LotteryPageClient = () =>  {
         {!isLoading && 
           <FormDialog
             title="Create Lottery"
-            description="Create a new lottery"
+            description="Create a new lottery to a connected smart contract"
             isOpen={lotteryDialogOpen}
             setIsOpen={setLotteryDialogOpen}
-            trigger={<Trigger/>}  
+            trigger={
+              <Button icon={<Plus/>}>
+                Create Lottery
+              </Button>
+            }  
             form={
               <CreateLotteryForm 
                 onSubmit={handleCreateLottery}
@@ -191,14 +196,5 @@ export const LotteryPageClient = () =>  {
         />
       )}
     </div>
-  )
-}
-
-const Trigger = () => {
-  return (  
-    <Button>
-      <Plus/>
-      Create Lottery
-    </Button>
   )
 }

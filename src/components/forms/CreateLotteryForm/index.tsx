@@ -1,18 +1,20 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Loader2, Plus } from "lucide-react"
+import { Plus } from "lucide-react"
 import { useForm } from "react-hook-form"
 
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 import { FormField, FormItem, FormLabel, Form, FormControl, FormDescription, FormMessage } from "@/components/ui/form"
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 import { CHAIN_ID_TO_NETWORK } from "@/lib/utils"
+
+import { FormContainer } from "../FormContainer"
+import { FormSubmitButton } from "../FormSubmitButton"
 
 import { lotteryFormSchema } from "./schema"
 import { CreateLotteryFormProps} from "./types"
@@ -51,7 +53,7 @@ export const CreateLotteryForm = (props: CreateLotteryFormProps) => {
     })
 
     return (
-        <div className="relative">        
+        <FormContainer isLoading={props.isLoading}>
             <Form {...form}>
                 <form 
                     className="space-y-6" 
@@ -99,121 +101,119 @@ export const CreateLotteryForm = (props: CreateLotteryFormProps) => {
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-6">
                             <FormField
-                            control={form.control}
-                            name="ticketPrice"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Ticket Price</FormLabel> 
-                                    <FormControl>   
-                                        <Input 
-                                            type="number"
-                                            min={100}
-                                            step={10}
-                                            {...field}
-                                            onChange={(e) => {
-                                                field.onChange(Number(e.target.value))
-                                            }}  
-                                        />
-                                    </FormControl>
-                                    <FormDescription>
-                                        Price of a ticket in Wei
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="maxTickets"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Max Tickets</FormLabel> 
-                                    <FormControl>   
-                                        <Input 
-                                            type="number"
-                                            min={1}
-                                            step={1}
-                                            {...field}
-                                            onChange={(e) => {
-                                                field.onChange(Number(e.target.value))
-                                            }}
-                                        />
-                                    </FormControl>
-                                    <FormDescription>
-                                        Maximum number of tickets for this lottery
+                                control={form.control}
+                                name="ticketPrice"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Ticket Price</FormLabel> 
+                                        <FormControl>   
+                                            <Input 
+                                                type="number"
+                                                min={100}
+                                                step={10}
+                                                {...field}
+                                                onChange={(e) => {
+                                                    field.onChange(Number(e.target.value))
+                                                }}  
+                                            />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Price of a ticket in Wei
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        <div className="space-y-6">
+                            <FormField
+                                control={form.control}
+                                name="maxTickets"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Max Tickets</FormLabel> 
+                                        <FormControl>   
+                                            <Input 
+                                                type="number"
+                                                min={1}
+                                                step={1}
+                                                {...field}
+                                                onChange={(e) => {
+                                                    field.onChange(Number(e.target.value))
+                                                }}
+                                            />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Maximum number of tickets for this lottery
                                     </FormDescription>  
                                     <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
                     </div>
-                    <div className="space-y-6"> 
-                        <FormField
-                            control={form.control}
-                            name="expiration"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Expiration</FormLabel> 
-                                    <FormControl>   
-                                        <Input 
-                                            type="number"
-                                            min={5}
-                                            max={120}
-                                            step={5}
-                                            {...field}
-                                            onChange={(e) => {
-                                                field.onChange(Number(e.target.value))
-                                            }}
-                                        />
-                                    </FormControl>
-                                    <FormDescription>
-                                        Number of minutes before the lottery expires
-                                    </FormDescription> 
-                                    <FormMessage /> 
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="commissionPercentage"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Commission Percentage</FormLabel> 
-                                    <FormControl>   
-                                        <Input 
-                                            type="number"
-                                            min={5}
-                                            max={50}
-                                            step={5}
-                                            {...field}
-                                            onChange={(e) => {
-                                                field.onChange(Number(e.target.value))
-                                            }}  
-                                        />
-                                    </FormControl>
-                                    <FormDescription>
-                                        Percentage of the jackpot that will be given to the lottery owner
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem> 
-                            )}
-                        />
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-6"> 
+                            <FormField
+                                control={form.control}
+                                name="expiration"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Expiration</FormLabel> 
+                                        <FormControl>   
+                                            <Input 
+                                                type="number"
+                                                min={5}
+                                                max={120}
+                                                step={5}
+                                                {...field}
+                                                onChange={(e) => {
+                                                    field.onChange(Number(e.target.value))
+                                                }}
+                                            />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Number of minutes before the lottery expires
+                                        </FormDescription> 
+                                        <FormMessage /> 
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        <div className="space-y-6"> 
+                            <FormField
+                                control={form.control}
+                                name="commissionPercentage"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Commission Percentage</FormLabel> 
+                                        <FormControl>   
+                                            <Input 
+                                                type="number"
+                                                min={5}
+                                                max={50}
+                                                step={5}
+                                                {...field}
+                                                onChange={(e) => {
+                                                    field.onChange(Number(e.target.value))
+                                                }}  
+                                            />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Percentage of the jackpot that will be given to the lottery owner
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem> 
+                                )}
+                            />
+                        </div>
                     </div>
-                </div>
-                <div className="flex justify-end">
-                    <Button
-                        type="submit">
-                        <Plus />
-                        Create Lottery
-                    </Button>
-                    </div>
+                    <FormSubmitButton 
+                        title="Create Lottery" 
+                        icon={<Plus />} 
+                    />
                 </form>     
             </Form>
-            {props.isLoading && (
-                <div className="absolute inset-0 flex items-center justify-center bg-background/50">
-                    <Loader2 className="h-6 w-6 animate-spin" />
-                </div>
-            )}  
-        </div>
+        </FormContainer>    
     )       
 }   
