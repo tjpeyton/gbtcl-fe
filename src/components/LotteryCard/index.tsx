@@ -3,13 +3,15 @@ import { CHAIN_ID_TO_NETWORK, formatUnixTimestampFromSeconds } from "@/lib/utils
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 import { Button } from "../ui/button"
 
-import { Lottery } from "@/app/api/lottery/route"
+import { LotteryDocument } from "@/lib/types/lottery"
 
 import { StatusCircle } from "../StatusCircle"
+import { FormDialog } from "../dialog/FormDialog"
+import { PurchaseTicketForm } from "../forms/PurchaseTicketForm"
 
 
 export interface LotteryCardProps {
-  lottery: Lottery
+  lottery: LotteryDocument
   isActive: boolean
   onBuyTickets?: () => void
 }
@@ -35,12 +37,23 @@ export const LotteryCard = ({ lottery, isActive, onBuyTickets }: LotteryCardProp
           <div className="flex flex-col gap-2">
             <span>Tickets Sold: 0/{lottery.maxTickets}</span>
           </div>
-          {isActive && <div className="flex flex-col gap-2">
-            <Button
-              className="w-full"
-              onClick={onBuyTickets}
-            >Buy Tickets {lottery.ticketPrice}</Button>
-          </div>}
+          {isActive && 
+            <div className="flex flex-col gap-2">
+              <FormDialog
+                form={
+                  <PurchaseTicketForm 
+                    onSubmit={onBuyTickets} 
+                    isLoading={false} 
+                  />
+                }
+                title="Buy Tickets"
+                description="Buy tickets for the lottery"
+                isOpen={false}
+                setIsOpen={() => {}}
+                trigger={<Button>Buy Tickets</Button>}  
+              />
+            </div>
+          }
         </div>
       </CardContent>
     </Card>

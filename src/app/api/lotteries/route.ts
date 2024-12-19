@@ -4,7 +4,7 @@ import { adminMiddleware } from '@/lib/middleware/admin'
 
 import { updateContractLotteries } from '@/lib/mongodb/models/contract'
 import { getAllLotteries, getLottery, insertLottery } from '@/lib/mongodb/models/lottery'
-import { createLotterySchema, Lottery } from '@/lib/types/lottery'
+import { createLotterySchema, LotteryDTO } from '@/lib/types/lottery'
 
 
 export async function GET(request: NextRequest) {
@@ -36,8 +36,9 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: result.error.issues }, { status: 400 })
         }
 
-        const lottery: Lottery = {
+        const lottery: LotteryDTO = {
             ...result.data,
+            tickets: []
         }
         const { insertedId } = await insertLottery(lottery)
 

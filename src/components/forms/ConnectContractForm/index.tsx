@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { useEffect, useState } from "react"
 import { Loader2, Plug } from "lucide-react"

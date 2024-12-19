@@ -121,7 +121,7 @@ export const LotteryPageClient = () =>  {
           maxTickets: Number(maxTickets),
           operatorCommissionPercentage: Number(operatorCommissionPercentage),
           expiration: Number(expiration),
-          createdAt: Number(blockTimestamp)
+          createdAt: Number(blockTimestamp), 
         }
         toast({ 
           title: 'Lottery created successfully',

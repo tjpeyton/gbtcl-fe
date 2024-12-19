@@ -3,7 +3,7 @@ import { GetAllLotteriesResponse } from "@/lib/types/lottery"
 import { secondsToMilliseconds } from "@/lib/utils"
 
 
-const API_URL = '/api/lottery/'
+const API_URL = '/api/lotteries/'
 
 export const fetchAllLotteries = async () : Promise<GetAllLotteriesResponse> => {
     try {
@@ -39,7 +39,7 @@ export const saveLottery = async (lottery: Lottery, csrfToken: string) => {
                 'Content-Type': 'application/json',
                 'X-CSRF-Token': csrfToken
             }
-            })
+        })
         if (!res.ok) throw new Error('Failed to create lottery')
 
         return await res.json()
