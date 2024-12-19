@@ -1,13 +1,17 @@
+'use client'
+
+import { useState } from "react"
+import { Plus } from "lucide-react"
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { StatusCircle } from "@/components/StatusCircle"
+import { FormDialog } from "@/components/dialog/FormDialog"
+import { PurchaseTicketForm } from "@/components/forms/PurchaseTicketForm"
+import { PurchaseTicketFormData } from "@/components/forms/PurchaseTicketForm/types"
+
 import { CHAIN_ID_TO_NETWORK, formatUnixTimestampFromSeconds } from "@/lib/utils"
-
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
-import { Button } from "../ui/button"
-
 import { LotteryDocument } from "@/lib/types/lottery"
-
-import { StatusCircle } from "../StatusCircle"
-import { FormDialog } from "../dialog/FormDialog"
-import { PurchaseTicketForm } from "../forms/PurchaseTicketForm"
 
 
 export interface LotteryCardProps {
@@ -17,6 +21,14 @@ export interface LotteryCardProps {
 }
 
 export const LotteryCard = ({ lottery, isActive, onBuyTickets }: LotteryCardProps) => {
+  const [ticketDialogOpen, setTicketDialogOpen] = useState(false)
+
+  const handleBuyTickets = async (data: PurchaseTicketFormData, csrfToken: string) => {
+    console.log('Buy Tickets', data, csrfToken)
+
+  }
+  
+
   return (
     <Card>
       <CardHeader>
@@ -24,7 +36,30 @@ export const LotteryCard = ({ lottery, isActive, onBuyTickets }: LotteryCardProp
           <div className="flex items-center gap-2"> 
             <StatusCircle status={isActive ? 'active' : 'inactive'} />
             <span className="text-lg font-bold">Lottery #{lottery.lotteryId}</span>
-            <span className="text-sm text-gray-500">{CHAIN_ID_TO_NETWORK[lottery.contract.chainId]}</span>
+            <span className="text-sm text-gray-500">
+              {CHAIN_ID_TO_NETWORK[lottery.contract.chainId]}
+            </span>
+            {isActive && 
+              <div className="ml-auto">
+                <FormDialog
+                  form={
+                    <PurchaseTicketForm 
+                      onSubmit={handleBuyTickets} 
+                      isLoading={false} 
+                    />
+                  }
+                  title="Buy Tickets"
+                  description="Buy tickets for the lottery"
+                  isOpen={ticketDialogOpen}
+                  setIsOpen={setTicketDialogOpen}
+                  trigger={
+                    <Button icon={<Plus/>}>
+                      Buy Tickets {lottery.ticketPrice} wei 
+                    </Button>
+                  }  
+                />
+              </div>
+            }
           </div>
         </CardTitle>
       </CardHeader>
@@ -35,25 +70,8 @@ export const LotteryCard = ({ lottery, isActive, onBuyTickets }: LotteryCardProp
             <span>Ticket Sales End: {formatUnixTimestampFromSeconds(lottery.expiration)}</span>
           </div>
           <div className="flex flex-col gap-2">
-            <span>Tickets Sold: 0/{lottery.maxTickets}</span>
+            <span>Tickets Sold: {lottery.tickets.length}/{lottery.maxTickets}</span>
           </div>
-          {isActive && 
-            <div className="flex flex-col gap-2">
-              <FormDialog
-                form={
-                  <PurchaseTicketForm 
-                    onSubmit={onBuyTickets} 
-                    isLoading={false} 
-                  />
-                }
-                title="Buy Tickets"
-                description="Buy tickets for the lottery"
-                isOpen={false}
-                setIsOpen={() => {}}
-                trigger={<Button>Buy Tickets</Button>}  
-              />
-            </div>
-          }
         </div>
       </CardContent>
     </Card>
