@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
-
+// Different schema for the form and the database
+// This ommits the createdAt field as it is set after the contracts response is received
 export const lotteryFormSchema = z.object({
     contract: z.object({
         address: z.string().min(1, { message: "Contract address is required" }),

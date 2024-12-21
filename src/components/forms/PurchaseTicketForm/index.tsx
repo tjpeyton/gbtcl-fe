@@ -8,7 +8,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Form } from "@/components/ui/form"
 import { FormContainer } from "../FormContainer"
 
-import { PurchaseTicketFormProps, purchaseTicketFormSchema } from "./types"
+import { PurchaseTicketFormProps } from "./types"
+import { purchaseTicketFormSchema } from "./schema" 
 
 
 export const PurchaseTicketForm = (props: PurchaseTicketFormProps) => {

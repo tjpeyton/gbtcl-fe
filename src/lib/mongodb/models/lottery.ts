@@ -1,4 +1,4 @@
-import { Lottery } from "@/lib/types/lottery"
+import { Lottery, PurchaseLotteryTickets, PurchaseLotteryTicketsDTO } from "@/lib/types/lottery"
 
 import { getDb } from "../client"
 
@@ -36,5 +36,21 @@ export const getAllLotteries = async () => {
         return collection.find().sort({ createdAt: -1 }).toArray()
     } catch (error) {   
         throw new Error('Failed to get all lotteries')
+    }
+}
+
+export const updateLotteryTickets = async (purchase: PurchaseLotteryTicketsDTO) => {
+    try {
+        const collection = await getLotteryCollection()
+        return collection.updateOne({ 
+            lotteryId: purchase.lotteryId,
+            contract: {
+                address: purchase.contract.address,
+                chainId: purchase.contract.chainId
+            }
+        }, { $inc: { ticketsBought: purchase.count } })
+
+    } catch (error) {
+        throw new Error('Failed to update lottery tickets')
     }
 }

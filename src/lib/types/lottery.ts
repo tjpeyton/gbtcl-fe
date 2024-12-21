@@ -1,13 +1,14 @@
 import { ObjectId } from "mongodb"
 import { z } from "zod"
 
+type ContractAbv = {
+    address: string,
+    chainId: number
+}
 
 export type LotteryDocument = {
     _id: ObjectId
-    contract: {
-        address: string,
-        chainId: number
-    },
+    contract: ContractAbv,
     lotteryId: number, 
     ticketPrice: number,
     maxTickets: number,
@@ -40,8 +41,14 @@ export const createLotterySchema = z.object({
 })
 
 export const purchaseLotteryTicketSchema = z.object({
-    lotteryId: z.string().min(1),
-    lotteryContract: z.string().min(1),
-    count: z.number().min(1),
-    price: z.number().min(1),   
+    buyerAddress: z.string().min(1),         
+    count: z.number().min(1),   
+    contract: z.object({
+        address: z.string().min(1),
+        chainId: z.number().min(1)
+    })
 })
+export type PurchaseLotteryTickets = z.infer<typeof purchaseLotteryTicketSchema>
+export type PurchaseLotteryTicketsDTO = PurchaseLotteryTickets & {
+    lotteryId: number,
+}

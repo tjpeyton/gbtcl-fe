@@ -1,4 +1,4 @@
-import { Lottery, LotteryDocument } from "@/lib/types/lottery"
+import { Lottery, LotteryDocument, PurchaseLotteryTickets, PurchaseLotteryTicketsDTO } from "@/lib/types/lottery"
 import { GetAllLotteriesResponse } from "@/lib/types/lottery"
 import { secondsToMilliseconds } from "@/lib/utils"
 
@@ -41,6 +41,29 @@ export const saveLottery = async (lottery: Lottery, csrfToken: string) => {
             }
         })
         if (!res.ok) throw new Error('Failed to create lottery')
+
+        return await res.json()
+    } catch (error: any) {
+        throw error
+    }
+}
+
+export const updateLotteryTickets = async (purchase: PurchaseLotteryTicketsDTO, csrfToken: string) => {
+    try {
+        const payload: PurchaseLotteryTickets = {
+            buyerAddress: purchase.buyerAddress,
+            count: purchase.count,
+            contract: purchase.contract,
+        }
+        const res = await fetch(API_URL + purchase.lotteryId + '/tickets', {
+            method: 'PATCH',
+            body: JSON.stringify(payload),
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': csrfToken
+            }
+        })
+        if (!res.ok) throw new Error('Failed to update lottery tickets')
 
         return await res.json()
     } catch (error: any) {

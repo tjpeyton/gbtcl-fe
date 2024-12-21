@@ -5,11 +5,12 @@ import { useState, useEffect } from "react"
 import { LotteryCard } from "@/components/LotteryCard"
 import TableSkeleton from "@/components/TableSkeleton"
 import { toast } from "@/components/ui/hooks/use-toast"
+import { PurchaseTicketFormData } from "@/components/forms/PurchaseTicketForm/types"
 
-import { LotteryDocument, GetAllLotteriesResponse } from "@/lib/types/lottery"
+import { LotteryDocument, GetAllLotteriesResponse, PurchaseLotteryTickets, PurchaseLotteryTicketsDTO } from "@/lib/types/lottery"
 
 import { fetchAllLotteries, filterActiveLotteries, filterExpiredLotteries } from "../services/lotteryService"
-import { PurchaseTicketFormData } from "@/components/forms/PurchaseTicketForm/types"
+import { useContract } from "../hooks/useContract"
 
 
 export const LotteriesPageClient = () => {
@@ -17,6 +18,8 @@ export const LotteriesPageClient = () => {
     const [expiredLotteries, setExpiredLotteries] = useState<LotteryDocument[]>([])
     const [isLoading, setIsLoading] = useState(false)
     const [isBuyingTickets, setIsBuyingTickets] = useState(false)
+
+    const { getContract } = useContract() 
 
     const fetchLotteries = async () => {
         try {
@@ -37,13 +40,64 @@ export const LotteriesPageClient = () => {
         }
     }
 
-    const handleBuyTickets = async (lottery: LotteryDocument, data: PurchaseTicketFormData, csrfToken: string) => {
-        console.log('Buy Tickets', lottery, data, csrfToken)
-        setIsBuyingTickets(true)
-        // purchase tickets through the blockchain
+    const updateLotteryTickets = async (purchase: PurchaseLotteryTickets, csrfToken: string) => {
+        try {
+            await updateLotteryTickets(purchase, csrfToken)
+        } catch (error: any) {
+            toast({
+                title: 'Failed to update lottery tickets',
+                description: error.message,
+                variant: 'destructive' 
+            })
+        }
+    }
 
-        // update the database
-        setIsBuyingTickets(false)
+    const handleBuyTickets = async (
+        lottery: LotteryDocument, 
+        data: PurchaseTicketFormData, 
+        csrfToken: string
+    ) => {
+        try {
+            setIsBuyingTickets(true)
+
+            const contract = await getContract(lottery.contract.address)
+
+            contract.once("TicketsBought", (
+                buyer: string,
+                lotteryId: number,
+                ticketsBought: number
+              ) => {
+                const purchase: PurchaseLotteryTicketsDTO = {
+                    buyerAddress: buyer,
+                    lotteryId: lotteryId,
+                    count: ticketsBought,
+                    contract: lottery.contract
+                }
+        
+                toast({ 
+                  title: 'Ticket purchase successful',
+                  description: 'Lottery ID: ' + lottery.lotteryId + ' created at ' + lottery.createdAt,
+                  variant: 'success' 
+                })
+
+                updateLotteryTickets(purchase, csrfToken)
+              })
+
+            const tx = await contract.purchaseTickets(
+                lottery.lotteryId, 
+                data.count, 
+            )
+        
+            await tx.wait()
+        } catch (error: any) {
+            toast({
+                title: 'Failed to purchase tickets',
+                description: error.message,
+                variant: 'destructive' 
+            })
+        } finally {
+            setIsBuyingTickets(false)
+        }
     }
 
     useEffect(() => {
