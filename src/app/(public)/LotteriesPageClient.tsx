@@ -9,15 +9,18 @@ import { toast } from "@/components/ui/hooks/use-toast"
 import { LotteryDocument, GetAllLotteriesResponse } from "@/lib/types/lottery"
 
 import { fetchAllLotteries, filterActiveLotteries, filterExpiredLotteries } from "../services/lotteryService"
+import { PurchaseTicketFormData } from "@/components/forms/PurchaseTicketForm/types"
 
 
 export const LotteriesPageClient = () => {
     const [activeLotteries, setActiveLotteries] = useState<LotteryDocument[]>([])
     const [expiredLotteries, setExpiredLotteries] = useState<LotteryDocument[]>([])
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
+    const [isBuyingTickets, setIsBuyingTickets] = useState(false)
 
     const fetchLotteries = async () => {
         try {
+            setIsLoading(true)
             const data: GetAllLotteriesResponse = await fetchAllLotteries()
             const lotteries: LotteryDocument[] = data.lotteries
 
@@ -34,8 +37,13 @@ export const LotteriesPageClient = () => {
         }
     }
 
-    const handleBuyTickets = (lottery: LotteryDocument) => {
-        console.log('Buy Tickets', lottery)
+    const handleBuyTickets = async (lottery: LotteryDocument, data: PurchaseTicketFormData, csrfToken: string) => {
+        console.log('Buy Tickets', lottery, data, csrfToken)
+        setIsBuyingTickets(true)
+        // purchase tickets through the blockchain
+
+        // update the database
+        setIsBuyingTickets(false)
     }
 
     useEffect(() => {
@@ -56,8 +64,8 @@ export const LotteriesPageClient = () => {
                 <LotteryCard 
                     key={lottery.lotteryId}
                     lottery={lottery}
-                    isActive={true}
-                    onBuyTickets={() => handleBuyTickets(lottery)}
+                    isBuyingTickets={isBuyingTickets}
+                    onBuyTickets={(data, csrfToken) => handleBuyTickets(lottery, data, csrfToken)}
                 />
             ))}
             <div className="flex flex-row items-center">
@@ -71,7 +79,8 @@ export const LotteriesPageClient = () => {
                 <LotteryCard 
                     key={lottery.lotteryId}
                     lottery={lottery} 
-                    isActive={false}
+                    isBuyingTickets={isBuyingTickets}
+                    onBuyTickets={(data, csrfToken) => handleBuyTickets(lottery, data, csrfToken)}
                 />
             ))}                 
         </div>

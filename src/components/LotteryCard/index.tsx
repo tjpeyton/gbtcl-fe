@@ -16,36 +16,34 @@ import { LotteryDocument } from "@/lib/types/lottery"
 
 export interface LotteryCardProps {
   lottery: LotteryDocument
-  isActive: boolean
-  onBuyTickets?: () => void
+  isBuyingTickets?: boolean
+  onBuyTickets?: (
+    data: PurchaseTicketFormData, 
+    csrfToken: string, 
+    lottery: LotteryDocument
+  ) => Promise<void>
 }
 
-export const LotteryCard = ({ lottery, isActive, onBuyTickets }: LotteryCardProps) => {
+export const LotteryCard = ({ lottery, isBuyingTickets, onBuyTickets }: LotteryCardProps) => {
   const [ticketDialogOpen, setTicketDialogOpen] = useState(false)
-
-  const handleBuyTickets = async (data: PurchaseTicketFormData, csrfToken: string) => {
-    console.log('Buy Tickets', data, csrfToken)
-
-  }
-  
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>
           <div className="flex items-center gap-2"> 
-            <StatusCircle status={isActive ? 'active' : 'inactive'} />
+            <StatusCircle status={onBuyTickets ? 'active' : 'inactive'} />
             <span className="text-lg font-bold">Lottery #{lottery.lotteryId}</span>
             <span className="text-sm text-gray-500">
               {CHAIN_ID_TO_NETWORK[lottery.contract.chainId]}
             </span>
-            {isActive && 
+            { onBuyTickets &&
               <div className="ml-auto">
                 <FormDialog
                   form={
                     <PurchaseTicketForm 
-                      onSubmit={handleBuyTickets} 
-                      isLoading={false} 
+                      onSubmit={(data, csrfToken) => onBuyTickets ? onBuyTickets(data, csrfToken, lottery) : Promise.resolve()} 
+                      isLoading={isBuyingTickets || false} 
                     />
                   }
                   title="Buy Tickets"
