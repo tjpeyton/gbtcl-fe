@@ -5,11 +5,14 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
-import { Form } from "@/components/ui/form"
+import { Form, FormField, FormItem, FormLabel } from "@/components/ui/form"
 import { FormContainer } from "../FormContainer"
 
 import { PurchaseTicketFormProps } from "./types"
 import { purchaseTicketFormSchema } from "./schema" 
+import { Input } from "@/components/ui/input"
+import { FormSubmitButton } from "../FormSubmitButton"
+import { TicketIcon } from "lucide-react"
 
 
 export const PurchaseTicketForm = (props: PurchaseTicketFormProps) => {
@@ -33,8 +36,7 @@ export const PurchaseTicketForm = (props: PurchaseTicketFormProps) => {
     const form = useForm<z.infer<typeof purchaseTicketFormSchema>>({
         resolver: zodResolver(purchaseTicketFormSchema),
         defaultValues: {
-            count: 0,
-            price: 0,
+            count: 0
         },
     })
 
@@ -45,7 +47,20 @@ export const PurchaseTicketForm = (props: PurchaseTicketFormProps) => {
                 <form 
                     className="space-y-6" 
                     onSubmit={form.handleSubmit((data) => props.onSubmit(data, csrfToken))}>
-                    
+                    <FormField
+                        control={form.control}
+                        name="count"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Number of tickets</FormLabel>
+                                <Input {...field} />
+                            </FormItem>
+                        )}
+                    />
+                    <FormSubmitButton
+                        title={`Purchase ${form.getValues('count')} ticket(s) for ${props.ticketPrice} * ${form.getValues('count')}`}
+                        icon={<TicketIcon />}
+                    />  
                 </form>
             </Form>
         </FormContainer>

@@ -32,32 +32,12 @@ export const LotteryCard = ({ lottery, isBuyingTickets, onBuyTickets }: LotteryC
       <CardHeader>
         <CardTitle>
           <div className="flex items-center gap-2"> 
-            <StatusCircle status={onBuyTickets ? 'active' : 'inactive'} />
+            <StatusCircle status={'active'} />
             <span className="text-lg font-bold">Lottery #{lottery.lotteryId}</span>
             <span className="text-sm text-gray-500">
               {CHAIN_ID_TO_NETWORK[lottery.contract.chainId]}
             </span>
-            { onBuyTickets &&
-              <div className="ml-auto">
-                <FormDialog
-                  form={
-                    <PurchaseTicketForm 
-                      onSubmit={(data, csrfToken) => onBuyTickets ? onBuyTickets(data, csrfToken, lottery) : Promise.resolve()} 
-                      isLoading={isBuyingTickets || false} 
-                    />
-                  }
-                  title="Buy Tickets"
-                  description="Buy tickets for the lottery"
-                  isOpen={ticketDialogOpen}
-                  setIsOpen={setTicketDialogOpen}
-                  trigger={
-                    <Button icon={<Plus/>}>
-                      Buy Tickets {lottery.ticketPrice} wei 
-                    </Button>
-                  }  
-                />
-              </div>
-            }
+           
           </div>
         </CardTitle>
       </CardHeader>
