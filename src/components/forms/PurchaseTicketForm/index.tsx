@@ -1,22 +1,25 @@
 'use client'
 
 import { useState, useEffect } from "react"
+import { TicketIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
-import { Form, FormField, FormItem, FormLabel } from "@/components/ui/form"
+import { Form, FormField, FormItem, FormLabel, FormMessage, FormControl, FormDescription } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+
 import { FormContainer } from "../FormContainer"
+import { FormSubmitButton } from "../FormSubmitButton"
 
 import { PurchaseTicketFormProps } from "./types"
 import { purchaseTicketFormSchema } from "./schema" 
-import { Input } from "@/components/ui/input"
-import { FormSubmitButton } from "../FormSubmitButton"
-import { TicketIcon } from "lucide-react"
 
 
 export const PurchaseTicketForm = (props: PurchaseTicketFormProps) => {
     const [csrfToken, setCsrfToken] = useState("")
+    const [totalCost, setTotalCost] = useState(0)   
+
 
     useEffect(() => {
         const fetchToken = async () => {
@@ -36,7 +39,7 @@ export const PurchaseTicketForm = (props: PurchaseTicketFormProps) => {
     const form = useForm<z.infer<typeof purchaseTicketFormSchema>>({
         resolver: zodResolver(purchaseTicketFormSchema),
         defaultValues: {
-            count: 0
+            count: 1
         },
     })
 
@@ -53,16 +56,36 @@ export const PurchaseTicketForm = (props: PurchaseTicketFormProps) => {
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Number of tickets</FormLabel>
-                                <Input {...field} />
+                                <FormControl>
+                                    <Input 
+                                        {...field} 
+                                        type="number"   
+                                        min={1}
+                                        max={100}
+                                        defaultValue={1}    
+                                        onChange={(e) => {
+                                            const value = parseInt(e.target.value)
+                                            if (value >= 1 && value <= 100) {
+                                                setTotalCost(value * props.ticketPrice) 
+                                                field.onChange(value)
+                                            }
+                                        }}
+                                    />
+                                </FormControl>
+                                <FormDescription>
+                                    Total cost of tickets: {Number(form.getValues('count') || 0) * props.ticketPrice} wei 
+                                </FormDescription>
                             </FormItem>
                         )}
                     />
+                    <FormMessage /> 
                     <FormSubmitButton
-                        title={`Purchase ${form.getValues('count')} ticket(s) for ${props.ticketPrice} * ${form.getValues('count')}`}
-                        icon={<TicketIcon />}
+                        title={`Purchase ${form.getValues('count')} ticket(s) for ${totalCost} wei`}
+                        icon={<TicketIcon />    }
+                        className="flex-grow"
                     />  
                 </form>
             </Form>
-        </FormContainer>
+        </FormContainer>        
     )
 }   

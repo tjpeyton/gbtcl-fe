@@ -16,7 +16,7 @@ import { useContract } from "../hooks/useContract"
 
 
 export const LotteriesPageClient = () => {
-    const [activeLotteries, setActiveLotteries] = useState<LotteryDocument[]>([])
+    const [lottery, setLottery] = useState<LotteryDocument>()
     const [isLoading, setIsLoading] = useState(false)
     const [isBuyingTickets, setIsBuyingTickets] = useState(false)
 
@@ -27,8 +27,9 @@ export const LotteriesPageClient = () => {
             setIsLoading(true)
             const data: GetAllLotteriesResponse = await fetchAllLotteries()
             const lotteries: LotteryDocument[] = data.lotteries
+            const activeLotteries = filterActiveLotteries(lotteries)
 
-            setActiveLotteries(filterActiveLotteries(lotteries) as LotteryDocument[] || [])
+            setLottery(activeLotteries[0] as LotteryDocument)
         } catch (error: any) {
             toast({
                 title: 'Failed to fetch lotteries',
@@ -109,28 +110,27 @@ export const LotteriesPageClient = () => {
         <div className="flex flex-row gap-4">
             <div className="flex flex-col">
                 {isLoading && <TableSkeleton rows={3} columns={1} />}
-                {!isLoading && activeLotteries.length === 0 && <p>No active lotteries</p>}
-                {!isLoading && activeLotteries.map((lottery) => (
+                {!isLoading && lottery && (
                     <LotteryCard 
                         key={lottery.lotteryId}
                         lottery={lottery}
                         isBuyingTickets={isBuyingTickets}
                         onBuyTickets={(data, csrfToken) => handleBuyTickets(lottery, data, csrfToken)}
                     />
-                ))}
+                )}
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col w-1/2">
                 {isLoading && <TableSkeleton rows={3} columns={1} />}
-                {!isLoading && activeLotteries.length > 0 && (
-                    <Card>
+                {!isLoading && lottery && (
+                    <Card className="w-full">
                         <CardHeader>
-                            <h3 className="text-l font-bold">Price per ticket</h3>
+                            <h3 className="text-l font-bold">Price per ticket: {lottery.ticketPrice} wei (ETH)</h3>
                         </CardHeader>
                         <CardContent>
                             <PurchaseTicketForm 
-                                onSubmit={(data, csrfToken) => handleBuyTickets(activeLotteries[0], data, csrfToken)} 
+                                onSubmit={(data, csrfToken) => handleBuyTickets(lottery, data, csrfToken)} 
                                 isLoading={isBuyingTickets || false} 
-                                ticketPrice={activeLotteries[0].ticketPrice}    
+                                ticketPrice={lottery.ticketPrice}    
                             />
                         </CardContent>
                     </Card>

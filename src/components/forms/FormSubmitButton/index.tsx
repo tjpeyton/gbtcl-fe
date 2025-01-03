@@ -2,15 +2,19 @@ import { Button } from "@/components/ui/button"
 
 
 export type FormSubmitButtonProps = {
-    title: string,
+    title: string | React.ReactNode,
     icon: React.ReactNode,
+    className?: string,
 }
 
 export const FormSubmitButton = (props: FormSubmitButtonProps) => {
     return (
-        <div className="flex justify-end">
+        <div className={props.className}>
             <Button
-                type="submit">
+                size="lg"
+                type="submit"
+                className="w-full p-6"
+            >
                 {props.icon}
                 {props.title}
             </Button>
