@@ -28,7 +28,12 @@ export const filterExpiredLotteries = (lotteries: LotteryDocument[] | Lottery[])
     return lotteries.filter(
         (lottery: Lottery) => new Date(secondsToMilliseconds(lottery.expiration)) < currentDate
     )
-}       
+} 
+
+export const isLotteryActive = (lottery: LotteryDocument | Lottery) => {
+    const currentDate = new Date()
+    return new Date(secondsToMilliseconds(lottery.expiration)) > currentDate
+}   
 
 export const saveLottery = async (lottery: Lottery, csrfToken: string) => {
     try {
