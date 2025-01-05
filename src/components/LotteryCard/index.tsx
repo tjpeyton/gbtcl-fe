@@ -11,6 +11,7 @@ import { CountdownDisplay } from "@/components/CountdownDisplay"
 
 import { CHAIN_ID_TO_NETWORK, formatUnixTimestampFromSeconds } from "@/lib/utils"
 import { LotteryDocument } from "@/lib/types/lottery"
+
 import useCountdown from "@/app/hooks/useCountdown"
 
 
@@ -54,20 +55,20 @@ export const LotteryCard = ({ lottery, isBuyingTickets, onBuyTickets }: LotteryC
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-row gap-2">
+        <div className="flex flex-row gap-2 justify-center">
           <div className="flex flex-col gap-1 border-solid border-2 border-black rounded-md p-3 w-1/2">
-            <span className="text-md">Total pool:</span>
+            <span className="text-md">Total Pool:</span>
             <span className="text-md font-bold">{lottery.tickets.length * lottery.ticketPrice} wei</span>
           </div>
-          <div className="flex flex-col gap-1 border-solid border-2 border-black rounded-md p-3 w-1/2">
-            <span className="text-md">Tickets left:</span>  
+          <div className="flex flex-col gap-1 border-solid border-2 border-black rounded-md p-3 w-2/3">
+            <span className="text-md">Tickets Remaining:</span>  
             <span className="text-md font-bold">{lottery.maxTickets - lottery.tickets.length}</span>
           </div>
         </div>
         <div className="flex flex-row">
           <div className="flex flex-col gap-2 pt-4 w-100">
             <span className="text-lg font-bold">Next Draw</span>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4"> 
+            <div className="grid md:grid-cols-4 gap-4"> 
               <CountdownDisplay value={days} label="days" />
               <CountdownDisplay value={hours} label="hours" />
               <CountdownDisplay value={minutes} label="minutes" />

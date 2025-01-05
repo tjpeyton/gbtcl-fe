@@ -107,7 +107,7 @@ export const LotteriesPageClient = () => {
 
 
     return (
-        <div className="flex flex-row gap-4">
+        <div className="flex flex-row gap-4 justify-center">
             <div className="flex flex-col">
                 {isLoading && <TableSkeleton rows={3} columns={1} />}
                 {!isLoading && lottery && (
@@ -119,7 +119,7 @@ export const LotteriesPageClient = () => {
                     />
                 )}
             </div>
-            <div className="flex flex-col w-1/2">
+            <div className="flex flex-col">
                 {isLoading && <TableSkeleton rows={3} columns={1} />}
                 {!isLoading && lottery && (
                     <Card className="w-full">

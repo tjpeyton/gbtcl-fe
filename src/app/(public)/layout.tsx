@@ -1,7 +1,6 @@
 import TopNav from '@/components/TopNav';
 
 import '@/app/globals.css';
-import { Toaster } from '@/components/ui/toaster';
 
 
 export default function PublicLayout({
@@ -16,5 +15,5 @@ export default function PublicLayout({
         {children}
       </main>
     </>
-  );
+  )
 }
