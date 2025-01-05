@@ -107,7 +107,13 @@ export const LotteriesPageClient = () => {
 
 
     return (
+        
         <div className="flex flex-row gap-4 justify-center">
+            {!lottery && 
+                <div className="flex flex-col">
+                    <h1 className="text-l font-bold">No active lotteries</h1>
+                </div> 
+            }
             <div className="flex flex-col">
                 {isLoading && <TableSkeleton rows={3} columns={1} />}
                 {!isLoading && lottery && (
