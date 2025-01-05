@@ -73,14 +73,14 @@ export const PurchaseTicketForm = (props: PurchaseTicketFormProps) => {
                                     />
                                 </FormControl>
                                 <FormDescription>
-                                    Total cost of tickets: {Number(form.getValues('count') || 0) * props.ticketPrice} wei 
+                                    Total cost of tickets: { totalCost } wei 
                                 </FormDescription>
                             </FormItem>
                         )}
                     />
                     <FormMessage /> 
                     <FormSubmitButton
-                        title={`Purchase ${form.getValues('count')} ticket(s) for ${totalCost} wei`}
+                        title={`Purchase ${form.getValues('count')} ticket(s)`}
                         icon={<TicketIcon />    }
                         className="flex-grow"
                     />  

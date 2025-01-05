@@ -122,9 +122,12 @@ export const LotteriesPageClient = () => {
             <div className="flex flex-col">
                 {isLoading && <TableSkeleton rows={3} columns={1} />}
                 {!isLoading && lottery && (
-                    <Card className="w-full">
-                        <CardHeader>
-                            <h3 className="text-l font-bold">Price per ticket: {lottery.ticketPrice} wei (ETH)</h3>
+                    <Card className="min-w-96">
+                        <CardHeader className="flex flex-row items-center justify-between">
+                            <h1 className="text-l">Price per ticket: </h1>
+                            <p className="text-l font-bold">
+                                {lottery.ticketPrice} wei (ETH)
+                            </p>
                         </CardHeader>
                         <CardContent>
                             <PurchaseTicketForm 
