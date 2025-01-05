@@ -10,10 +10,10 @@ import { FormField, FormItem, FormLabel, Form, FormControl, FormDescription, For
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-import { CHAIN_ID_TO_NETWORK } from "@/lib/utils"
-
 import { FormContainer } from "../FormContainer"
 import { FormSubmitButton } from "../FormSubmitButton"
+
+import { CHAIN_ID_TO_NETWORK } from "@/lib/utils"
 
 import { lotteryFormSchema } from "./schema"
 import { CreateLotteryFormProps} from "./types"
@@ -82,9 +82,9 @@ export const CreateLotteryForm = (props: CreateLotteryFormProps) => {
                                             <SelectItem 
                                                 key={contract.address} 
                                                 value={`${contract.address}|${contract.chainId}`}>
-                                                <div className="flex flex-col"> 
+                                                <div className="flex flex-row items-center justify-between"> 
                                                     <span>{contract.address}</span>
-                                                    <span>{CHAIN_ID_TO_NETWORK[contract.chainId]}</span>
+                                                    <span className="ml-2 text-xs text-gray-500">{CHAIN_ID_TO_NETWORK[contract.chainId]}</span>
                                                 </div>
                                             </SelectItem>
                                         ))} 
