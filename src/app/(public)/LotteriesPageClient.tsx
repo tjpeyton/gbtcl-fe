@@ -19,6 +19,7 @@ export const LotteriesPageClient = () => {
     const [lottery, setLottery] = useState<LotteryDocument>()
     const [isLoading, setIsLoading] = useState(false)
     const [isBuyingTickets, setIsBuyingTickets] = useState(false)
+         
 
     const { getContract } = useContract() 
 
@@ -86,7 +87,10 @@ export const LotteriesPageClient = () => {
 
             const tx = await contract.purchaseTickets(
                 lottery.lotteryId, 
-                data.count, 
+                data.count,
+                {
+                    value: data.count * lottery.ticketPrice 
+                }
             )
         
             await tx.wait()

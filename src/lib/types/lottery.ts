@@ -15,13 +15,12 @@ export type LotteryDocument = {
     expiration: number,
     operatorCommissionPercentage: number,
     createdAt: number,
-    tickets: string[],
+    tickets?: string[],
     winnerSelectedAt?: string,
     winnerAddress?: string
 }
 
-export type Lottery = Omit<LotteryDocument, '_id' | 'tickets'>
-export type LotteryDTO = Omit<LotteryDocument, '_id'>
+export type Lottery = Omit<LotteryDocument, '_id'>
 
 export type GetAllLotteriesResponse = {
     lotteries: LotteryDocument[]

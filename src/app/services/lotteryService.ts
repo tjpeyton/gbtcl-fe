@@ -33,7 +33,15 @@ export const filterExpiredLotteries = (lotteries: LotteryDocument[] | Lottery[])
 export const isLotteryActive = (lottery: LotteryDocument | Lottery) => {
     const currentDate = new Date()
     return new Date(secondsToMilliseconds(lottery.expiration)) > currentDate
-}   
+} 
+
+export const userHasTickets = (lottery: LotteryDocument | Lottery, userAddress: string | null) => {
+    return lottery.tickets?.some((address: string) => address === userAddress)
+}
+
+export const getUserTickets = (lottery: LotteryDocument | Lottery, userAddress: string | null) => {
+    return lottery.tickets?.filter((address: string) => address === userAddress)
+}
 
 export const saveLottery = async (lottery: Lottery, csrfToken: string) => {
     try {

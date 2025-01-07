@@ -61,8 +61,7 @@ export const PurchaseTicketForm = (props: PurchaseTicketFormProps) => {
                                         {...field} 
                                         type="number"   
                                         min={1}
-                                        max={100}
-                                        defaultValue={1}    
+                                        max={100}   
                                         onChange={(e) => {
                                             const value = parseInt(e.target.value)
                                             if (value >= 1 && value <= 100) {
