@@ -1,7 +1,6 @@
 import { AdminSidebar } from "@/components/AdminSidebar"
 import { SidebarProvider } from "@/components/ui/sidebar"
 
-import styles from './page.module.css'
 
 export const metadata = {
   title: 'GBTCL Admin',
@@ -16,7 +15,7 @@ export default function RootLayout({
   return (
     <SidebarProvider>
       <AdminSidebar />
-      <main className={styles.main}>
+      <main className="w-full h-full p-[1%]">
         {children}
       </main>
     </SidebarProvider>  

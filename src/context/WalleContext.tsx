@@ -21,7 +21,13 @@ type Props = {
 
 
 const WalletContextProvider = ({ children }: Props) => {
-    const { connectWallet, disconnect, switchNetwork, getBlockTimestamp, state } = useWalletProvider()
+    const { 
+        connectWallet, 
+        disconnect, 
+        switchNetwork, 
+        getBlockTimestamp, 
+        state 
+    } = useWalletProvider()
 
     return (
         <WalletContext.Provider

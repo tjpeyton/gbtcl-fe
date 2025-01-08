@@ -85,16 +85,19 @@ export const LotteriesPageClient = () => {
                 updateLotteryTickets(purchase, csrfToken)
               })
 
+            const value = data.count * lottery.ticketPrice
+
             const tx = await contract.purchaseTickets(
                 lottery.lotteryId, 
                 data.count,
                 {
-                    value: data.count * lottery.ticketPrice 
+                    value: value
                 }
-            )
+            )  
         
             await tx.wait()
         } catch (error: any) {
+            console.log('error', error) 
             toast({
                 title: 'Failed to purchase tickets',
                 description: error.message,
