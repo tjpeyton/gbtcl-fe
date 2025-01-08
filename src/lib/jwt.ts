@@ -1,8 +1,8 @@
-import { jwtVerify, SignJWT } from "jose"
+import { jwtVerify, SignJWT } from 'jose'
 
 const secretKey = process.env.JWT_SECRET
 
-export const generateToken = (payload: any, expiresIn?: string) => {
+const generateToken = (payload: any, expiresIn?: string) => {
   const secret = new TextEncoder().encode(secretKey)
   
   return new SignJWT(payload)
@@ -12,7 +12,7 @@ export const generateToken = (payload: any, expiresIn?: string) => {
     .sign(secret)
 }
 
-export const verifyToken = async (token: string) => {
+const verifyToken = async (token: string) => {
   const secret = new TextEncoder().encode(process.env.JWT_SECRET!)
   
   try {
@@ -22,3 +22,8 @@ export const verifyToken = async (token: string) => {
     throw new Error('Invalid token')
   }
 }
+
+export {
+  generateToken,
+  verifyToken
+} 

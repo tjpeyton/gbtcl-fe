@@ -3,7 +3,7 @@ import { cookies } from 'next/headers'
 import { generateToken } from './jwt'
 
 
-export const getCsrfToken = async () => {
+const getCsrfToken = async () => {
   const token = await generateToken({}, '5m')
   
   // Set token in cookie
@@ -18,10 +18,15 @@ export const getCsrfToken = async () => {
   return token
 }
 
-export const verifyCsrfToken = async (token: string) => {
+const verifyCsrfToken = async (token: string) => {
   const cookieToken = cookies().get('csrf-token')?.value
   
   if (!cookieToken || !token || token !== cookieToken) {
     throw new Error('Invalid CSRF token')
   }
+}
+
+export {
+  getCsrfToken,
+  verifyCsrfToken
 }

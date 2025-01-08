@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react'
 import { Plug } from 'lucide-react'
 
-import { DataTable } from "@/components/ui/table"
+import { DataTable } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/hooks/use-toast'
 import TableSkeleton from '@/components/TableSkeleton'
-import { FormDialog } from '@/components/dialog/FormDialog'
+import FormDialog from '@/components/dialog/FormDialog'
 import { ConnectContractForm } from '@/components/forms/ConnectContractForm'
 import { ConnectContractFormData } from '@/components/forms/ConnectContractForm/types'
 
@@ -15,7 +15,7 @@ import { fetchAllContracts, saveContract } from '@/app/services/contractService'
 
 import { ContractDocument, GetAllContractsResponse } from '@/lib/types/contract'
 
-import { columns } from "./columns"
+import { columns } from './columns'
 
 
 export const ContractsPageClient = () => {

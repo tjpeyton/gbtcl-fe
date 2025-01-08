@@ -1,8 +1,8 @@
 
 const WhitepaperPage = () => {
-    return (
-        <div>Whitepaper</div>
-    )
+  return (
+    <div>Whitepaper</div>
+  )
 }   
 
 export default WhitepaperPage   

@@ -1,4 +1,4 @@
-import { LotteriesPageClient } from './LotteriesPageClient';
+import { LotteriesPageClient } from './LotteriesPageClient'
 
 
 export default function Home() {

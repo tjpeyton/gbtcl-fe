@@ -1,4 +1,4 @@
-import { LotteryPageClient } from "./LotteriesPageClient"
+import { LotteryPageClient } from './LotteriesPageClient'
 
 
 const AdminLotteryPage = () => {

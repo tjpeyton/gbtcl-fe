@@ -15,50 +15,50 @@ const WalletInfo = () => {
     connectWallet,
     disconnect,
     state: { isAuthenticated, address, currentChain, isAdmin },
-  } = useWalletContext() as WalletContext;
+  } = useWalletContext() as WalletContext
 
   return (
     <>
       {isAuthenticated 
         ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <Button 
-                  type='button'>
-                  { formatAddress(address ?? '') }
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuLabel>
-                  {CHAIN_ID_TO_NETWORK[currentChain ?? 0]}
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {isAdmin && (
-                  <DropdownMenuItem>
-                    <Link href='/admin'>
-                      Admin
-                    </Link>
-                  </DropdownMenuItem>
-                )}
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Button 
+                type='button'>
+                { formatAddress(address ?? '') }
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>
+                {CHAIN_ID_TO_NETWORK[currentChain ?? 0]}
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {isAdmin && (
                 <DropdownMenuItem>
-                  <LogOut/>
-                  <Button 
-                    type='button'
-                    variant='ghost'
-                    onClick={disconnect}>
-                    Disconnect
-                  </Button>
+                  <Link href='/admin'>
+                      Admin
+                  </Link>
                 </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu> 
+              )}
+              <DropdownMenuItem>
+                <LogOut/>
+                <Button 
+                  type='button'
+                  variant='ghost'
+                  onClick={disconnect}>
+                    Disconnect
+                </Button>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu> 
         ) 
         : (
-            <Button
-              type='button'
-              variant='secondary'
-              onClick={connectWallet}>
+          <Button
+            type='button'
+            variant='secondary'
+            onClick={connectWallet}>
               Connect Wallet
-            </Button>
+          </Button>
         )
       }
     </>

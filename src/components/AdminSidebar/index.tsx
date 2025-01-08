@@ -1,10 +1,10 @@
 'use client'
 
-import { usePathname } from "next/navigation"
-import Link from "next/link"
-import { ReceiptText, LayoutDashboard, Dices, House } from "lucide-react"
+import { usePathname } from 'next/navigation'
+import Link from 'next/link'
+import { ReceiptText, LayoutDashboard, Dices, House } from 'lucide-react'
 
-import { CHAIN_ID_TO_NETWORK, cn, formatAddress } from "@/lib/utils"
+import { CHAIN_ID_TO_NETWORK, cn, formatAddress } from '@/lib/utils'
 
 import {
   Sidebar,
@@ -16,40 +16,40 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { Button } from "../ui/button"
+} from '@/components/ui/sidebar'
+import { Button } from '../ui/button'
 
-import { useWalletContext, WalletContext } from "@/context/WalleContext"
+import { useWalletContext, WalletContext } from '@/context/WalleContext'
 
 
 const items = [
   {
-    title: "Dashboard",
-    url: "/admin",
+    title: 'Dashboard',
+    url: '/admin',
     icon: LayoutDashboard,
   },
   {
-    title: "Lotteries",
-    url: "/admin/lotteries",
+    title: 'Lotteries',
+    url: '/admin/lotteries',
     icon: Dices,
   },
   {
-    title: "Contracts",
-    url: "/admin/contracts",
+    title: 'Contracts',
+    url: '/admin/contracts',
     icon: ReceiptText,
   }, 
   {
-    title: "App",
-    url: "/",
+    title: 'App',
+    url: '/',
     icon: House,
   }
 ]
 
-export function AdminSidebar() {
+const AdminSidebar = () => {
   const pathname = usePathname()
   const {
     state: { address, currentChain },
-  } = useWalletContext() as WalletContext;
+  } = useWalletContext() as WalletContext
 
   return (
     <Sidebar>
@@ -78,10 +78,10 @@ export function AdminSidebar() {
                       <Link 
                         href={item.url}
                         className={cn(
-                          "block px-4 py-2 rounded-lg transition-colors duration-200",
-                        isActive
-                          ? "bg-gray-300"
-                          : " hover:bg-gray-200 hover:text-black"
+                          'block px-4 py-2 rounded-lg transition-colors duration-200',
+                          isActive
+                            ? 'bg-gray-300'
+                            : ' hover:bg-gray-200 hover:text-black'
                         )}>
                         <item.icon />
                         <span>{item.title}</span>
@@ -97,3 +97,5 @@ export function AdminSidebar() {
     </Sidebar>
   )
 }
+
+export default AdminSidebar

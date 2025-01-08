@@ -1,28 +1,32 @@
 import { NextResponse, NextRequest } from 'next/server'
 
-import { adminMiddleware } from './lib/middleware/admin'
-import { csrfMiddleware } from './lib/middleware/csrf'
+import { adminMiddleware, csrfMiddleware } from './lib/middleware'
 
 
-export const middleware = async (request: NextRequest) => {
-  
-    const path = request.nextUrl.pathname
-    const method = request.method
+const middleware = async (request: NextRequest) => {
+  const path = request.nextUrl.pathname
+  const method = request.method
 
-    if (path.startsWith('/admin')) {
-      return adminMiddleware(request)
-    }
+  if (path.startsWith('/admin')) {
+    return adminMiddleware(request)
+  }
 
-    if (method === 'POST' && !(path.startsWith('/api/auth'))) {
-      return csrfMiddleware(request)
-    }
+  if (method === 'POST' && !(path.startsWith('/api/auth'))) {
+    return csrfMiddleware(request)
+  }
 
-    return NextResponse.next()
+  return NextResponse.next()
 }
 
-export const config = {
+const config = {
   matcher: [
     '/admin/:path*',
     '/api/:path*'
   ]
 }
+
+
+export {
+  middleware,
+  config
+} 

@@ -9,7 +9,7 @@ export type FormDialogProps = {
   form: React.ReactNode
 }
 
-export const FormDialog = (props: FormDialogProps) => {
+const FormDialog = (props: FormDialogProps) => {
   return (
     <Dialog open={props.isOpen} onOpenChange={props.setIsOpen}>
       <DialogTrigger>
@@ -25,3 +25,5 @@ export const FormDialog = (props: FormDialogProps) => {
     </Dialog>
   )
 }
+
+export default FormDialog

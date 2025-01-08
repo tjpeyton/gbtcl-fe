@@ -9,12 +9,12 @@ import { ContractDocument, GetAllContractsResponse } from '@/lib/types/contract'
 import { fetchAllContracts } from '@/app/services/contractService'
 import { fetchAllLotteries, saveLottery } from '@/app/services/lotteryService'
 
-import { DataTable } from "@/components/ui/table"
+import { DataTable } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/hooks/use-toast'
 import { CreateLotteryForm } from '@/components/forms/CreateLotteryForm'
 import { CreateLotteryFormData } from '@/components/forms/CreateLotteryForm/types'
-import { FormDialog } from '@/components/dialog/FormDialog'
+import FormDialog from '@/components/dialog/FormDialog'
 import TableSkeleton from '@/components/TableSkeleton'
 
 import { WalletContext, useWalletContext } from '@/context/WalleContext'
@@ -22,7 +22,7 @@ import { useContract } from '@/app/hooks/useContract'
 
 import { minutesToSeconds } from '@/lib/utils'
 
-import { columns } from "./columns"
+import { columns } from './columns'
 
 
 export const LotteryPageClient = () =>  {
@@ -102,7 +102,7 @@ export const LotteryPageClient = () =>  {
       const contractInstance = await getContract(data.contract.address) 
 
       // Listen for LotteryCreated event
-      contractInstance.once("LotteryCreated", (
+      contractInstance.once('LotteryCreated', (
         ticketPrice: number,
         maxTickets: number,
         operatorCommissionPercentage: number,
@@ -164,13 +164,13 @@ export const LotteryPageClient = () =>  {
 
 
   return (
-    <div className="container mx-auto py-2">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold">Lotteries</h1>
+    <div className='container mx-auto py-2'>
+      <div className='flex justify-between items-center mb-8'>
+        <h1 className='text-2xl font-bold'>Lotteries</h1>
         {!isLoading && 
           <FormDialog
-            title="Create Lottery"
-            description="Create a new lottery to a connected smart contract"
+            title='Create Lottery'
+            description='Create a new lottery to a connected smart contract'
             isOpen={lotteryDialogOpen}
             setIsOpen={setLotteryDialogOpen}
             trigger={

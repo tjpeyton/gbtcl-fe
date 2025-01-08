@@ -1,5 +1,5 @@
-import { AdminSidebar } from "@/components/AdminSidebar"
-import { SidebarProvider } from "@/components/ui/sidebar"
+import AdminSidebar from '@/components/AdminSidebar'
+import { SidebarProvider } from '@/components/ui/sidebar'
 
 
 export const metadata = {
@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <SidebarProvider>
       <AdminSidebar />
-      <main className="w-full h-full p-[1%]">
+      <main className='w-full h-full p-[1%]'>
         {children}
       </main>
     </SidebarProvider>  

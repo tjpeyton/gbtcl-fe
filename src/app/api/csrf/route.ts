@@ -1,4 +1,4 @@
-import { getCsrfToken } from "@/lib/csrf"
+import { getCsrfToken } from '@/lib/csrf'
 
 
 export async function GET() {

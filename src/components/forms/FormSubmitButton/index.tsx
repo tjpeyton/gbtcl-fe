@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button'
 
 
 export type FormSubmitButtonProps = {
@@ -7,17 +7,18 @@ export type FormSubmitButtonProps = {
     className?: string,
 }
 
+
 export const FormSubmitButton = (props: FormSubmitButtonProps) => {
-    return (
-        <div className={props.className}>
-            <Button
-                size="lg"
-                type="submit"
-                className="w-full p-6"
-            >
-                {props.icon}
-                {props.title}
-            </Button>
-        </div>
-    )
+  return (
+    <div className={props.className}>
+      <Button
+        size="lg"
+        type="submit"
+        className="w-full p-6"
+      >
+        {props.icon}
+        {props.title}
+      </Button>
+    </div>
+  )
 }

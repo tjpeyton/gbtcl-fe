@@ -1,9 +1,14 @@
-import { ObjectId } from "mongodb";
+import { ObjectId } from 'mongodb'
 
-export type AdminDocument = {
+type AdminDocument = {
     _id: ObjectId,
     address: string,
     name?: string
 }
 
-export type Admin = Omit<AdminDocument, '_id'>  
+type Admin = Omit<AdminDocument, '_id'>  
+
+export {
+  type AdminDocument,
+  type Admin
+} 

@@ -5,19 +5,19 @@ import { PurchaseLotteryTicketsDTO } from '@/lib/types/lottery'
 
 // need to verify csrf token middle ware is firing here
 export async function PATCH(
-    request: NextRequest, 
-    { params }: { params: { id: string } }
+  request: NextRequest, 
+  { params }: { params: { id: string } }
 ) {
-    try {
+  try {
 
-        const body: PurchaseLotteryTicketsDTO = await request.json()
-        // validate body
+    const body: PurchaseLotteryTicketsDTO = await request.json()
+    // validate body
 
         
 
 
-    } catch (error) {
-        console.error('Error fetching lottery:', error)
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
-    }
+  } catch (error) {
+    console.error('Error fetching lottery:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
 }

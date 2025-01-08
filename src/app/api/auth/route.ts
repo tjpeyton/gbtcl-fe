@@ -1,7 +1,7 @@
-import { cookies } from "next/headers"
+import { cookies } from 'next/headers'
 
-import { generateToken } from "@/lib/jwt"
-import { isAdmin } from "@/lib/mongodb"
+import { generateToken } from '@/lib/jwt'
+import { isAdmin } from '@/lib/mongodb/models'
 
 
 // Generate a jwt 

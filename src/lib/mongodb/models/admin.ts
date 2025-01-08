@@ -1,12 +1,12 @@
-import { AdminDocument } from "@/lib/types/admin"
+import { AdminDocument } from '@/lib/types/admin'
 
-import { getDb } from "../client"
+import { getDb } from '../client'
 
 export const isAdmin = async (address: string) : Promise<boolean> => {
-    const db = await getDb('gbtcl')
-    const collection = db.collection<AdminDocument>('admin')
+  const db = await getDb('gbtcl')
+  const collection = db.collection<AdminDocument>('admin')
 
-    const admin = await collection.findOne({ address: address.toLowerCase() })
+  const admin = await collection.findOne({ address: address.toLowerCase() })
 
-    return admin !== null
+  return admin !== null
 }

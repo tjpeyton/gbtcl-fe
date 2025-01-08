@@ -1,9 +1,9 @@
 
-import { ObjectId } from "mongodb"
+import { ObjectId } from 'mongodb'
 
-import { z } from "zod"
+import { z } from 'zod'
 
-export type ContractDocument = {
+type ContractDocument = {
     _id: ObjectId,
     address: string
     abi: any
@@ -12,13 +12,20 @@ export type ContractDocument = {
     createdAt: Date
 }
 
-export type GetAllContractsResponse = {
+type GetAllContractsResponse = {
     contracts: ContractDocument[]
 }   
 
-export type Contract = Omit<ContractDocument, '_id'>
+type Contract = Omit<ContractDocument, '_id'>
 
-export const connectContractSchema = z.object({
-    contractAddress: z.string().min(1, { message: "Contract address is required" }),
-    chain: z.string().min(1, { message: "Chain is required" })
+const connectContractSchema = z.object({
+  contractAddress: z.string().min(1, { message: 'Contract address is required' }),
+  chain: z.string().min(1, { message: 'Chain is required' })
 })
+
+export {
+  connectContractSchema,
+  type ContractDocument,
+  type GetAllContractsResponse,
+  type Contract
+}

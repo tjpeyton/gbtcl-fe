@@ -1,6 +1,6 @@
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from '@/components/ui/skeleton'
 
-type TableSkeletonProps = { 
+export type TableSkeletonProps = { 
   rows: number
   columns: number
 }
@@ -32,4 +32,4 @@ const TableSkeleton = ({ rows, columns }: TableSkeletonProps) => {
   )
 }
 
-export default TableSkeleton;
+export default TableSkeleton

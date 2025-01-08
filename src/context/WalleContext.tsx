@@ -1,8 +1,8 @@
 'use client'
 
-import { createContext, ReactNode, useContext } from "react"
+import { createContext, ReactNode, useContext } from 'react'
 
-import useWalletProvider, { WalletState } from "@/app/hooks/useWalletProviders"
+import useWalletProvider, { WalletState } from '@/app/hooks/useWalletProviders'
 
 
 export interface WalletContext {
@@ -12,36 +12,36 @@ export interface WalletContext {
     getBlockTimestamp: () => Promise<number | undefined>
     state: WalletState
 }
+
+type WalletContextProviderProps = {
+  children: ReactNode
+}
   
 const WalletContext = createContext<WalletContext | null>(null)
   
-type Props = {
-    children: ReactNode
-}
 
+const WalletContextProvider = ({ children }: WalletContextProviderProps) => {
+  const { 
+    connectWallet, 
+    disconnect, 
+    switchNetwork, 
+    getBlockTimestamp, 
+    state 
+  } = useWalletProvider()
 
-const WalletContextProvider = ({ children }: Props) => {
-    const { 
-        connectWallet, 
-        disconnect, 
-        switchNetwork, 
-        getBlockTimestamp, 
-        state 
-    } = useWalletProvider()
-
-    return (
-        <WalletContext.Provider
-            value={{
-                connectWallet,
-                disconnect,
-                switchNetwork,
-                getBlockTimestamp,
-                state,
-            }}
-        >
-            {children}
-        </WalletContext.Provider>
-    )
+  return (
+    <WalletContext.Provider
+      value={{
+        connectWallet,
+        disconnect,
+        switchNetwork,
+        getBlockTimestamp,
+        state,
+      }}
+    >
+      {children}
+    </WalletContext.Provider>
+  )
 }
 
 export default WalletContextProvider
