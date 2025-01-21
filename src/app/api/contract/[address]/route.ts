@@ -14,7 +14,7 @@ export async function GET(
 
     const contract = await getContract(params.address)
 
-    return NextResponse.json({ contract }, { status: 200 })
+    return NextResponse.json({ ...contract }, { status: 200 })
   } catch (error) {
     console.error('Error fetching contract:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 
 import { LotteryDocument, GetAllLotteriesResponse, PurchaseLotteryTickets, PurchaseLotteryTicketsDTO } from '@/lib/types/lottery'
 
-import { fetchAllLotteries, filterActiveLotteries } from '../services/lotteryService'
+import { fetchAllLotteries, filterActiveLotteries } from '@/app/services/lotteryService'
 import { useLotteryContract } from '@/app/hooks/useLotteryContract'
 
 
