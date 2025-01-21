@@ -90,9 +90,7 @@ export const LotteriesPageClient = () => {
       const tx = await contract.purchaseTickets(
         lottery.lotteryId, 
         data.count,
-        {
-          value: value
-        }
+        { value: value }
       )  
         
       await tx.wait()
