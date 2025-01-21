@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/sidebar'
 import { Button } from '../ui/button'
 
-import { useWalletContext, WalletContext } from '@/context/WalleContext'
+import { useWalletContext, WalletContext } from '@/app/contexts/WalleContext'
 
 
 const items = [

@@ -12,7 +12,7 @@ const adminMiddleware = async (request: NextRequest) => {
     const token = request.cookies.get('admin-token')?.value
 
     if (!token) {
-      return NextResponse.redirect(new URL('/', request.url), { status: 401 })
+      return NextResponse.redirect(new URL('/', request.url), { status: 302 })
     }
 
     const payload = await verifyToken(token)  
@@ -25,7 +25,7 @@ const adminMiddleware = async (request: NextRequest) => {
         
   } catch (error) {
     console.error(error)    
-    return NextResponse.redirect(new URL('/', request.url), { status: 401 })
+    return NextResponse.redirect(new URL('/', request.url), { status: 403 })
   }
 }
 

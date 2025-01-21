@@ -17,8 +17,8 @@ import { CreateLotteryFormData } from '@/components/forms/CreateLotteryForm/type
 import FormDialog from '@/components/dialog/FormDialog'
 import TableSkeleton from '@/components/TableSkeleton'
 
-import { WalletContext, useWalletContext } from '@/context/WalleContext'
-import { useContract } from '@/app/hooks/useContract'
+import { WalletContext, useWalletContext } from '@/app/contexts/WalleContext'
+import { useLotteryContract } from '@/app/hooks/useLotteryContract'
 
 import { minutesToSeconds } from '@/lib/utils'
 
@@ -37,7 +37,7 @@ export const LotteryPageClient = () =>  {
     getBlockTimestamp,
   } = useWalletContext() as WalletContext
 
-  const { getContract } = useContract() 
+  const { getLotteryContract } = useLotteryContract() 
 
   
   const fetchLotteries = async () => {
@@ -99,7 +99,7 @@ export const LotteryPageClient = () =>  {
       setIsCreating(true)
       if (!isAuthenticated) throw new Error('User is not authenticated')
 
-      const contractInstance = await getContract(data.contract.address) 
+      const contractInstance = await getLotteryContract(data.contract.address) 
 
       // Listen for LotteryCreated event
       contractInstance.once('LotteryCreated', (

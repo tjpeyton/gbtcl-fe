@@ -11,7 +11,7 @@ import CountdownDisplay from '@/components/CountdownDisplay'
 
 import useCountdown from '@/app/hooks/useCountdown'
 import { getUserTickets, userHasTickets } from '@/app/services/lotteryService'
-import { useWalletContext, WalletContext } from '@/context/WalleContext'  
+import { useWalletContext, WalletContext } from '@/app/contexts/WalleContext'  
 
 import { CHAIN_ID_TO_NETWORK, formatUnixTimestampFromSeconds } from '@/lib/utils'
 import { LotteryDocument } from'@/lib/types/lottery' 

@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { BrowserProvider, ethers, JsonRpcSigner } from 'ethers'
 
+import { authenticateWallet } from '@/app/services/authService'
 
 declare global {
     interface Window {
@@ -10,23 +11,26 @@ declare global {
     }
 }
 
-export interface WalletState {
-    address: string | null;
-    currentChain: number | null;
-    signer: JsonRpcSigner | null;
-    provider: BrowserProvider | null;
-    isAuthenticated: boolean;
-    isAdmin: boolean;
+export type WalletState = {
+    address: string | null
+    currentChain: number | null
+    signer: JsonRpcSigner | null
+    provider: BrowserProvider | null
+    isAuthenticated: boolean
+    isAdmin: boolean
+    adminToken: string | null
 }
 
+
 const useWalletProvider = () => {
-  const initialWalletState = {
+  const initialWalletState: WalletState = {
     address: null,
     currentChain: null,
     signer: null,
     provider: null,
     isAuthenticated: false,
     isAdmin: false,
+    adminToken: null
   }
   
   const [state, setState] = useState<WalletState>(initialWalletState)
@@ -44,17 +48,8 @@ const useWalletProvider = () => {
       if (accounts.length > 0) {
         const signer = await provider.getSigner()
         const chain = Number(await (await provider.getNetwork()).chainId)
-  
-        localStorage.setItem('isConnected', 'true')
 
-        const request = await fetch('/api/auth', {
-          method: 'POST',
-          body: JSON.stringify({ address: accounts[0] })
-        })
-        const response = await request.json()
-
-        localStorage.setItem('token', response.token)
-        localStorage.setItem('isAdmin', response.isAdmin)
+        const auth = await authenticateWallet(accounts[0])
 
         setState({
           ...state,
@@ -63,7 +58,8 @@ const useWalletProvider = () => {
           currentChain: chain,
           provider,
           isAuthenticated: true,
-          isAdmin: response.isAdmin,
+          isAdmin: auth.isAdmin,
+          adminToken: auth.token
         })
       }
     } catch (error) {
@@ -73,7 +69,6 @@ const useWalletProvider = () => {
 
   const switchNetwork = useCallback(async (chainId: number) => {
     try {
-      console.log('switchNetwork', chainId) 
       await window.ethereum.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: `0x${chainId.toString(16)}` }],

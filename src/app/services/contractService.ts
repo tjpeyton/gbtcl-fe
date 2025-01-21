@@ -30,21 +30,21 @@ export const fetchAllContracts = async () : Promise<GetAllContractsResponse> => 
 }   
 
 export const saveContract = async (contract: ConnectContractFormData, csrfToken: string) => {
-  try {
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      body: JSON.stringify(contract),
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-Token': csrfToken
-      }
-    })
-
-    if (!res.ok) {
-      throw new Error(`Failed to save contract: ${res.status} ${res.statusText}`)
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    body: JSON.stringify(contract),
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': csrfToken
     }
-    return await res.json()
-  } catch (error: any) {
-    throw new Error(`Network Error: Failed to save contract: ${error.message}`) 
+  })
+    
+  if (!res.ok) {
+    if(res.status === 409 ) {
+      throw new Error('Contract already exists for this network')
+    }
+    throw new Error(`Failed to save contract: ${res.status} ${res.statusText}`)
   }
+
+  return res.json()
 }  

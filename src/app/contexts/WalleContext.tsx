@@ -5,7 +5,7 @@ import { createContext, ReactNode, useContext } from 'react'
 import useWalletProvider, { WalletState } from '@/app/hooks/useWalletProviders'
 
 
-export interface WalletContext {
+export type WalletContext = {
     connectWallet: () => Promise<any>
     disconnect: () => void
     switchNetwork: (chainId: number) => Promise<any>

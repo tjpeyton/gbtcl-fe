@@ -2,18 +2,17 @@
 
 import { ethers } from 'ethers'
 
-import { fetchContract } from '../services/contractService'
+import { fetchContract } from '@/app/services/contractService'
+import { useWalletContext, WalletContext } from '@/app/contexts/WalleContext'
 
-import { useWalletContext, WalletContext } from '@/context/WalleContext'
 
-
-export const useContract = () => {
+export const useLotteryContract = () => {
   const {
     state: { signer, provider },
     switchNetwork,
   } = useWalletContext() as WalletContext
 
-  const getContract = async (address: string) => {
+  const getLotteryContract = async (address: string) => {
     try {
       const contractData = await fetchContract(address)   
 
@@ -34,5 +33,5 @@ export const useContract = () => {
     }
   }
 
-  return { getContract }
+  return { getLotteryContract }
 }

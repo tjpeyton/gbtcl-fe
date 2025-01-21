@@ -13,23 +13,19 @@ const getContractCollection = async () => {
 }
 
 const insertContract = async (contract: Contract) => {
-  try {
-    const contracts = await getContractCollection()
+  const contracts = await getContractCollection()
 
-    // Check if contract exists first
-    const existingContract : ContractDocument | null = await contracts.findOne({
-      address: contract.address.toLowerCase()
-    })
-    if (existingContract) {
-      throw new Error('Contract already exists for this network')
-    }
-        
-    return contracts.insertOne({
-      ...contract
-    })
-  } catch (error) {
-    throw new Error('Failed to insert contract')
+  // Check if contract exists first
+  const existingContract : ContractDocument | null = await contracts.findOne({
+    address: contract.address.toLowerCase()
+  })
+  if (existingContract) {
+    throw new Error('Contract already exists for this network', { cause: 409 })
   }
+        
+  return contracts.insertOne({
+    ...contract
+  })
 }
 
 const getContract = async (address: string) => {

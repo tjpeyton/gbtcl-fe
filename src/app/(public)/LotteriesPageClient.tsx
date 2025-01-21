@@ -12,7 +12,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { LotteryDocument, GetAllLotteriesResponse, PurchaseLotteryTickets, PurchaseLotteryTicketsDTO } from '@/lib/types/lottery'
 
 import { fetchAllLotteries, filterActiveLotteries } from '../services/lotteryService'
-import { useContract } from '../hooks/useContract'
+import { useLotteryContract } from '@/app/hooks/useLotteryContract'
 
 
 export const LotteriesPageClient = () => {
@@ -21,7 +21,7 @@ export const LotteriesPageClient = () => {
   const [isBuyingTickets, setIsBuyingTickets] = useState(false)
          
 
-  const { getContract } = useContract() 
+  const { getLotteryContract } = useLotteryContract() 
 
   const fetchLotteries = async () => {
     try {
@@ -62,7 +62,7 @@ export const LotteriesPageClient = () => {
     try {
       setIsBuyingTickets(true)
 
-      const contract = await getContract(lottery.contract.address)
+      const contract = await getLotteryContract(lottery.contract.address)
 
       contract.once('TicketsBought', (
         buyer: string,

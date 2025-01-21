@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google'
 
 import { Toaster } from '@/components/ui/toaster'
 
-import WalletContextProvider from '@/context/WalleContext'
+import WalletContextProvider from '@/app/contexts/WalleContext'
 
 import './globals.css'
 

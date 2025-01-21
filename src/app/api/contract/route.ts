@@ -57,11 +57,12 @@ export async function POST(request: NextRequest) {
       { message: 'ok' },
       { status: 201 }
     )
-  } catch (error) {
-    console.error('Error inserting contract:', error)
+  } catch (error: any) {
+
+    console.error('Error inserting contract:', error.message)
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: 'Internal server error: ' + error.message },
+      { status: error.cause || 500 }
     )
   }
 }

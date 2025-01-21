@@ -45,30 +45,20 @@ export const ContractsPageClient = () => {
   const handleConnectContract = async (data: ConnectContractFormData, csrfToken: string) => {
     try {
       setIsCreating(true)
-      const response = await saveContract(data, csrfToken)
+      await saveContract(data, csrfToken)
 
-      if (!response.ok) {
-        const data = await response.json()
-        toast({
-          title: 'Failed to connect contract',
-          description: data.error || data.message,
-          variant: 'destructive' 
-        })
-        return
-      } else {
-        toast({
-          title: 'Contract connected',
-          description: 'You can now interact with the contract',
-          variant: 'success'
-        })
-        fetchContracts()
-      } 
+      toast({
+        title: 'Contract connected',
+        description: 'You can now interact with the contract',
+        variant: 'success'
+      })
 
+      fetchContracts()
       setContractDialogOpen(false)
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: 'Failed to connect contract',
-        description: 'Please try again',
+        description: error.message,
         variant: 'destructive' 
       })
     } finally {
