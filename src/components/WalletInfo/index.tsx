@@ -1,13 +1,21 @@
 'use client'
 
 import Link from 'next/link'
-import { LogOut } from 'lucide-react'
+import { LogOut, Settings } from 'lucide-react'
+
+import { Button } from '../ui/button'
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuLabel, 
+  DropdownMenuSeparator, 
+  DropdownMenuTrigger 
+} from '../ui/dropdown-menu'
 
 import { CHAIN_ID_TO_NETWORK, formatAddress } from '@/lib/utils'
 import { useWalletContext, WalletContext } from '@/app/contexts/WalleContext'
 
-import { Button } from '../ui/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu'
 
 
 const WalletInfo = () => {
@@ -22,32 +30,33 @@ const WalletInfo = () => {
       {isAuthenticated 
         ? (
           <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Button 
-                type='button'>
+            <DropdownMenuTrigger className='flex flex-row items-center'>
+              <p className='font-bold bg-black text-white px-4 py-2 rounded-md'>
                 { formatAddress(address ?? '') }
-              </Button>
+              </p>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent className='w-48'>
               <DropdownMenuLabel>
                 {CHAIN_ID_TO_NETWORK[currentChain ?? 0]}
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               {isAdmin && (
                 <DropdownMenuItem>
-                  <Link href='/admin'>
+                  <div className='flex w-full'> 
+                    <Link 
+                      href='/admin' 
+                      className='flex gap-2 items-center cursor-pointer w-full'>
+                      <Settings/>
                       Admin
-                  </Link>
+                    </Link>
+                  </div>
                 </DropdownMenuItem>
               )}
-              <DropdownMenuItem>
-                <LogOut/>
-                <Button 
-                  type='button'
-                  variant='ghost'
-                  onClick={disconnect}>
-                    Disconnect
-                </Button>
+              <DropdownMenuItem onClick={disconnect}>
+                <div className='flex gap-2 items-center cursor-pointer w-full'>
+                  <LogOut/>
+                  <p>Disconnect</p>
+                </div>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu> 

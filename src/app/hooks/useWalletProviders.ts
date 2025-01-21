@@ -113,8 +113,8 @@ const useWalletProvider = () => {
       setState({ ...state, address: accounts[0] })
     })
   
-    window.ethereum.on('networkChanged', (network: string) => {
-      setState({ ...state, currentChain: Number(network) })
+    window.ethereum.on('chainChanged', (chainId: string) => {
+      setState({ ...state, currentChain: Number(chainId) })
     })
   
     return () => {
