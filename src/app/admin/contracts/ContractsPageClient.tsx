@@ -16,6 +16,7 @@ import { fetchAllContracts, saveContract } from '@/app/services/contractService'
 import { ContractDocument, GetAllContractsResponse } from '@/lib/types/contract'
 
 import { columns } from './columns'
+import Header from '@/components/Header'
 
 
 export const ContractsPageClient = () => {
@@ -72,10 +73,10 @@ export const ContractsPageClient = () => {
 
 
   return (
-    <div className="container mx-auto py-2">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold">Contracts</h1>
-        {!isLoading && 
+    <>
+      <Header
+        title="Contracts"
+        dialog={!isLoading && 
           <FormDialog
             title="Connect Contract"
             description="Connect a deployed contract to the platform"
@@ -83,7 +84,7 @@ export const ContractsPageClient = () => {
             setIsOpen={setContractDialogOpen}
             trigger={
               <Button icon={<Plug/>}>
-                Connect Contract
+              Connect Contract
               </Button>
             }  
             form={
@@ -93,8 +94,8 @@ export const ContractsPageClient = () => {
               />
             }
           />  
-        }
-      </div>
+        }>
+      </Header>
       {isLoading && <TableSkeleton rows={5} columns={3} />}
       {!isLoading && (
         <DataTable 
@@ -102,6 +103,6 @@ export const ContractsPageClient = () => {
           columns={columns} 
         />
       )}
-    </div>
+    </>
   )
 }

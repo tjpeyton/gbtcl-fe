@@ -16,6 +16,7 @@ import { CreateLotteryForm } from '@/components/forms/CreateLotteryForm'
 import { CreateLotteryFormData } from '@/components/forms/CreateLotteryForm/types'
 import FormDialog from '@/components/dialog/FormDialog'
 import TableSkeleton from '@/components/TableSkeleton'
+import Header from '@/components/Header'
 
 import { WalletContext, useWalletContext } from '@/app/contexts/WalleContext'
 import { useLotteryContract } from '@/app/hooks/useLotteryContract'
@@ -164,10 +165,10 @@ export const LotteryPageClient = () =>  {
 
 
   return (
-    <div className='container mx-auto py-2'>
-      <div className='flex justify-between items-center mb-8'>
-        <h1 className='text-2xl font-bold'>Lotteries</h1>
-        {!isLoading && 
+    <>
+      <Header
+        title='Lotteries'
+        dialog={!isLoading && 
           <FormDialog
             title='Create Lottery'
             description='Create a new lottery to a connected smart contract'
@@ -186,8 +187,8 @@ export const LotteryPageClient = () =>  {
               />
             }
           />  
-        }
-      </div>
+        }>
+      </Header>
       {isLoading && <TableSkeleton rows={5} columns={3} />}
       {!isLoading && (
         <DataTable 
@@ -195,6 +196,6 @@ export const LotteryPageClient = () =>  {
           columns={columns} 
         />
       )}
-    </div>
+    </>
   )
 }

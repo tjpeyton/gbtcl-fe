@@ -1,8 +1,11 @@
+import Header from '@/components/Header'
 
 
 const AdminPage = () => {
   return (
-    <h1>Admin Page</h1>
+    <Header
+      title="Admin">
+    </Header>
   )
 }
 

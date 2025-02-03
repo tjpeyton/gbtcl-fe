@@ -16,7 +16,9 @@ export default function RootLayout({
     <SidebarProvider>
       <AdminSidebar />
       <main className='w-full h-full p-[1%]'>
-        {children}
+        <div className='container mx-auto py-2'>
+          {children}
+        </div>
       </main>
     </SidebarProvider>  
   )
