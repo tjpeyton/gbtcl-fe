@@ -47,10 +47,13 @@ const purchaseLotteryTicketSchema = z.object({
     chainId: z.number().min(1),
   }),
 })
+
+const purchaseLotteryTicketDTOSchema = purchaseLotteryTicketSchema.extend({
+  lotteryId: z.number().min(1),
+})
+
 type PurchaseLotteryTickets = z.infer<typeof purchaseLotteryTicketSchema>
-type PurchaseLotteryTicketsDTO = PurchaseLotteryTickets & {
-    lotteryId: number,
-}
+type PurchaseLotteryTicketsDTO = z.infer<typeof purchaseLotteryTicketDTOSchema>
 
 export {  
   type LotteryDocument,
@@ -58,6 +61,7 @@ export {
   type Lottery,
   createLotterySchema,
   purchaseLotteryTicketSchema,
+  purchaseLotteryTicketDTOSchema,
   type PurchaseLotteryTickets,
   type PurchaseLotteryTicketsDTO
 }

@@ -9,9 +9,9 @@ import { PurchaseTicketForm } from '@/components/forms/PurchaseTicketForm'
 import { PurchaseTicketFormData } from '@/components/forms/PurchaseTicketForm/types'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 
-import { LotteryDocument, GetAllLotteriesResponse, PurchaseLotteryTickets, PurchaseLotteryTicketsDTO } from '@/lib/types/lottery'
+import { LotteryDocument, GetAllLotteriesResponse, PurchaseLotteryTicketsDTO } from '@/lib/types/lottery'
 
-import { fetchAllLotteries, filterActiveLotteries } from '@/app/services/lotteryService'
+import { fetchAllLotteries, filterActiveLotteries, updateLotteryTickets } from '@/app/services/lotteryService'
 import { useLotteryContract } from '@/app/hooks/useLotteryContract'
 
 
@@ -20,7 +20,6 @@ export const LotteriesPageClient = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [isBuyingTickets, setIsBuyingTickets] = useState(false)
          
-
   const { getLotteryContract } = useLotteryContract() 
 
   const fetchLotteries = async () => {
@@ -42,15 +41,18 @@ export const LotteriesPageClient = () => {
     }
   }
 
-  const updateLotteryTickets = async (purchase: PurchaseLotteryTickets, csrfToken: string) => {
+  const updateLotteryTicketsDB = async (purchase: PurchaseLotteryTicketsDTO, csrfToken: string) => {
     try {
       await updateLotteryTickets(purchase, csrfToken)
     } catch (error: any) {
+      console.error('Failed to update lottery tickets:', error) 
       toast({
         title: 'Failed to update lottery tickets',
         description: error.message,
         variant: 'destructive' 
       })
+    } finally {
+      fetchLotteries()
     }
   }
 
@@ -69,10 +71,11 @@ export const LotteriesPageClient = () => {
         lotteryId: number,
         ticketsBought: number
       ) => {
+      
         const purchase: PurchaseLotteryTicketsDTO = {
           buyerAddress: buyer,
-          lotteryId: lotteryId,
-          count: ticketsBought,
+          lotteryId: Number(lotteryId),
+          count: Number(ticketsBought),
           contract: lottery.contract
         }
         
@@ -82,7 +85,7 @@ export const LotteriesPageClient = () => {
           variant: 'success' 
         })
 
-        updateLotteryTickets(purchase, csrfToken)
+        updateLotteryTicketsDB(purchase, csrfToken)
       })
 
       const value = data.count * lottery.ticketPrice
@@ -95,7 +98,6 @@ export const LotteriesPageClient = () => {
         
       await tx.wait()
     } catch (error: any) {
-      console.log('error', error) 
       toast({
         title: 'Failed to purchase tickets',
         description: error.message,
@@ -106,6 +108,8 @@ export const LotteriesPageClient = () => {
     }
   }
 
+  
+
   useEffect(() => {
     fetchLotteries()
   }, [])
@@ -115,9 +119,9 @@ export const LotteriesPageClient = () => {
         
     <div className="flex flex-row gap-4 justify-center">
       {!lottery && !isLoading && 
-                <div className="flex flex-col">
-                  <h1 className="text-l font-bold">No active lotteries</h1>
-                </div> 
+        <div className="flex flex-col">
+          <h1 className="text-l font-bold">No active lotteries</h1>
+        </div> 
       }
       <div className="flex flex-col">
         {isLoading && <TableSkeleton rows={3} columns={1} />}

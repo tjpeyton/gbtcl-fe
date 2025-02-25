@@ -8,7 +8,7 @@ const getLotteryCollection = async () => {
     const db = await getDb('gbtcl')
     return db.collection<Lottery>('lottery')
   } catch (error) {
-    throw new Error('Failed to get lottery collection')
+    throw new Error('Failed to retrieve lottery collection')
   }
 }
 
@@ -17,7 +17,7 @@ const insertLottery = async (lottery: Lottery) => {
     const collection = await getLotteryCollection()
     return collection.insertOne(lottery)
   } catch (error) {
-    throw new Error('Failed to insert lottery')
+    throw new Error('Failed to insert lottery document')
   }
 }
 
@@ -26,7 +26,7 @@ const getLottery = async (lotteryId: number) => {
     const collection = await getLotteryCollection()
     return collection.findOne({ lotteryId })
   } catch (error) {
-    throw new Error('Failed to get lottery')
+    throw new Error('Failed to retrieve lottery document')
   }
 }
 
@@ -35,23 +35,30 @@ const getAllLotteries = async () => {
     const collection = await getLotteryCollection()
     return collection.find().sort({ createdAt: -1 }).toArray()
   } catch (error) {   
-    throw new Error('Failed to get all lotteries')
+    throw new Error('Failed to retrieve all lottery documents')
   }
 }
 
 const updateLotteryTickets = async (purchase: PurchaseLotteryTicketsDTO) => {
   try {
     const collection = await getLotteryCollection()
-    return collection.updateOne({ 
+
+    const result = await collection.updateOne({ 
       lotteryId: purchase.lotteryId,
       contract: {
         address: purchase.contract.address,
         chainId: purchase.contract.chainId
       }
-    }, { $inc: { ticketsBought: purchase.count } })
+    }, { $push: { tickets: purchase.buyerAddress } })
 
+    if (result.modifiedCount < 0) {
+      console.error('No documents were updated')
+      throw new Error('Ticket Purchase not documented off chain')
+    }
+
+    return result
   } catch (error) {
-    throw new Error('Failed to update lottery tickets')
+    throw new Error(`Failed to update lottery tickets: Ticket Purchase not documented off chain - ${error}`)
   }
 }
 

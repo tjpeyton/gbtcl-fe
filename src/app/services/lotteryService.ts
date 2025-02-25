@@ -42,8 +42,9 @@ export const updateLotteryTickets = async (purchase: PurchaseLotteryTicketsDTO, 
     const payload: PurchaseLotteryTickets = {
       buyerAddress: purchase.buyerAddress,
       count: purchase.count,
-      contract: purchase.contract,
+      contract: purchase.contract
     }
+    console.log('payload', payload) 
     const res = await fetch(API_URL + purchase.lotteryId + '/tickets', {
       method: 'PATCH',
       body: JSON.stringify(payload),
@@ -53,12 +54,12 @@ export const updateLotteryTickets = async (purchase: PurchaseLotteryTicketsDTO, 
       }
     })
     if (!res.ok) {
-      throw new Error(`Failed to update lottery tickets: ${res.status} ${res.statusText}`)
+      throw new Error(`${res.status} ${res.statusText}`)
     }
 
     return await res.json()
   } catch (error: any) {
-    throw new Error(`Network Error: Failed to update lottery tickets: ${error.message}`)    
+    throw new Error(error.message)    
   }
 }
 
@@ -86,5 +87,5 @@ export const userHasTickets = (lottery: LotteryDocument | Lottery, userAddress: 
 }
 
 export const getUserTickets = (lottery: LotteryDocument | Lottery, userAddress: string | null) => {
-  return lottery.tickets?.filter((address: string) => address === userAddress)
+  return lottery.tickets?.filter((address: string) => address.toUpperCase() === userAddress?.toUpperCase())
 }
