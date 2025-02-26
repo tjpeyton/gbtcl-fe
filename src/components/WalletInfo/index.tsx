@@ -17,7 +17,6 @@ import { CHAIN_ID_TO_NETWORK, formatAddress } from '@/lib/utils'
 import { useWalletContext, WalletContext } from '@/app/contexts/WalleContext'
 
 
-
 const WalletInfo = () => {
   const {
     connectWallet,
@@ -44,7 +43,7 @@ const WalletInfo = () => {
                 <DropdownMenuItem>
                   <div className='flex w-full'> 
                     <Link 
-                      href='/admin' 
+                      href='/admin/lotteries' 
                       className='flex gap-2 items-center cursor-pointer w-full'>
                       <Settings/>
                       Admin

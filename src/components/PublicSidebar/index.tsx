@@ -2,7 +2,8 @@
 
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { ReceiptText, Dices, House } from 'lucide-react'
+import { Dices, Info, File } from 'lucide-react'
+import Image from 'next/image'
 
 import { CHAIN_ID_TO_NETWORK, cn, formatAddress } from '@/lib/utils'
 
@@ -24,19 +25,19 @@ import { useWalletContext, WalletContext } from '@/app/contexts/WalleContext'
 
 const items = [
   {
-    title: 'Lotteries',
-    url: '/admin/lotteries',
+    title: 'Lottery',
+    url: '/lotteries',
     icon: Dices,
   },
   {
-    title: 'Contracts',
-    url: '/admin/contracts',
-    icon: ReceiptText,
-  }, 
+    title: 'About',
+    url: '/about',
+    icon: Info,
+  },
   {
-    title: 'App',
-    url: '/',
-    icon: House,
+    title: 'Whitepaper',
+    url: '/whitepaper',
+    icon: File,
   }
 ]
 
@@ -49,19 +50,11 @@ const AdminSidebar = () => {
   return (
     <Sidebar>
       <SidebarHeader>
-        {currentChain && (
-          <span className="text-center block">
-            {CHAIN_ID_TO_NETWORK[currentChain]}
-          </span>
-        )}
-        <Button 
-          type="button">
-          {formatAddress(address ?? '')}
-        </Button>
+        <Image src="/images/gbtcl_logo.png" alt="logo" width={500} height={500} />
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>GBTCL Admin</SidebarGroupLabel>
+          <SidebarGroupLabel>Home</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => {

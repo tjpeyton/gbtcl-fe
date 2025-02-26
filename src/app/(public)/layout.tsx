@@ -1,6 +1,9 @@
 import TopNav from '@/components/TopNav'
+import PublicSidebar from '@/components/PublicSidebar'
+import { SidebarProvider } from '@/components/ui/sidebar'
 
 import '@/app/globals.css'
+
 
 
 export default function PublicLayout({
@@ -10,10 +13,15 @@ export default function PublicLayout({
 }>) {
   return (
     <>
-      <TopNav/>
-      <main className="container mx-auto">  
-        {children}
-      </main>
+      <SidebarProvider> 
+        <PublicSidebar/>
+        <div className="container">  
+          <TopNav/>
+          <main className="container mx-auto">      
+            {children}
+          </main>
+        </div>
+      </SidebarProvider>
     </>
   )
 }

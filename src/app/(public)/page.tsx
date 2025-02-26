@@ -1,9 +1,5 @@
-import { LotteriesPageClient } from './LotteriesPageClient'
-
+import { redirect } from 'next/navigation'
 
 export default function Home() {
-  
-  return (
-    <LotteriesPageClient />
-  ) 
+  redirect('/lotteries')
 }
