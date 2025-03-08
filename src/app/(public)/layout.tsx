@@ -15,7 +15,7 @@ export default function PublicLayout({
     <>
       <SidebarProvider> 
         <PublicSidebar/>
-        <div className="container">  
+        <div className="container ">  
           <TopNav/>
           <main className="container mx-auto">      
             {children}

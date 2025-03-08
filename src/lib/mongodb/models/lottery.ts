@@ -30,10 +30,12 @@ const getLottery = async (lotteryId: number) => {
   }
 }
 
-const getAllLotteries = async () => {
+const getAllLotteries = async (contractAddress?: string) => {
   try {
+    const filter = contractAddress ? { contract: { address: contractAddress } } : {}
+    
     const collection = await getLotteryCollection()
-    return collection.find().sort({ createdAt: -1 }).toArray()
+    return collection.find(filter).sort({ createdAt: -1 }).toArray()
   } catch (error) {   
     throw new Error('Failed to retrieve all lottery documents')
   }
@@ -43,15 +45,17 @@ const updateLotteryTickets = async (purchase: PurchaseLotteryTicketsDTO) => {
   try {
     const collection = await getLotteryCollection()
 
-    const result = await collection.updateOne({ 
+    const result = await collection.findOneAndUpdate({ 
       lotteryId: purchase.lotteryId,
       contract: {
         address: purchase.contract.address,
         chainId: purchase.contract.chainId
       }
-    }, { $push: { tickets: purchase.buyerAddress } })
+    }, 
+    { $push: { tickets: purchase.buyerAddress } }, 
+    { returnDocument: 'after' })
 
-    if (result.modifiedCount < 0) {
+    if (!result) {
       console.error('No documents were updated')
       throw new Error('Ticket Purchase not documented off chain')
     }
@@ -62,9 +66,28 @@ const updateLotteryTickets = async (purchase: PurchaseLotteryTicketsDTO) => {
   }
 }
 
+const updateLottery = async (lottery: Partial<Lottery>) => {
+  try {
+    const collection = await getLotteryCollection()
+    return collection.findOneAndUpdate(
+      { 
+        lotteryId: lottery.lotteryId,
+        contract: {
+          address: lottery.contract?.address,
+          chainId: lottery.contract?.chainId
+        }
+      },
+      { $set: { ...lottery } },
+      { returnDocument: 'after' }
+    )
+  } catch (error) {
+    throw new Error('Failed to update lottery document')
+  }
+}
 export {
   insertLottery,
   getLottery,
   getAllLotteries,
-  updateLotteryTickets
+  updateLotteryTickets,
+  updateLottery 
 }

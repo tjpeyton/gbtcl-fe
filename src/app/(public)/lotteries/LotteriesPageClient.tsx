@@ -108,8 +108,6 @@ export const LotteriesPageClient = () => {
     }
   }
 
-  
-
   useEffect(() => {
     fetchLotteries()
   }, [])

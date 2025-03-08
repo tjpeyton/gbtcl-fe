@@ -6,18 +6,21 @@ import { connectContractSchema, Contract } from '@/lib/types/contract'
 import { EtherscanResponse, validateContract } from '@/lib/etherscan'
 
 
-export async function GET(request: NextRequest) {
+export async function GET(
+  request: NextRequest,
+) {
   try { 
-    await adminMiddleware(request)  
-
+    await adminMiddleware(request) 
+ 
     const contracts = await getAllContracts()
-
+    
     return NextResponse.json({ contracts }, { status: 200 })
   } catch (error) {
     console.error('Error fetching contracts:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
-} 
+}
+
 
 export async function POST(request: NextRequest) {
   try {

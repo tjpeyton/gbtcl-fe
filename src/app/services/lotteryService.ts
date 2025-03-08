@@ -44,7 +44,7 @@ export const updateLotteryTickets = async (purchase: PurchaseLotteryTicketsDTO, 
       count: purchase.count,
       contract: purchase.contract
     }
-    console.log('payload', payload) 
+
     const res = await fetch(API_URL + purchase.lotteryId + '/tickets', {
       method: 'PATCH',
       body: JSON.stringify(payload),
@@ -62,6 +62,21 @@ export const updateLotteryTickets = async (purchase: PurchaseLotteryTicketsDTO, 
     throw new Error(error.message)    
   }
 }
+
+export const deleteLottery = async (contractAddress: string, lotteryId: string) => {
+  try {
+    const res = await fetch(API_URL + lotteryId + '?contract=' + contractAddress, {
+      method: 'DELETE'
+    })
+    if (!res.ok) {
+      throw new Error(`Failed to delete lottery: ${res.status} ${res.statusText}`)
+    }
+
+    return await res.json()
+  } catch (error: any) {
+    throw new Error(error.message)
+  }
+} 
 
 export const filterActiveLotteries = (lotteries: LotteryDocument[] | Lottery[]) => {
   const currentDate = new Date()

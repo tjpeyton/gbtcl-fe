@@ -4,7 +4,10 @@ import { PurchaseLotteryTicketsDTO, purchaseLotteryTicketSchema } from '@/lib/ty
 import { updateLotteryTickets } from '@/lib/mongodb/models/lottery'
 
 // need to verify csrf token middleware is firing here
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(
+  request: NextRequest, 
+  { params }: { params: { id: string } }
+) {
   try {
     //validate body
     const body: PurchaseLotteryTicketsDTO = await request.json()
@@ -16,7 +19,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
         { status: 400 }
       )
     }
-    
+
     const updatedLottery = await updateLotteryTickets({
       ...result.data, 
       lotteryId: Number(params.id)

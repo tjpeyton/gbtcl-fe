@@ -3,7 +3,7 @@ import { ContractDocument, GetAllContractsResponse } from '@/lib/types/contract'
 import { ConnectContractFormData } from '@/components/forms/ConnectContractForm/types'
 
 
-const API_URL = '/api/contract/'
+const API_URL = '/api/contracts/'
 
 export const fetchContract = async (address: string) : Promise<ContractDocument> => {
   try {   
