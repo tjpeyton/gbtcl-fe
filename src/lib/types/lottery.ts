@@ -63,5 +63,6 @@ export {
   purchaseLotteryTicketSchema,
   purchaseLotteryTicketDTOSchema,
   type PurchaseLotteryTickets,
-  type PurchaseLotteryTicketsDTO
+  type PurchaseLotteryTicketsDTO,
+  type ContractAbv
 }

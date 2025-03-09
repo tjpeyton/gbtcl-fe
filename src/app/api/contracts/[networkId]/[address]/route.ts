@@ -6,12 +6,12 @@ import { getContract } from '@/lib/mongodb/models'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { address: string } }
+  { params }: { params: { networkId: string, address: string } }
 ) {
   try { 
     await adminMiddleware(request) 
  
-    const contract = await getContract(params.address)
+    const contract = await getContract(Number(params.networkId), params.address)
     
     return NextResponse.json({ ...contract }, { status: 200 })
   } catch (error) {

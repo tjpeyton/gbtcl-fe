@@ -1,14 +1,12 @@
 'use client'
 
-import { ColumnDef } from '@tanstack/react-table'
-
+import Link from 'next/link'  
 import { Ellipsis, Pencil, Trash2 } from 'lucide-react'
 
+import { ColumnDef } from '@tanstack/react-table'
+
 import { CHAIN_ID_TO_NETWORK, formatUnixTimestampFromSeconds } from '@/lib/utils'
-
-import { LotteryDocument } from '@/lib/types/lottery'
-
-import { isLotteryActive } from '@/app/services/lotteryService'
+import { LotteryDocument, ContractAbv } from '@/lib/types/lottery'
 
 import StatusCircle from '@/components/StatusCircle'
 import { Button } from '@/components/ui/button'
@@ -18,17 +16,27 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { toast } from '@/components/ui/hooks/use-toast'
 
-import Link from 'next/link'  
+import { isLotteryActive, deleteLottery } from '@/app/services/lotteryService'
 
-const deleteLottery = async (lotteryId: string) => {
+
+const removeLottery = async (lotteryId: string, contract: ContractAbv) => {
   try { 
-    await deleteLottery(lotteryId)
-  } catch (error) {
-    console.error(error)
+    await deleteLottery(contract, lotteryId)
+    toast({
+      title: 'Lottery deleted successfully',
+      description: 'The lottery has been deleted successfully',
+      variant: 'success', 
+    })  
+  } catch (error: any) {
+    toast({
+      title: 'Failed to delete lottery',
+      description: error.message,
+      variant: 'destructive',
+    })
   }
-}
- 
+} 
 
 export const columns: ColumnDef<LotteryDocument>[] = [
   {
@@ -38,9 +46,11 @@ export const columns: ColumnDef<LotteryDocument>[] = [
       const lottery = row.original
       return (
         <div className='flex flex-row items-center justify-center'>  
-          {isLotteryActive(lottery) 
-            ? <StatusCircle status='active' /> 
-            : <StatusCircle status='inactive' />}
+          {
+            isLotteryActive(lottery) 
+              ? <StatusCircle status='active' /> 
+              : <StatusCircle status='inactive' />
+          }
         </div>
       )
     }
@@ -103,7 +113,7 @@ export const columns: ColumnDef<LotteryDocument>[] = [
               <DropdownMenuItem
                 className="text-destructive hover:cursor-pointer"
                 onClick={() => {
-                  // delete lottery
+                  removeLottery(String(lottery.lotteryId), lottery.contract)
                 }}
               >
                 <Trash2 className="mr-2 h-4 w-4" />

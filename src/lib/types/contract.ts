@@ -8,7 +8,6 @@ type ContractDocument = {
     address: string
     abi: any
     chainId: string
-    lottery: string[]
     createdAt: Date
 }
 

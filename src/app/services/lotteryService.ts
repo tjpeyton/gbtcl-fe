@@ -1,13 +1,13 @@
 import { Lottery, LotteryDocument, PurchaseLotteryTickets, PurchaseLotteryTicketsDTO } from '@/lib/types/lottery'
-import { GetAllLotteriesResponse } from '@/lib/types/lottery'
+import { GetAllLotteriesResponse, ContractAbv } from '@/lib/types/lottery'
 import { secondsToMilliseconds } from '@/lib/utils'   
 
+const LOTTERIES_API_URL = '/api/lotteries/'
 
-const API_URL = '/api/lotteries/'
 
 export const fetchAllLotteries = async (): Promise<GetAllLotteriesResponse> => {
   try {     
-    const res = await fetch(API_URL)
+    const res = await fetch(LOTTERIES_API_URL)
     if (!res.ok) {
       throw new Error(`Failed to fetch lotteries: ${res.status} ${res.statusText}`)
     }
@@ -19,7 +19,7 @@ export const fetchAllLotteries = async (): Promise<GetAllLotteriesResponse> => {
 
 export const saveLottery = async (lottery: Lottery, csrfToken: string) => {
   try {
-    const res = await fetch(API_URL, {
+    const res = await fetch(LOTTERIES_API_URL, {
       method: 'POST',
       body: JSON.stringify(lottery),
       headers: {
@@ -27,6 +27,7 @@ export const saveLottery = async (lottery: Lottery, csrfToken: string) => {
         'X-CSRF-Token': csrfToken
       }
     })
+
     if (!res.ok) {
       throw new Error(`Failed to create lottery: ${res.status} ${res.statusText}`)
     }
@@ -45,7 +46,7 @@ export const updateLotteryTickets = async (purchase: PurchaseLotteryTicketsDTO, 
       contract: purchase.contract
     }
 
-    const res = await fetch(API_URL + purchase.lotteryId + '/tickets', {
+    const res = await fetch('/api/contracts/' + purchase.contract.chainId + '/' + purchase.contract.address + '/lotteries/' + purchase.lotteryId + '/tickets', {
       method: 'PATCH',
       body: JSON.stringify(payload),
       headers: {
@@ -63,9 +64,9 @@ export const updateLotteryTickets = async (purchase: PurchaseLotteryTicketsDTO, 
   }
 }
 
-export const deleteLottery = async (contractAddress: string, lotteryId: string) => {
+export const deleteLottery = async (contract: ContractAbv, lotteryId: string) => {
   try {
-    const res = await fetch(API_URL + lotteryId + '?contract=' + contractAddress, {
+    const res = await fetch('/api/contracts/' + contract.chainId + '/' + contract.address + '/lotteries/' + lotteryId, {
       method: 'DELETE'
     })
     if (!res.ok) {

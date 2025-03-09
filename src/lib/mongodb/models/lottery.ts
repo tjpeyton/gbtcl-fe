@@ -1,7 +1,7 @@
 import { Lottery, PurchaseLotteryTicketsDTO } from '@/lib/types/lottery'
 
 import { getDb } from '../client'
-
+import { ContractAbv } from '@/lib/types/lottery'
 
 const getLotteryCollection = async () => {
   try {
@@ -21,18 +21,31 @@ const insertLottery = async (lottery: Lottery) => {
   }
 }
 
-const getLottery = async (lotteryId: number) => {
+const getLottery = async (networkId: number, address: string, lotteryId: number) => {
   try {
+    const filter = { lotteryId: lotteryId, contract: { networkId: networkId, address: address } }
+
     const collection = await getLotteryCollection()
-    return collection.findOne({ lotteryId })
+    return collection.findOne(filter)
   } catch (error) {
     throw new Error('Failed to retrieve lottery document')
+  } 
+}
+
+const getLotteriesByContract = async (networkId: number, address: string) => {
+  try {
+    const filter = { contract: { networkId: networkId, address: address } }
+
+    const collection = await getLotteryCollection()
+    return collection.find(filter).sort({ createdAt: -1 }).toArray()
+  } catch (error) {
+    throw new Error('Failed to retrieve all lottery documents')
   }
 }
 
-const getAllLotteries = async (contractAddress?: string) => {
+const getAllLotteries = async (address?: string) => {
   try {
-    const filter = contractAddress ? { contract: { address: contractAddress } } : {}
+    const filter = address ? { contract: { address: address } } : {}
     
     const collection = await getLotteryCollection()
     return collection.find(filter).sort({ createdAt: -1 }).toArray()
@@ -69,25 +82,50 @@ const updateLotteryTickets = async (purchase: PurchaseLotteryTicketsDTO) => {
 const updateLottery = async (lottery: Partial<Lottery>) => {
   try {
     const collection = await getLotteryCollection()
-    return collection.findOneAndUpdate(
-      { 
-        lotteryId: lottery.lotteryId,
-        contract: {
-          address: lottery.contract?.address,
-          chainId: lottery.contract?.chainId
-        }
-      },
-      { $set: { ...lottery } },
-      { returnDocument: 'after' }
-    )
+    return collection.findOneAndUpdate({ 
+      lotteryId: lottery.lotteryId,
+      contract: {
+        address: lottery.contract?.address,
+        chainId: lottery.contract?.chainId
+      }
+    },
+    { $set: { ...lottery } },
+    { returnDocument: 'after' })
   } catch (error) {
     throw new Error('Failed to update lottery document')
   }
 }
+
+const deleteLottery = async (contract: ContractAbv, lotteryId: number) => {
+  console.log('contract:', contract)
+  console.log('lotteryId:', lotteryId)
+  try {
+    const collection = await getLotteryCollection()
+    const result = await collection.findOneAndDelete({ 
+      lotteryId: lotteryId,
+      contract: {
+        address: contract.address,
+        chainId: contract.chainId
+      }
+    })
+
+    if (!result) {
+      throw new Error('Lottery not found', { cause: 404 })
+    }
+
+    return result
+  } catch (error: any) {
+    throw new Error(error.message, { cause: error.cause })
+  }
+}
+
+
 export {
   insertLottery,
   getLottery,
   getAllLotteries,
+  getLotteriesByContract,
   updateLotteryTickets,
-  updateLottery 
+  updateLottery,
+  deleteLottery,
 }

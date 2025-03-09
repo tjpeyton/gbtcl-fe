@@ -6,9 +6,7 @@ import { connectContractSchema, Contract } from '@/lib/types/contract'
 import { EtherscanResponse, validateContract } from '@/lib/etherscan'
 
 
-export async function GET(
-  request: NextRequest,
-) {
+export async function GET(request: NextRequest) {
   try { 
     await adminMiddleware(request) 
  
@@ -50,7 +48,6 @@ export async function POST(request: NextRequest) {
       address,
       chainId,
       abi,
-      lottery: [],
       createdAt: new Date()
     }
 

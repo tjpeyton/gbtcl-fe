@@ -28,11 +28,13 @@ const insertContract = async (contract: Contract) => {
   })
 }
 
-const getContract = async (address: string) => {
+const getContract = async (networkId: number, address: string) => {
   try {
     const collection = await getContractCollection()
 
-    return collection.findOne({ address: address.toLowerCase() })
+    return collection.findOne({ 
+      contract: { networkId: networkId, address: address.toLowerCase() } 
+    })
   } catch (error) {
     throw new Error('Failed to get contract')
   }
@@ -47,18 +49,8 @@ const getAllContracts = async () => {
   }
 } 
 
-const updateContractLotteries = async (address: string, lotteryId: string) => {
-  try {
-    const collection = await getContractCollection()
-    return collection.updateOne({ address: address }, { $push: { lottery: lotteryId } })
-  } catch (error) {
-    throw new Error('Failed to update contract lotteries')
-  }
-} 
-
 export {
   insertContract,
   getContract,
   getAllContracts,
-  updateContractLotteries
 } 
