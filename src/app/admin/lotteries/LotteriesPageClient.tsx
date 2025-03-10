@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Plus } from 'lucide-react'
 
-import { LotteryDocument, GetAllLotteriesResponse, Lottery } from '@/lib/types/lottery'
+import { LotteryDocument, GetAllLotteriesResponse, Lottery, LotteryStatus } from '@/lib/types/lottery'
 import { ContractDocument, GetAllContractsResponse } from '@/lib/types/contract'
 
 import { fetchAllContracts } from '@/app/services/contractService'
@@ -123,6 +123,7 @@ export const LotteryPageClient = () =>  {
           operatorCommissionPercentage: Number(operatorCommissionPercentage),
           expiration: Number(expiration),
           createdAt: Number(blockTimestamp), 
+          status: LotteryStatus.OPEN
         }
         toast({ 
           title: 'Lottery created successfully',
@@ -176,7 +177,7 @@ export const LotteryPageClient = () =>  {
             setIsOpen={setLotteryDialogOpen}
             trigger={
               <Button icon={<Plus/>}>
-                Create Lottery
+              Create Lottery
               </Button>
             }  
             form={

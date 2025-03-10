@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { adminMiddleware } from '@/lib/middleware/admin'
 
 import { getAllLotteries, insertLottery } from '@/lib/mongodb/models/lottery'
-import { createLotterySchema, Lottery } from '@/lib/types'
+import { createLotterySchema, Lottery, LotteryStatus } from '@/lib/types'
    
 
 export async function GET(request: NextRequest) {
@@ -31,7 +31,8 @@ export async function POST(request: NextRequest) {
 
     const lottery: Lottery = {
       ...result.data,
-      tickets: []
+      tickets: [],
+      status: LotteryStatus.OPEN
     }
 
     await insertLottery(lottery)

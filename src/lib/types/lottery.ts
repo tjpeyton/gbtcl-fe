@@ -6,6 +6,14 @@ type ContractAbv = {
     chainId: number
 }
 
+enum LotteryStatus {
+    OPEN = 'open',
+    DRAWING = 'drawing',
+    WINNER_SELECTED = 'winner_selected',
+    COMPLETED = 'completed',
+    CANCELLED = 'cancelled'
+}
+
 type LotteryDocument = {
     _id: ObjectId
     contract: ContractAbv,
@@ -15,6 +23,7 @@ type LotteryDocument = {
     expiration: number,
     operatorCommissionPercentage: number,
     createdAt: number,
+    status: LotteryStatus,
     tickets?: string[],
     winnerSelectedAt?: string,
     winnerAddress?: string
@@ -64,5 +73,6 @@ export {
   purchaseLotteryTicketDTOSchema,
   type PurchaseLotteryTickets,
   type PurchaseLotteryTicketsDTO,
-  type ContractAbv
+  type ContractAbv,
+  LotteryStatus 
 }

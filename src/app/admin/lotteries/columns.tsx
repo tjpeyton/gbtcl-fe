@@ -8,8 +8,8 @@ import { ColumnDef } from '@tanstack/react-table'
 import { CHAIN_ID_TO_NETWORK, formatUnixTimestampFromSeconds } from '@/lib/utils'
 import { LotteryDocument, ContractAbv } from '@/lib/types/lottery'
 
-import StatusCircle from '@/components/StatusCircle'
 import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -45,11 +45,11 @@ export const columns: ColumnDef<LotteryDocument>[] = [
     cell: ({ row }) => {
       const lottery = row.original
       return (
-        <div className='flex flex-row items-center justify-center'>  
+        <div className='flex flex-row'>  
           {
             isLotteryActive(lottery) 
-              ? <StatusCircle status='active' /> 
-              : <StatusCircle status='inactive' />
+              ? <Badge variant='open'>Open</Badge> 
+              : <Badge variant='drawing'>Drawing</Badge>
           }
         </div>
       )

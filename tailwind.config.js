@@ -41,6 +41,26 @@ module.exports = {
   				DEFAULT: 'hsl(var(--destructive))',
   				foreground: 'hsl(var(--destructive-foreground))'
   			},
+        open: {
+          DEFAULT: 'hsl(var(--open))',
+          foreground: 'hsl(var(--open-foreground))'
+        },
+        drawing: {
+          DEFAULT: 'hsl(var(--drawing))',
+          foreground: 'hsl(var(--drawing-foreground))'
+        },
+        winnerSelected: {
+          DEFAULT: 'hsl(var(--winner-selected))',
+          foreground: 'hsl(var(--winner-selected-foreground))'
+        },
+        completed: {
+          DEFAULT: 'hsl(var(--completed))',
+          foreground: 'hsl(var(--completed-foreground))'
+        },
+        cancelled: {
+          DEFAULT: 'hsl(var(--cancelled))',
+          foreground: 'hsl(var(--cancelled-foreground))'
+        }, 
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
