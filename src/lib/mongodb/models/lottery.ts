@@ -1,7 +1,8 @@
-import { Lottery, PurchaseLotteryTicketsDTO } from '@/lib/types/lottery'
-
 import { getDb } from '../client'
+
+import { Lottery, PurchaseLotteryTicketsDTO } from '@/lib/types/lottery'
 import { ContractAbv } from '@/lib/types/lottery'
+
 
 const getLotteryCollection = async () => {
   try {
@@ -97,8 +98,6 @@ const updateLottery = async (lottery: Partial<Lottery>) => {
 }
 
 const deleteLottery = async (contract: ContractAbv, lotteryId: number) => {
-  console.log('contract:', contract)
-  console.log('lotteryId:', lotteryId)
   try {
     const collection = await getLotteryCollection()
     const result = await collection.findOneAndDelete({ 
@@ -118,7 +117,6 @@ const deleteLottery = async (contract: ContractAbv, lotteryId: number) => {
     throw new Error(error.message, { cause: error.cause })
   }
 }
-
 
 export {
   insertLottery,

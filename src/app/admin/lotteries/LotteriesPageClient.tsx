@@ -100,7 +100,7 @@ export const LotteryPageClient = () =>  {
       setIsCreating(true)
       if (!isAuthenticated) throw new Error('User is not authenticated')
 
-      const contractInstance = await getLotteryContract(data.contract.address) 
+      const contractInstance = await getLotteryContract(data.contract) 
 
       // Listen for LotteryCreated event
       contractInstance.once('LotteryCreated', (

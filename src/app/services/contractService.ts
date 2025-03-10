@@ -1,13 +1,13 @@
 import { ContractDocument, GetAllContractsResponse } from '@/lib/types/contract'
 
 import { ConnectContractFormData } from '@/components/forms/ConnectContractForm/types'
-
+import { ContractAbv } from '@/lib/types/lottery'
 
 const API_URL = '/api/contracts/'
 
-export const fetchContract = async (address: string) : Promise<ContractDocument> => {
+export const fetchContract = async (contract: ContractAbv) : Promise<ContractDocument> => {
   try {   
-    const res = await fetch(`${API_URL}${address}`)
+    const res = await fetch(`${API_URL}/${contract.chainId}/${contract.address}/`)
     if (!res.ok) {
       throw new Error(`Failed to fetch contract: ${res.status} ${res.statusText}`)
     }

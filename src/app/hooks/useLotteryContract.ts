@@ -4,7 +4,7 @@ import { ethers } from 'ethers'
 
 import { fetchContract } from '@/app/services/contractService'
 import { useWalletContext, WalletContext } from '@/app/contexts/WalleContext'
-
+import { ContractAbv } from '@/lib/types/lottery' 
 
 export const useLotteryContract = () => {
   const {
@@ -12,9 +12,11 @@ export const useLotteryContract = () => {
     switchNetwork,
   } = useWalletContext() as WalletContext
 
-  const getLotteryContract = async (address: string) => {
+  const getLotteryContract = async (contractAbv: ContractAbv) => {
     try {
-      const contractData = await fetchContract(address)   
+      console.log('contractAbv', contractAbv) 
+      const contractData = await fetchContract(contractAbv)   
+      console.log('contractData', contractData)
 
       // Check if the current network is the same as the contract's network   
       const chain = await provider?.getNetwork()
@@ -25,7 +27,7 @@ export const useLotteryContract = () => {
 
       if (!signer) throw new Error('Signer not found')
                 
-      const contract = new ethers.Contract(address, contractData.abi, signer)
+      const contract = new ethers.Contract(contractAbv.address, contractData.abi, signer)
 
       return contract
     } catch (error: any) {

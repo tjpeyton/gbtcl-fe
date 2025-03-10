@@ -28,15 +28,18 @@ const insertContract = async (contract: Contract) => {
   })
 }
 
-const getContract = async (networkId: number, address: string) => {
+const getContract = async (chainId: string, address: string) => {
   try {
+    const filter = { chainId: chainId, address: address.toLowerCase() }
     const collection = await getContractCollection()
 
-    return collection.findOne({ 
-      contract: { networkId: networkId, address: address.toLowerCase() } 
-    })
-  } catch (error) {
-    throw new Error('Failed to get contract')
+    const result = await collection.findOne(filter)
+    if (!result) {
+      throw new Error('Contract not found', { cause: 404 })
+    }
+    return result
+  } catch (error: any) {
+    throw new Error('Failed to get contract: ' + error.message, { cause: error.cause })
   }
 } 
 
