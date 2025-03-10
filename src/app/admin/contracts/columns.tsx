@@ -20,11 +20,11 @@ export const columns: ColumnDef<ContractDocument>[] = [
     accessorKey: 'address',
   },
   {
-    header: 'Lotteries Deployed',
-    accessorKey: 'lottery',
+    header: 'Deployed',
+    accessorKey: 'deployed',
     cell: ({ row }) => {
-      const lottery = row.original.lottery
-      return lottery.length
+      const date = row.original.createdAt 
+      return date ? new Date(date).toLocaleDateString() : '-'
     } 
   },
 ]

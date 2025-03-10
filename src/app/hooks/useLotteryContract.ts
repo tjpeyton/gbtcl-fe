@@ -14,9 +14,7 @@ export const useLotteryContract = () => {
 
   const getLotteryContract = async (contractAbv: ContractAbv) => {
     try {
-      console.log('contractAbv', contractAbv) 
       const contractData = await fetchContract(contractAbv)   
-      console.log('contractData', contractData)
 
       // Check if the current network is the same as the contract's network   
       const chain = await provider?.getNetwork()
