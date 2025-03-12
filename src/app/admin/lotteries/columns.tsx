@@ -5,7 +5,7 @@ import { Ellipsis, Pencil, Trash2 } from 'lucide-react'
 
 import { ColumnDef } from '@tanstack/react-table'
 
-import { CHAIN_ID_TO_NETWORK, formatUnixTimestampFromSeconds } from '@/lib/utils'
+import { CHAIN_ID_TO_NETWORK, formatUnixTimestampFromSeconds, getLotteryStatus } from '@/lib/utils'
 import { LotteryDocument, ContractAbv } from '@/lib/types/lottery'
 
 import { Button } from '@/components/ui/button'
@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { toast } from '@/components/ui/hooks/use-toast'
 
-import { isLotteryActive, deleteLottery } from '@/app/services/lotteryService'
+import { deleteLottery } from '@/app/services/lotteryService'
 
 
 const removeLottery = async (lotteryId: string, contract: ContractAbv) => {
@@ -46,11 +46,12 @@ export const columns: ColumnDef<LotteryDocument>[] = [
       const lottery = row.original
       return (
         <div className='flex flex-row'>  
-          {
-            isLotteryActive(lottery) 
-              ? <Badge variant='open'>Open</Badge> 
-              : <Badge variant='drawing'>Drawing</Badge>
-          }
+          <Badge variant={
+            getLotteryStatus(lottery)
+              .toLowerCase() as 'open' | 'drawing' | 'winnerSelected' | 'completed' | 'cancelled'
+          }>
+            {getLotteryStatus(lottery)}
+          </Badge>
         </div>
       )
     }

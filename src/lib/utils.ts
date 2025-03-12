@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import { LotteryDocument, LotteryStatus } from './types/lottery'
 
 const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs))
@@ -53,6 +54,15 @@ const addMinutesToUnixTimestamp = (timestamp: number, minutes: number) => {
   return newTimestamp.getTime()
 }
 
+const getLotteryStatus = (lottery: LotteryDocument): LotteryStatus => {
+  if (lottery.status === 'open' && lottery.expiration < Date.now()) {
+  
+    return LotteryStatus.DRAWING
+  } else {
+    return lottery.status
+  }
+}
+
 export {
   cn,
   formatAddress,
@@ -64,5 +74,6 @@ export {
   secondsToMilliseconds,
   minutesToSeconds,
   minutesToMilliseconds,
-  addMinutesToUnixTimestamp
+  addMinutesToUnixTimestamp,
+  getLotteryStatus
 }

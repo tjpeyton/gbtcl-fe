@@ -8,7 +8,7 @@ import { TooltipContent, TooltipTrigger, TooltipProvider, Tooltip } from '../ui/
 import { Button } from '../ui/button'
 
 import { LotteryDocument } from '@/lib/types/lottery'
-import { CHAIN_ID_TO_NETWORK, formatUnixTimestampFromSeconds } from '@/lib/utils'
+import { CHAIN_ID_TO_NETWORK, formatUnixTimestampFromSeconds, getLotteryStatus } from '@/lib/utils'
 import { Skeleton } from '../ui/skeleton'
 
 
@@ -28,7 +28,12 @@ const LotteryDetailsCard = ({ lottery }: LotteryDetailsCardProps) => {
       <CardHeader>
         <CardTitle className='flex items-center justify-between'>
           <span>Lottery Details</span>
-          <Badge variant="open">Open</Badge>
+          <Badge variant={
+            getLotteryStatus(lottery)
+              .toLowerCase() as 'open' | 'drawing' | 'winnerSelected' | 'completed' | 'cancelled'
+          }>
+            {getLotteryStatus(lottery)}
+          </Badge>
         </CardTitle>
         <CardDescription>
           Lottery ID: {lottery.lotteryId} - Created {formatUnixTimestampFromSeconds(lottery.createdAt)}

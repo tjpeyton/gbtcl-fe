@@ -6,6 +6,7 @@ import { fetchLottery } from '@/app/services/lotteryService'
 
 import LotteryDetailsCard from '@/components/LotteryDetailsCard'
 import { Skeleton } from '@/components/ui/skeleton'
+import LotteryActionsCard from '@/components/LotteryActionsCard'
 
 import { LotteryDocument } from '@/lib/types/lottery'
 
@@ -55,6 +56,11 @@ const ManageLotteryPage = ({ params }: ManageLotteryPageProps) => {
         {isLoading && <Skeleton className="h-full w-full" />}
         {!isLoading && lottery && 
           <LotteryDetailsCard 
+            lottery={lottery} 
+          />
+        }
+        {!isLoading && lottery &&
+          <LotteryActionsCard 
             lottery={lottery} 
           />
         }
