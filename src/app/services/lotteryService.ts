@@ -3,6 +3,7 @@ import { GetAllLotteriesResponse, ContractAbv } from '@/lib/types/lottery'
 import { secondsToMilliseconds } from '@/lib/utils'   
 
 const LOTTERIES_API_URL = '/api/lotteries/'
+const CONTRACTS_API_URL = '/api/contracts/'
 
 
 export const fetchAllLotteries = async (): Promise<GetAllLotteriesResponse> => {
@@ -16,6 +17,19 @@ export const fetchAllLotteries = async (): Promise<GetAllLotteriesResponse> => {
     throw new Error(`Network Error: Failed to fetch lotteries: ${error.message}`)
   }
 }
+
+export const fetchLottery = async (contract: ContractAbv, lotteryId: number): Promise<LotteryDocument> => {
+  try {
+    const res = await fetch(`${CONTRACTS_API_URL}/${contract.chainId}/${contract.address}/lotteries/${lotteryId}/`)
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch lottery: ${res.status} ${res.statusText}`)
+    }
+    return await res.json()
+  } catch (error: any) {
+    throw new Error(`Network Error: Failed to fetch lottery: ${error.message}`)
+  }
+} 
 
 export const saveLottery = async (lottery: Lottery, csrfToken: string) => {
   try {

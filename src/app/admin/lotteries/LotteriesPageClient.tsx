@@ -177,7 +177,7 @@ export const LotteryPageClient = () =>  {
             setIsOpen={setLotteryDialogOpen}
             trigger={
               <Button icon={<Plus/>}>
-              Create Lottery
+                Create Lottery
               </Button>
             }  
             form={

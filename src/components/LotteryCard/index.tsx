@@ -5,7 +5,6 @@ import { InfoIcon, TicketIcon } from 'lucide-react'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@radix-ui/react-tooltip'
-import StatusCircle from '@/components/StatusCircle'
 import { PurchaseTicketFormData } from '@/components/forms/PurchaseTicketForm/types'
 import CountdownDisplay from '@/components/CountdownDisplay'
 
@@ -40,7 +39,6 @@ const LotteryCard = ({ lottery, isBuyingTickets, onBuyTickets }: LotteryCardProp
       <CardHeader>
         <CardTitle>
           <div className='flex items-center gap-2'> 
-            <StatusCircle status={'active'} />
             <span className='text-lg font-bold'>Lottery #{lottery.lotteryId}</span>
             <span className='text-sm text-gray-500'>
               {CHAIN_ID_TO_NETWORK[lottery.contract.chainId]}

@@ -102,7 +102,8 @@ export const columns: ColumnDef<LotteryDocument>[] = [
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <Link href={`/admin/lotteries/${lottery.lotteryId}`}>
+              <Link 
+                href={`/admin/contracts/${lottery.contract.chainId}/${lottery.contract.address}/lotteries/${lottery.lotteryId}`}>
                 <DropdownMenuItem
                   className="hover:cursor-pointer"
                 >

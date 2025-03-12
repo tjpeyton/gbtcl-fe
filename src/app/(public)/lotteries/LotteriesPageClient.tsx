@@ -64,7 +64,7 @@ export const LotteriesPageClient = () => {
     try {
       setIsBuyingTickets(true)
 
-      const contract = await getLotteryContract(lottery.contract.address)
+      const contract = await getLotteryContract(lottery.contract)
 
       contract.once('TicketsBought', (
         buyer: string,
@@ -114,7 +114,6 @@ export const LotteriesPageClient = () => {
 
 
   return (
-        
     <div className="flex flex-row gap-4 justify-center">
       {!lottery && !isLoading && 
         <div className="flex flex-col">

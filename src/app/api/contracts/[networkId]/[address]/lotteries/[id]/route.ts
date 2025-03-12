@@ -9,13 +9,14 @@ export async function GET(
   { params }: { params: { networkId: string, address: string, id: string } }
 ) {
   try { 
+    console.log(params)
     await adminMiddleware(request)  
     
     const lottery = await getLottery(Number(params.networkId), params.address, Number(params.id))
-    return NextResponse.json({ lottery }, { status: 200 })
-  } catch (error) {
+    return NextResponse.json(lottery, { status: 200 })
+  } catch (error: any) {
     console.error('Error fetching lotteries:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: error.message }, { status: error.cause })
   }
 } 
 

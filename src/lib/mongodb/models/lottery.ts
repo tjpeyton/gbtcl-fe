@@ -22,20 +22,33 @@ const insertLottery = async (lottery: Lottery) => {
   }
 }
 
-const getLottery = async (networkId: number, address: string, lotteryId: number) => {
+const getLottery = async (chainId: number, address: string, lotteryId: number) => {
   try {
-    const filter = { lotteryId: lotteryId, contract: { networkId: networkId, address: address } }
+    const filter = { 
+      lotteryId: lotteryId, 
+      'contract.chainId': chainId, 
+      'contract.address': address 
+    }
 
-    const collection = await getLotteryCollection()
-    return collection.findOne(filter)
-  } catch (error) {
-    throw new Error('Failed to retrieve lottery document')
+    const collection = await getLotteryCollection() 
+    const result = await collection.findOne(filter)
+
+    if (!result) {
+      throw new Error('Lottery not found', { cause: 404 })
+    }
+
+    return result
+  } catch (error: any) {
+    throw new Error(error.message, { cause: error.cause })
   } 
 }
 
-const getLotteriesByContract = async (networkId: number, address: string) => {
+const getLotteriesByContract = async (chainId: number, address: string) => {
   try {
-    const filter = { contract: { networkId: networkId, address: address } }
+    const filter = { 
+      'contract.chainId': chainId, 
+      'contract.address': address 
+    }
 
     const collection = await getLotteryCollection()
     return collection.find(filter).sort({ createdAt: -1 }).toArray()
@@ -44,12 +57,10 @@ const getLotteriesByContract = async (networkId: number, address: string) => {
   }
 }
 
-const getAllLotteries = async (address?: string) => {
+const getAllLotteries = async () => {
   try {
-    const filter = address ? { contract: { address: address } } : {}
-    
     const collection = await getLotteryCollection()
-    return collection.find(filter).sort({ createdAt: -1 }).toArray()
+    return collection.find().sort({ createdAt: -1 }).toArray()
   } catch (error) {   
     throw new Error('Failed to retrieve all lottery documents')
   }
@@ -83,7 +94,7 @@ const updateLotteryTickets = async (purchase: PurchaseLotteryTicketsDTO) => {
 const updateLottery = async (lottery: Partial<Lottery>) => {
   try {
     const collection = await getLotteryCollection()
-    return collection.findOneAndUpdate({ 
+    const result = await collection.findOneAndUpdate({ 
       lotteryId: lottery.lotteryId,
       contract: {
         address: lottery.contract?.address,
@@ -92,8 +103,14 @@ const updateLottery = async (lottery: Partial<Lottery>) => {
     },
     { $set: { ...lottery } },
     { returnDocument: 'after' })
-  } catch (error) {
-    throw new Error('Failed to update lottery document')
+
+    if (!result) {
+      throw new Error('Lottery not found', { cause: 404 })
+    }
+
+    return result
+  } catch (error: any) {
+    throw new Error(error.message, { cause: error.cause })
   }
 }
 

@@ -12,7 +12,7 @@ export async function GET(
     await adminMiddleware(request)  
     
     const lotteries = await getLotteriesByContract(Number(params.networkId), params.address)
-    return NextResponse.json({ lotteries }, { status: 200 })
+    return NextResponse.json(lotteries, { status: 200 })
   } catch (error) {
     console.error('Error fetching lotteries:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
