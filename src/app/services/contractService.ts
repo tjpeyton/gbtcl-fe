@@ -48,3 +48,19 @@ export const saveContract = async (contract: ConnectContractFormData, csrfToken:
 
   return res.json()
 }  
+
+export const deleteContract = async (contract: ContractAbv) => {
+  try {
+    const res = await fetch(`${API_URL}/${contract.chainId}/${contract.address}/`, {
+      method: 'DELETE'
+    })
+
+    if (!res.ok) {
+      throw new Error(`Failed to delete contract: ${res.status} ${res.statusText}`)
+    }
+
+    return res.json()
+  } catch (error: any) {
+    throw new Error(`Network Error: Failed to delete contract: ${error.message}`, { cause: error })
+  }
+} 

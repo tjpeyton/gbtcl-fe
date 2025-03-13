@@ -1,4 +1,4 @@
-import { Lottery, LotteryDocument, PurchaseLotteryTickets, PurchaseLotteryTicketsDTO } from '@/lib/types/lottery'
+import { Lottery, LotteryDocument, LotteryUpdate, TicketPurchase } from '@/lib/types/lottery'
 import { GetAllLotteriesResponse, ContractAbv } from '@/lib/types/lottery'
 import { secondsToMilliseconds } from '@/lib/utils'   
 
@@ -52,17 +52,31 @@ export const saveLottery = async (lottery: Lottery, csrfToken: string) => {
   }
 }
 
-export const updateLotteryTickets = async (purchase: PurchaseLotteryTicketsDTO, csrfToken: string) => {
+export const updateLottery = async (contract: ContractAbv, lotteryId: number, update: LotteryUpdate, csrfToken: string) => {
   try {
-    const payload: PurchaseLotteryTickets = {
-      buyerAddress: purchase.buyerAddress,
-      count: purchase.count,
-      contract: purchase.contract
+    const res = await fetch('/api/contracts/' + contract.chainId + '/' + contract.address + '/lotteries/' + lotteryId, {
+      method: 'PATCH',
+      body: JSON.stringify(update),
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken
+      }
+    })
+    if (!res.ok) {  
+      throw new Error(`Failed to update lottery: ${res.statusText}`, { cause: res.status })
     }
 
-    const res = await fetch('/api/contracts/' + purchase.contract.chainId + '/' + purchase.contract.address + '/lotteries/' + purchase.lotteryId + '/tickets', {
+    return await res.json()
+  } catch (error: any) {
+    throw new Error(`Network Error: Failed to update lottery: ${error.message}`, { cause: error.status })
+  }
+}
+
+export const updateLotteryTickets = async (contract: ContractAbv, lotteryId: number, update: TicketPurchase, csrfToken: string) => {
+  try {
+    const res = await fetch('/api/contracts/' + contract.chainId + '/' + contract.address + '/lotteries/' + lotteryId + '/tickets', {
       method: 'PATCH',
-      body: JSON.stringify(payload),
+      body: JSON.stringify(update),
       headers: {
         'Content-Type': 'application/json',
         'X-CSRF-Token': csrfToken

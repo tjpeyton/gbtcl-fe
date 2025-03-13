@@ -1,29 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import { PurchaseLotteryTicketsDTO, purchaseLotteryTicketSchema } from '@/lib/types/lottery'
+import { TicketPurchase, ticketPurchaseSchema } from '@/lib/types/lottery'
 import { updateLotteryTickets } from '@/lib/mongodb/models/lottery'
 
 // need to verify csrf token middleware is firing here
 export async function PATCH(
   request: NextRequest, 
-  { params }: { params: { id: string } }
+  { params }: { params: { networkId: string, address: string, id: string } }
 ) {
   try {
     //validate body
-    const body: PurchaseLotteryTicketsDTO = await request.json()
-    const result = purchaseLotteryTicketSchema.safeParse(body)
-    if (!result.success) { 
-      console.error('Invalid request body:', result.error.issues)
-      return NextResponse.json(
-        { error: result.error.issues }, 
-        { status: 400 }
-      )
+    const body: TicketPurchase = await request.json()
+    const result = ticketPurchaseSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json({ error: result.error.issues }, { status: 400 })
     }
-
-    const updatedLottery = await updateLotteryTickets({
-      ...result.data, 
-      lotteryId: Number(params.id)
-    })
+    
+    const updatedLottery = await updateLotteryTickets({ 
+      chainId: Number(params.networkId),
+      address: params.address
+    }, Number(params.id), body)
 
     console.log('updatedLottery', updatedLottery) 
 
@@ -31,11 +27,11 @@ export async function PATCH(
       { message: 'Tickets updated successfully' }, 
       { status: 200 }
     )
-  } catch (error) {
-    console.error('Error updating tickets:', error)
+  } catch (error: any) {
+    console.error('Error updating tickets:', error.message)
     return NextResponse.json(
-      { error: 'Internal server error' }, 
-      { status: 500 }
+      { error: error.message }, 
+      { status: error.cause }
     )
   }
 }

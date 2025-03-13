@@ -19,7 +19,7 @@ import {
 import { toast } from '@/components/ui/hooks/use-toast'
 
 import { deleteLottery } from '@/app/services/lotteryService'
-
+ 
 
 const removeLottery = async (lotteryId: string, contract: ContractAbv) => {
   try { 

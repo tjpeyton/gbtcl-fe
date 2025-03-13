@@ -9,7 +9,7 @@ import { PurchaseTicketForm } from '@/components/forms/PurchaseTicketForm'
 import { PurchaseTicketFormData } from '@/components/forms/PurchaseTicketForm/types'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 
-import { LotteryDocument, GetAllLotteriesResponse, PurchaseLotteryTicketsDTO } from '@/lib/types/lottery'
+import { LotteryDocument, GetAllLotteriesResponse, TicketPurchase, ContractAbv } from '@/lib/types/lottery'
 
 import { fetchAllLotteries, filterActiveLotteries, updateLotteryTickets } from '@/app/services/lotteryService'
 import { useLotteryContract } from '@/app/hooks/useLotteryContract'
@@ -41,9 +41,9 @@ export const LotteriesPageClient = () => {
     }
   }
 
-  const updateLotteryTicketsDB = async (purchase: PurchaseLotteryTicketsDTO, csrfToken: string) => {
+  const updateLotteryTicketsDB = async (contract: ContractAbv, lotteryId: number, purchase: TicketPurchase, csrfToken: string) => {
     try {
-      await updateLotteryTickets(purchase, csrfToken)
+      await updateLotteryTickets(contract, lotteryId, purchase, csrfToken)
     } catch (error: any) {
       console.error('Failed to update lottery tickets:', error) 
       toast({
@@ -72,11 +72,9 @@ export const LotteriesPageClient = () => {
         ticketsBought: number
       ) => {
       
-        const purchase: PurchaseLotteryTicketsDTO = {
+        const purchase: TicketPurchase = {
           buyerAddress: buyer,
-          lotteryId: Number(lotteryId),
           count: Number(ticketsBought),
-          contract: lottery.contract
         }
         
         toast({ 
@@ -85,7 +83,10 @@ export const LotteriesPageClient = () => {
           variant: 'success' 
         })
 
-        updateLotteryTicketsDB(purchase, csrfToken)
+        updateLotteryTicketsDB({
+          address: String(contract.address),
+          chainId: Number(contract.chainId)
+        }, lottery.lotteryId, purchase, csrfToken)
       })
 
       const value = data.count * lottery.ticketPrice

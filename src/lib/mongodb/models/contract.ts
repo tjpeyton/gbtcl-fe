@@ -1,6 +1,7 @@
 import { Contract, ContractDocument } from '@/lib/types/contract'
 
 import { getDb } from '../client'
+import { ContractAbv } from '@/lib/types/lottery'
 
 
 const getContractCollection = async () => {
@@ -52,8 +53,26 @@ const getAllContracts = async () => {
   }
 } 
 
+const deleteContract = async (contract: ContractAbv) => {
+  try {
+    const collection = await getContractCollection()
+    const result = await collection.findOneAndDelete({ 
+      chainId: String(contract.chainId), 
+      address: contract.address.toLowerCase() 
+    })
+    if(!result) { 
+      throw new Error('Contract not found', { cause: 404 })
+    }
+    return result
+  } catch (error: any) {
+    throw new Error('Failed to delete contract: ' + error.message, { cause: error.cause })
+  }
+}
+
+
 export {
   insertContract,
   getContract,
   getAllContracts,
+  deleteContract
 } 

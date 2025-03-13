@@ -12,6 +12,7 @@ export async function GET(
     await adminMiddleware(request)  
     
     const lotteries = await getLotteriesByContract(Number(params.networkId), params.address)
+    
     return NextResponse.json(lotteries, { status: 200 })
   } catch (error) {
     console.error('Error fetching lotteries:', error)

@@ -1,6 +1,6 @@
 import { getDb } from '../client'
 
-import { Lottery, PurchaseLotteryTicketsDTO } from '@/lib/types/lottery'
+import { Lottery, LotteryUpdate, TicketPurchase } from '@/lib/types/lottery'
 import { ContractAbv } from '@/lib/types/lottery'
 
 
@@ -60,48 +60,44 @@ const getLotteriesByContract = async (chainId: number, address: string) => {
 const getAllLotteries = async () => {
   try {
     const collection = await getLotteryCollection()
+
     return collection.find().sort({ createdAt: -1 }).toArray()
   } catch (error) {   
     throw new Error('Failed to retrieve all lottery documents')
   }
 }
 
-const updateLotteryTickets = async (purchase: PurchaseLotteryTicketsDTO) => {
+const updateLottery = async (contract: ContractAbv, lotteryId: number, update: LotteryUpdate) => {
   try {
     const collection = await getLotteryCollection()
 
     const result = await collection.findOneAndUpdate({ 
-      lotteryId: purchase.lotteryId,
-      contract: {
-        address: purchase.contract.address,
-        chainId: purchase.contract.chainId
-      }
+      lotteryId: lotteryId,
+      'contract.chainId': contract.chainId,
+      'contract.address': contract.address
     }, 
-    { $push: { tickets: purchase.buyerAddress } }, 
+    { $set: { ...update } }, 
     { returnDocument: 'after' })
 
     if (!result) {
-      console.error('No documents were updated')
-      throw new Error('Ticket Purchase not documented off chain')
+      throw new Error('Lottery not found', { cause: 404 })
     }
 
     return result
-  } catch (error) {
-    throw new Error(`Failed to update lottery tickets: Ticket Purchase not documented off chain - ${error}`)
+  } catch (error: any) {
+    throw new Error(error.message, { cause: error.cause })
   }
 }
 
-const updateLottery = async (lottery: Partial<Lottery>) => {
+const updateLotteryTickets = async (contract: ContractAbv, lotteryId: number, update: TicketPurchase) => {
   try {
     const collection = await getLotteryCollection()
     const result = await collection.findOneAndUpdate({ 
-      lotteryId: lottery.lotteryId,
-      contract: {
-        address: lottery.contract?.address,
-        chainId: lottery.contract?.chainId
-      }
+      lotteryId: lotteryId,
+      'contract.chainId': contract.chainId,
+      'contract.address': contract.address
     },
-    { $set: { ...lottery } },
+    { $push: { tickets: { $each: Array(update.count).fill(update.buyerAddress) } } },
     { returnDocument: 'after' })
 
     if (!result) {
@@ -142,5 +138,5 @@ export {
   getLotteriesByContract,
   updateLotteryTickets,
   updateLottery,
-  deleteLottery,
+  deleteLottery
 }

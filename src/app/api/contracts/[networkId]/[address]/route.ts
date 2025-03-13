@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 import { adminMiddleware } from '@/lib/middleware/admin'
-import { getContract } from '@/lib/mongodb/models'
+import { deleteContract, getContract } from '@/lib/mongodb/models'
+
 
 
 export async function GET(
@@ -19,3 +20,28 @@ export async function GET(
     return NextResponse.json({ error: error.message }, { status: error.cause })
   }
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { networkId: string, address: string } }
+) {
+  try { 
+    await adminMiddleware(request) 
+
+    await deleteContract({
+      chainId: Number(params.networkId), 
+      address: params.address
+    })
+
+    return NextResponse.json(
+      { message: 'Contract deleted successfully' }, 
+      { status: 200 }
+    )
+  } catch (error: any) {
+    console.error('Error deleting contract:', error)
+    return NextResponse.json(
+      { error: error.message }, 
+      { status: error.cause }
+    )
+  }
+} 
