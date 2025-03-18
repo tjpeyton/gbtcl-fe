@@ -43,7 +43,7 @@ const ManageLotteryPage = ({ params }: ManageLotteryPageProps) => {
 
 
   return (
-    <div>
+    <>
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Manage Lottery</h1>
@@ -65,7 +65,7 @@ const ManageLotteryPage = ({ params }: ManageLotteryPageProps) => {
           />
         }
       </div>
-    </div>
+    </>
   )
 } 
 
