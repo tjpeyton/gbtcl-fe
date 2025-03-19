@@ -34,7 +34,7 @@ export async function PATCH(
 
     const body: LotteryUpdate = await request.json()
     if (!Object.keys(body).length) {
-      return new Response(JSON.stringify({ error: "At least one field is required" }), { status: 400 });
+      return new Response(JSON.stringify({ error: 'At least one field is required' }), { status: 400 })
     }
 
     const updatedLottery = await updateLottery({ 

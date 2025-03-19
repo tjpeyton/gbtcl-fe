@@ -8,7 +8,8 @@ type ContractDocument = {
     address: string
     abi: any
     chainId: string
-    createdAt: Date
+    createdAt: Date,
+    name?: string
 }
 
 type GetAllContractsResponse = {

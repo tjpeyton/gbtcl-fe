@@ -4,9 +4,10 @@
 import { useEffect, useState, useCallback } from 'react'
 
 import { Skeleton } from '@/components/ui/skeleton'
-import ContractActionsCard from '@/components/ContractActionsCard'
-import ContractDetailsCard from '@/components/ContractDetailsCard'
+import { AbiDisplay } from '@/components/AbiDisplay'
+
 import { ContractDocument } from '@/lib/types/contract'
+
 import { fetchContract } from '@/app/services/contractService'
 
 
@@ -50,17 +51,10 @@ const ManageContractPage = ({ params }: ManageContractPageProps) => {
           </p>
         </div>
       </div>
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="">
         {isLoading && <Skeleton className="h-full w-full" />}
         {!isLoading && contract && 
-          <ContractDetailsCard 
-            contract={contract} 
-          />
-        }
-        {!isLoading && contract &&
-          <ContractActionsCard 
-            contract={contract} 
-          />
+          <AbiDisplay contract={contract} />
         }
       </div>
     </>
