@@ -1,41 +1,39 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronDown, ChevronUp, Code, FileJson, ActivityIcon as Function, Info } from 'lucide-react'
+import { Code, FileJson, ActivityIcon as Function, Info } from 'lucide-react'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-
 import ContractAddress from '@/components/ContractAdress'
 import FunctionItem from './FunctionItem'
-
-import { ContractDocument } from '@/lib/types/contract'
 import EventItem from './EventItem'
 import OtherItem from './OtherItem'
 import ConstructorItem from './ConstructorItem'
 
+import { ContractDocument, AbiFunction, AbiEvent, AbiConstructor, AbiFallback, AbiReceive } from '@/lib/types/contract'
 
 type AbiDisplayProps = {
   contract: ContractDocument  
 }
 
-export const AbiDisplay = ({ contract }: AbiDisplayProps) => {
+
+const AbiDisplay = ({ contract }: AbiDisplayProps) => {
   const [jsonView, setJsonView] = useState(false)
 
-  const functions = contract.abi.filter((item: any) => item.type === 'function')
-  const events = contract.abi.filter((item: any) => item.type === 'event')
-  const constructor = contract.abi.filter((item: any) => item.type === 'constructor')
-  const fallback = contract.abi.filter((item: any) => item.type === 'fallback')
-  const receive = contract.abi.filter((item: any) => item.type === 'receive')
+  const functions: AbiFunction[] = contract.abi.filter((item: any) => item.type === 'function') as AbiFunction[]
+  const events: AbiEvent[] = contract.abi.filter((item: any) => item.type === 'event') as AbiEvent[]
+  const constructor: AbiConstructor[] = contract.abi.filter((item: any) => item.type === 'constructor') as AbiConstructor[]
+  const fallback: AbiFallback[] = contract.abi.filter((item: any) => item.type === 'fallback') as AbiFallback[]
+  const receive: AbiReceive[] = contract.abi.filter((item: any) => item.type === 'receive') as AbiReceive[]  
 
-  // Get stateMutability counts for functions
-  const viewFunctions = functions.filter((item: any) => item.stateMutability === 'view')
-  const pureFunctions = functions.filter((item: any) => item.stateMutability === 'pure')
-  const nonpayableFunctions = functions.filter((item: any) => item.stateMutability === 'nonpayable')
-  const payableFunctions = functions.filter((item: any) => item.stateMutability === 'payable')
+  const viewFunctions: AbiFunction[] = functions.filter((item: AbiFunction) => item.stateMutability === 'view')
+  const pureFunctions: AbiFunction[] = functions.filter((item: AbiFunction) => item.stateMutability === 'pure')
+  const nonpayableFunctions: AbiFunction[] = functions.filter((item: AbiFunction) => item.stateMutability === 'nonpayable')
+  const payableFunctions: AbiFunction[] = functions.filter((item: AbiFunction) => item.stateMutability === 'payable')
 
 
   return (
@@ -152,3 +150,4 @@ export const AbiDisplay = ({ contract }: AbiDisplayProps) => {
   )
 }
 
+export default AbiDisplay

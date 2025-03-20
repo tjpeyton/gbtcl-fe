@@ -4,7 +4,7 @@
 import { useEffect, useState, useCallback } from 'react'
 
 import { Skeleton } from '@/components/ui/skeleton'
-import { AbiDisplay } from '@/components/AbiDisplay'
+import AbiDisplay from '@/components/AbiDisplay'
 
 import { ContractDocument } from '@/lib/types/contract'
 
