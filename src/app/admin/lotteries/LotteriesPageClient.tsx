@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react'
 import { Plus } from 'lucide-react'
 
-import { LotteryDocument, GetAllLotteriesResponse, Lottery, LotteryStatus } from '@/lib/types/lottery'
+import { LotteryDocument, GetAllLotteriesResponse, Lottery, LotteryStatus, ContractAbv } from '@/lib/types/lottery'
 import { ContractDocument, GetAllContractsResponse } from '@/lib/types/contract'
 
 import { fetchAllContracts } from '@/app/services/contractService'
-import { fetchAllLotteries, saveLottery } from '@/app/services/lotteryService'
+import { deleteLottery, fetchAllLotteries, saveLottery } from '@/app/services/lotteryService'
 
 import { DataTable } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
@@ -23,10 +23,10 @@ import { useLotteryContract } from '@/app/hooks/useLotteryContract'
 
 import { minutesToSeconds } from '@/lib/utils'
 
-import { columns } from './columns'
+import columns from './columns'
 
 
-export const LotteryPageClient = () =>  {
+const LotteryPageClient = () =>  {
   const [lotteries, setLotteries] = useState<LotteryDocument[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isCreating, setIsCreating] = useState(false)
@@ -80,12 +80,13 @@ export const LotteryPageClient = () =>  {
     try { 
       await saveLottery(lottery, csrfToken) 
 
+      fetchLotteries() 
+
       toast({ 
         title: 'Lottery saved to database successfully',
         description: 'Lottery ID: ' + lottery.lotteryId + ' created at ' + lottery.createdAt,
         variant: 'success' 
       })
-      fetchLotteries() 
     } catch (error: any) {
       toast({ 
         title: 'Failed to save lottery to database',
@@ -159,6 +160,27 @@ export const LotteryPageClient = () =>  {
     }
   }
 
+  const handleDeleteLottery = async (lotteryId: string, contract: ContractAbv) => {
+    try { 
+      await deleteLottery(contract, lotteryId)
+
+      fetchLotteries()
+
+      toast({
+        title: 'Lottery deleted successfully',
+        description: 'The lottery has been deleted successfully',
+        variant: 'success', 
+      })  
+    } catch (error: any) {
+      toast({
+        title: 'Failed to delete lottery',
+        description: error.message,
+        variant: 'destructive',
+      })
+    }
+  }
+
+
   useEffect(() => {
     fetchLotteries()
     fetchContracts()  
@@ -194,9 +216,11 @@ export const LotteryPageClient = () =>  {
       {!isLoading && (
         <DataTable 
           data={lotteries} 
-          columns={columns} 
+          columns={columns(handleDeleteLottery)} 
         />
       )}
     </>
   )
 }
+
+export default LotteryPageClient  

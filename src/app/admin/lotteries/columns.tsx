@@ -2,11 +2,7 @@
 
 import Link from 'next/link'  
 import { Ellipsis, Pencil, Trash2 } from 'lucide-react'
-
 import { ColumnDef } from '@tanstack/react-table'
-
-import { CHAIN_ID_TO_NETWORK, formatUnixTimestampFromSeconds, getLotteryStatus } from '@/lib/utils'
-import { LotteryDocument, ContractAbv } from '@/lib/types/lottery'
 
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -16,29 +12,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { toast } from '@/components/ui/hooks/use-toast'
 
-import { deleteLottery } from '@/app/services/lotteryService'
+import { CHAIN_ID_TO_NETWORK, formatUnixTimestampFromSeconds, getLotteryStatus } from '@/lib/utils'
+import { LotteryDocument, ContractAbv } from '@/lib/types/lottery'
+
  
-
-const removeLottery = async (lotteryId: string, contract: ContractAbv) => {
-  try { 
-    await deleteLottery(contract, lotteryId)
-    toast({
-      title: 'Lottery deleted successfully',
-      description: 'The lottery has been deleted successfully',
-      variant: 'success', 
-    })  
-  } catch (error: any) {
-    toast({
-      title: 'Failed to delete lottery',
-      description: error.message,
-      variant: 'destructive',
-    })
-  }
-} 
-
-export const columns: ColumnDef<LotteryDocument>[] = [
+const columns = (onDelete: (lotteryId: string, contract: ContractAbv) => Promise<void>): ColumnDef<LotteryDocument>[] => [
   {
     header: 'Status',
     accessorKey: 'expiration',
@@ -115,7 +94,7 @@ export const columns: ColumnDef<LotteryDocument>[] = [
               <DropdownMenuItem
                 className="text-destructive hover:cursor-pointer"
                 onClick={() => {
-                  removeLottery(String(lottery.lotteryId), lottery.contract)
+                  onDelete(String(lottery.lotteryId), lottery.contract)
                 }}
               >
                 <Trash2 className="mr-2 h-4 w-4" />
@@ -128,3 +107,5 @@ export const columns: ColumnDef<LotteryDocument>[] = [
     },
   }
 ]
+
+export default columns

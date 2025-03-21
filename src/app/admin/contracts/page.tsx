@@ -1,4 +1,4 @@
-import { ContractsPageClient } from './ContractsPageClient'
+import ContractsPageClient from './ContractsPageClient'
 
 
 const AdminContractPage = async () => {
