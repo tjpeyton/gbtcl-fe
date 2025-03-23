@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 import { adminMiddleware } from '@/lib/middleware/admin'
-import { deleteContract, getContract } from '@/lib/mongodb/models'
-
+import { deleteContract, getContract, deleteLotteriesByContract } from '@/lib/mongodb/models'
 
 
 export async function GET(
@@ -28,10 +27,13 @@ export async function DELETE(
   try { 
     await adminMiddleware(request) 
 
-    await deleteContract({
+    const contract = {
       chainId: Number(params.networkId), 
       address: params.address
-    })
+    }
+
+    await deleteContract(contract)
+    await deleteLotteriesByContract(contract)
 
     return NextResponse.json(
       { message: 'Contract deleted successfully' }, 

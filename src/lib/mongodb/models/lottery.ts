@@ -131,6 +131,20 @@ const deleteLottery = async (contract: ContractAbv, lotteryId: number) => {
   }
 }
 
+const deleteLotteriesByContract = async (contract: ContractAbv) => {
+  try {
+    const collection = await getLotteryCollection()
+    const result = await collection.deleteMany({
+      'contract.chainId': contract.chainId,
+      'contract.address': contract.address
+    })
+
+    return result
+  } catch (error: any) {
+    throw new Error(error.message, { cause: error.cause })
+  }
+}
+
 export {
   insertLottery,
   getLottery,
@@ -138,5 +152,6 @@ export {
   getLotteriesByContract,
   updateLotteryTickets,
   updateLottery,
-  deleteLottery
+  deleteLottery,
+  deleteLotteriesByContract
 }

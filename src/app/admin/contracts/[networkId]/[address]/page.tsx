@@ -5,6 +5,7 @@ import { useEffect, useState, useCallback } from 'react'
 
 import { Skeleton } from '@/components/ui/skeleton'
 import AbiDisplay from '@/components/AbiDisplay'
+import { toast } from '@/components/ui/hooks/use-toast'
 
 import { ContractDocument } from '@/lib/types/contract'
 
@@ -29,12 +30,17 @@ const ManageContractPage = ({ params }: ManageContractPageProps) => {
       setIsLoading(true)
       const contract = await fetchContract({ chainId: Number(networkId), address })
       setContract(contract)
-    } catch (error) {
-      console.error('Failed to fetch contract:', error)
+    } catch (error: any) {
+      toast({
+        title: 'Failed to fetch contract',
+        description: error.message,
+        variant: 'destructive',
+      })  
     } finally {
       setIsLoading(false)
     }
   }, [networkId, address])
+
 
   useEffect(() => {
     getContract()
@@ -51,7 +57,7 @@ const ManageContractPage = ({ params }: ManageContractPageProps) => {
           </p>
         </div>
       </div>
-      <div className="">
+      <div>
         {isLoading && <Skeleton className="h-full w-full" />}
         {!isLoading && contract && 
           <AbiDisplay contract={contract} />

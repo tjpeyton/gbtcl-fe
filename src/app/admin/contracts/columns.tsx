@@ -1,11 +1,10 @@
-'use client'
-
 import Link from 'next/link'
 import { Ellipsis, Trash2, View } from 'lucide-react'
 import { ColumnDef } from '@tanstack/react-table'
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
+import ConfirmDialog from '@/components/dialog/ConfirmDialog'
 
 import { ContractAbv } from '@/lib/types/lottery'
 import { ContractDocument } from '@/lib/types/contract'
@@ -55,15 +54,21 @@ const columns = (onDelete: (contract: ContractAbv) => Promise<void>): ColumnDef<
                     View
                 </DropdownMenuItem>
               </Link>
-              <DropdownMenuItem
-                className="hover:cursor-pointer text-destructive"
-                onClick={() => {
+              <ConfirmDialog
+                trigger={
+                  <DropdownMenuItem
+                    className="hover:cursor-pointer text-destructive"
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Delete
+                  </DropdownMenuItem>
+                }
+                title="Delete Contract"
+                message="Are you sure you want to delete this contract? All of the lotteries associated with this contract will also be deleted."
+                onConfirm={() => {
                   onDelete({chainId: Number(contract.chainId), address: contract.address} as ContractAbv)
                 }}
-              >
-                <Trash2 className="mr-2 h-4 w-4" />
-                Delete
-              </DropdownMenuItem>
+              />
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
