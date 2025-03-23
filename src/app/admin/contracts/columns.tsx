@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Ellipsis, Trash2, View } from 'lucide-react'
+import { Ellipsis, Settings, Trash2 } from 'lucide-react'
 import { ColumnDef } from '@tanstack/react-table'
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
@@ -12,6 +12,13 @@ import { CHAIN_ID_TO_NETWORK } from '@/lib/utils'
 
 
 const columns = (onDelete: (contract: ContractAbv) => Promise<void>): ColumnDef<ContractDocument>[] => [
+  {
+    header: 'Name',
+    accessorKey: 'name',
+    cell: ({ row }) => {
+      return row.original.name ?? '-'
+    }
+  },
   {
     header: 'Chain',
     accessorKey: 'chainId',
@@ -50,8 +57,8 @@ const columns = (onDelete: (contract: ContractAbv) => Promise<void>): ColumnDef<
               <Link
                 href={`/admin/contracts/${contract.chainId}/${contract.address}`}>
                 <DropdownMenuItem className="hover:cursor-pointer">
-                  <View className="mr-2 h-4 w-4" />
-                    View
+                  <Settings className="mr-2 h-4 w-4" />
+                  Manage
                 </DropdownMenuItem>
               </Link>
               <ConfirmDialog
@@ -73,7 +80,7 @@ const columns = (onDelete: (contract: ContractAbv) => Promise<void>): ColumnDef<
           </DropdownMenu>
         </div>
       )
-    },
+    }
   }
 ]
 

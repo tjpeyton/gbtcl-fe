@@ -7,7 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
-import { ContractAddress } from '@/components/ContractAdress'
+import ContractAddress from '@/components/ContractAdress'
 
 
 export interface LotteryDetailsCardProps {

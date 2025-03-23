@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'  
-import { Ellipsis, Pencil, Trash2 } from 'lucide-react'
+import { Ellipsis, Settings, Trash2 } from 'lucide-react'
 import { ColumnDef } from '@tanstack/react-table'
 
 import { Button } from '@/components/ui/button'
@@ -87,8 +87,8 @@ const columns = (onDelete: (lotteryId: string, contract: ContractAbv) => Promise
                 <DropdownMenuItem
                   className="hover:cursor-pointer"
                 >
-                  <Pencil className="mr-2 h-4 w-4" />
-                  Edit
+                  <Settings className="mr-2 h-4 w-4" />
+                  Manage
                 </DropdownMenuItem>
               </Link>
               <DropdownMenuItem
