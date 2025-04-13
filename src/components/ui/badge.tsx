@@ -20,6 +20,14 @@ const badgeVariants = cva(
           'border-transparent bg-drawing text-drawing-foreground',
         winnerSelected:
           'border-transparent bg-winnerSelected text-winnerSelected-foreground',
+        ETH:
+          'border-transparent bg-eth text-eth-foreground',
+        USDT:
+          'border-transparent bg-usdt text-usdt-foreground',
+        USDC:
+          'border-transparent bg-usdc text-usdc-foreground',
+        SepoliaETH:
+          'border-transparent bg-sepoliaETH text-sepoliaETH-foreground',
         destructive:
           'border-transparent bg-destructive text-destructive-foreground',
         completed:

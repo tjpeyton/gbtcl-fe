@@ -32,6 +32,7 @@ export const fetchLottery = async (contract: ContractAbv, lotteryId: number): Pr
 } 
 
 export const saveLottery = async (lottery: Lottery, csrfToken: string) => {
+  console.log('lottery', lottery)
   try {
     const res = await fetch(LOTTERIES_API_URL, {
       method: 'POST',

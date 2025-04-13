@@ -17,10 +17,18 @@ enum LotteryStatus {
   CANCELLED = 'cancelled'
 }
 
+enum Currency {
+  ETH = 'Ethereum Mainnet',
+  SepoliaETH = 'Sepolia Testnet',
+  USDT = 'Tether',
+  USDC = 'USD Coin'
+} 
+
 type LotteryDocument = {
   _id: ObjectId
   contract: ContractAbv
   lotteryId: number
+  currency: Currency
   ticketPrice: number
   maxTickets: number
   expiration: number
@@ -58,6 +66,7 @@ const createLotterySchema = z.object({
     address: z.string().min(1),
     chainId: z.number().min(1)
   }),
+  currency: z.nativeEnum(Currency), 
   lotteryId: z.number().min(1),   
   ticketPrice: z.number().min(100),
   maxTickets: z.number().min(1),
@@ -76,5 +85,6 @@ export {
   LotteryStatus,
   type LotteryUpdate,
   type TicketPurchase,
-  ticketPurchaseSchema
+  ticketPurchaseSchema,
+  Currency  
 }

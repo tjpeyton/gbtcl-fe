@@ -117,6 +117,7 @@ const LotteryPageClient = () =>  {
             address: data.contract.address,
             chainId: data.contract.chainId
           },
+          currency: data.currency,
           // Convert to number to handle BigInt
           lotteryId: Number(lotteryId),
           ticketPrice: Number(ticketPrice),

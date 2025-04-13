@@ -9,17 +9,33 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FormField, FormItem, FormLabel, Form, FormControl, FormDescription, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-
+import { Badge } from '@/components/ui/badge'
 import { FormContainer, FormSubmitButton } from '@/components/forms'
 
 import { CHAIN_ID_TO_NETWORK } from '@/lib/utils'
+import { Currency } from '@/lib/types'
 
 import lotteryFormSchema  from './schema'
 import { CreateLotteryFormProps} from './types'
 
+const getDefaultPrice = (currency: string) => {
+  console.log('currency', currency) 
+  switch (currency) {
+  case 'ETH':
+  case 'SepoliaETH':
+    return (0.0000000000000001)
+  case 'USDT':
+  case 'USDC':
+    return 1
+  default:
+    return 71
+  }
+}
 
 export const CreateLotteryForm = (props: CreateLotteryFormProps) => {
   const [csrfToken, setCsrfToken] = useState('')
+  const [currency, setCurrency] = useState('')
+  const [defaultPrice, setDefaultPrice] = useState<number | null>(null)
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -40,12 +56,13 @@ export const CreateLotteryForm = (props: CreateLotteryFormProps) => {
     resolver: zodResolver(lotteryFormSchema),
     defaultValues: {
       contract: {
-        address: '',
-        chainId: 0,
+        address: undefined,
+        chainId: undefined,
       },        
-      ticketPrice: 0,
-      maxTickets: 0,
-      expiration: 5,
+      currency: undefined,
+      ticketPrice: undefined,
+      maxTickets: 10,
+      expiration: 65,
       commissionPercentage: 5,
     },
   })
@@ -83,7 +100,9 @@ export const CreateLotteryForm = (props: CreateLotteryFormProps) => {
                         value={`${contract.address}|${contract.chainId}`}>
                         <div className="flex flex-row items-center justify-between"> 
                           <span>{contract.address}</span>
-                          <span className="ml-2 text-xs text-gray-500">{CHAIN_ID_TO_NETWORK[contract.chainId]}</span>
+                          <span className="ml-2 text-xs text-gray-500">
+                            {CHAIN_ID_TO_NETWORK[contract.chainId]}
+                          </span>
                         </div>
                       </SelectItem>
                     ))} 
@@ -96,22 +115,67 @@ export const CreateLotteryForm = (props: CreateLotteryFormProps) => {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="currency"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Currency</FormLabel> 
+                <Select 
+                  disabled={!form.watch('contract.address')}  
+                  onValueChange={(value) => {
+                    field.onChange(value)
+                    setCurrency(value)
+                    setDefaultPrice(getDefaultPrice(value))
+                  }}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a currency for the lottery" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {Object.keys(Currency).map((currency) => (
+                      <SelectItem 
+                        key={currency} 
+                        value={currency}>
+                        <div className="flex flex-row items-center justify-between"> 
+                          <span> <Badge variant={currency as keyof typeof Currency}>{currency}</Badge></span>
+                          <span className="ml-2 text-xs text-gray-500">
+                            {Currency[currency as keyof typeof Currency]}
+                          </span>
+                        </div>
+                      </SelectItem>
+                    ))} 
+                  </SelectContent>
+                </Select>
+                <FormDescription>
+                  Currency for the lottery
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-6">
               <FormField
+                disabled={!currency}
                 control={form.control}
                 name="ticketPrice"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Ticket Price</FormLabel> 
+                    <FormLabel>Ticket Price { currency ? `(${currency})` : ''}</FormLabel> 
                     <FormControl>   
                       <Input 
                         type="number"
-                        min={100}
-                        step={10}
+                        min={0.0000000000000001}
+                        defaultValue={defaultPrice ?? ''}
+                        className="[appearance:textfield] 
+                          [&::-webkit-outer-spin-button]:appearance-none 
+                          [&::-webkit-inner-spin-button]:appearance-none"
                         {...field}
                         onChange={(e) => {
-                          field.onChange(Number(e.target.value))
+                          const value = e.target.value === '' ? '' : Number(e.target.value)
+                          field.onChange(value)
                         }}  
                       />
                     </FormControl>
@@ -125,6 +189,7 @@ export const CreateLotteryForm = (props: CreateLotteryFormProps) => {
             </div>
             <div className="space-y-6">
               <FormField
+                disabled={!currency}  
                 control={form.control}
                 name="maxTickets"
                 render={({ field }) => (
@@ -134,10 +199,10 @@ export const CreateLotteryForm = (props: CreateLotteryFormProps) => {
                       <Input 
                         type="number"
                         min={1}
-                        step={1}
                         {...field}
                         onChange={(e) => {
-                          field.onChange(Number(e.target.value))
+                          const value = e.target.value === '' ? '' : Number(e.target.value)
+                          field.onChange(value)
                         }}
                       />
                     </FormControl>
@@ -153,6 +218,7 @@ export const CreateLotteryForm = (props: CreateLotteryFormProps) => {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-6"> 
               <FormField
+                disabled={!currency}
                 control={form.control}
                 name="expiration"
                 render={({ field }) => (
@@ -163,10 +229,10 @@ export const CreateLotteryForm = (props: CreateLotteryFormProps) => {
                         type="number"
                         min={5}
                         max={120}
-                        step={5}
                         {...field}
                         onChange={(e) => {
-                          field.onChange(Number(e.target.value))
+                          const value = e.target.value === '' ? '' : Number(e.target.value)
+                          field.onChange(value)
                         }}
                       />
                     </FormControl>
@@ -180,6 +246,7 @@ export const CreateLotteryForm = (props: CreateLotteryFormProps) => {
             </div>
             <div className="space-y-6"> 
               <FormField
+                disabled={!currency}
                 control={form.control}
                 name="commissionPercentage"
                 render={({ field }) => (
@@ -190,10 +257,10 @@ export const CreateLotteryForm = (props: CreateLotteryFormProps) => {
                         type="number"
                         min={5}
                         max={50}
-                        step={5}
                         {...field}
                         onChange={(e) => {
-                          field.onChange(Number(e.target.value))
+                          const value = e.target.value === '' ? '' : Number(e.target.value)
+                          field.onChange(value)
                         }}  
                       />
                     </FormControl>

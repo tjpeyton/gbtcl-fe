@@ -64,11 +64,19 @@ main {
     --winner-selected: 195 57% 50%;
     --completed: 245 57% 50%;
     --cancelled: 0 57% 50%;
+    --eth: 210 100% 40%;
+    --sepoliaETH: 210 100% 30%;
+    --usdt: 161 62% 39%;
+    --usdc: 211 68% 47%;
     --open-foreground: 0 0% 98%;
     --drawing-foreground: 0 0% 98%;
     --winner-selected-foreground: 0 0% 98%;
     --completed-foreground: 0 0% 98%;
     --cancelled-foreground: 0 0% 98%; 
+    --eth-foreground: 0 0% 98%;
+    --usdt-foreground: 0 0% 98%;
+    --usdc-foreground: 0 0% 98%;
+    --sepoliaETH-foreground: 0 0% 98%;
   }
 }
 

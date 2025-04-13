@@ -61,6 +61,22 @@ module.exports = {
           DEFAULT: 'hsl(var(--cancelled))',
           foreground: 'hsl(var(--cancelled-foreground))'
         }, 
+        eth: {
+          DEFAULT: 'hsl(var(--eth))',
+          foreground: 'hsl(var(--eth-foreground))'
+        },
+        usdt: {
+          DEFAULT: 'hsl(var(--usdt))',
+          foreground: 'hsl(var(--usdt-foreground))'
+        },  
+        usdc: {
+          DEFAULT: 'hsl(var(--usdc))',
+          foreground: 'hsl(var(--usdc-foreground))'
+        },      
+        sepoliaETH: {
+          DEFAULT: 'hsl(var(--sepoliaETH))',
+          foreground: 'hsl(var(--sepoliaETH-foreground))'
+        },  
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
